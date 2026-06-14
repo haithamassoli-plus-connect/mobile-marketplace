@@ -16,8 +16,8 @@ import { useUniwind } from 'uniwind';
 import colors from '@/components/ui/colors';
 
 import { CaretDown } from '@/components/ui/icons';
-import { Modal, useModal } from './modal';
-import { Text } from './text';
+import { Modal, useModal } from '../modal';
+import { Text } from '../text';
 
 const selectTv = tv({
   slots: {

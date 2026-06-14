@@ -4,8 +4,8 @@ import * as React from 'react';
 import { I18nManager, TextInput as NTextInput, StyleSheet, View } from 'react-native';
 import { tv } from 'tailwind-variants';
 
-import colors from './colors';
-import { Text } from './text';
+import colors from '../colors';
+import { Text } from '../text';
 
 const inputTv = tv({
   slots: {

@@ -9,7 +9,7 @@ import {
   View,
 } from '@/components/ui';
 import { Github, Rate, Share, Support, Website } from '@/components/ui/icons';
-import { useAuthStore as useAuth } from '@/features/auth/use-auth-store';
+import { useAuthStore as useAuth } from '@/features/auth';
 import { translate } from '@/lib/i18n';
 import { LanguageItem } from './components/language-item';
 import { SettingsContainer } from './components/settings-container';

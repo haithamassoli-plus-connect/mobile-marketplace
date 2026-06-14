@@ -7,8 +7,8 @@ import {
   Settings as SettingsIcon,
   Style as StyleIcon,
 } from '@/components/ui/icons';
-import { useAuthStore as useAuth } from '@/features/auth/use-auth-store';
-import { useIsFirstTime } from '@/lib/hooks/use-is-first-time';
+import { useAuthStore as useAuth } from '@/features/auth';
+import { useIsFirstTime } from '@/lib/hooks';
 
 export default function TabLayout() {
   const status = useAuth.use.status();
