@@ -2,9 +2,9 @@
 
 ## What: Technology Stack
 
-- **Expo SDK 54** with React Native 0.81.5 - Managed React Native development
+- **Expo SDK 56** with React Native 0.85.3 and React 19.2 - Managed React Native development
 - **TypeScript** - Strict type safety throughout
-- **Expo Router 6** - File-based routing (like Next.js)
+- **Expo Router 56** - File-based routing (like Next.js)
 - **TailwindCSS** via Uniwind/Nativewind - Utility-first styling for React Native
 - **Zustand** - Lightweight global state management
 - **React Query** - Server state and data fetching
