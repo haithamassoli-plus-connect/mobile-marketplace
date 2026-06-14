@@ -6,24 +6,22 @@
 # This is a composite action, which means it can be used in other actions.
 # It is used in almost all workflows to set up the environment and install dependencies.
 # Updating  the package manager or Node version here will be reflected in all workflows.
+# Package manager: npm (npm ci installs from package-lock.json).
 
 # 👀 Example usage:
-#       - name : 📦 Setup Node + PNPM + install deps
-#         uses: ./.github/actions/setup-node-pnpm-install
+#       - name : 📦 Setup Node + npm + install deps
+#         uses: ./.github/actions/setup-node-npm-install
 
-name: 'Setup  Node + PNPM + Install Dependencies'
-description: 'Setup  Node + PNPM + Install Dependencies'
+name: 'Setup  Node + npm + Install Dependencies'
+description: 'Setup  Node + npm + Install Dependencies'
 runs:
   using: composite
   steps:
-    - uses: pnpm/action-setup@v4
-      with:
-        run_install: false
     - uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache: pnpm
+        cache: npm
 
     - name: 📦 Install Project Dependencies
-      run: pnpm install --frozen-lockfile
+      run: npm ci
       shell: bash

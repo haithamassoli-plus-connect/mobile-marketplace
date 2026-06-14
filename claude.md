@@ -33,19 +33,19 @@ Root Files:
 
 **Essential Commands:**
 ```bash
-pnpm start              # Start dev server
-pnpm ios/android        # Run on platform
-pnpm lint               # ESLint check
-pnpm type-check         # TypeScript validation
-pnpm test               # Run Jest tests
-pnpm check-all          # All quality checks
+npm run start              # Start dev server
+npm run ios/android        # Run on platform
+npm run lint               # ESLint check
+npm run type-check         # TypeScript validation
+npm run test               # Run Jest tests
+npm run check-all          # All quality checks
 ```
 
 **Environment-Specific:**
 ```bash
-pnpm start:preview              # Preview environment
-pnpm ios:production             # Production iOS
-pnpm build:production:ios       # EAS production build
+npm run start:preview              # Preview environment
+npm run ios:production             # Production iOS
+npm run build:production:ios       # EAS production build
 ```
 
 ## How: Key Patterns
@@ -65,6 +65,6 @@ pnpm build:production:ios       # EAS production build
 - ✅ **DO** follow feature-based structure: `src/features/[name]/`
 - ✅ **DO** use TanStack Form for forms (not react-hook-form)
 - ✅ **DO** use MMKV storage for sensitive data (not AsyncStorage)
-- ✅ **DO** use EAS Build for production: `pnpm build:production:ios`
+- ✅ **DO** use EAS Build for production: `npm run build:production:ios`
 - ✅ **DO** prefix env vars with `EXPO_PUBLIC_*` for app access
 - ❌ **DO NOT** modify `android/` or `ios/` directly (use Expo config plugins)
