@@ -39,6 +39,14 @@ npm run android
 
 ## ✍️ Documentation
 
+This repo ships self-contained docs:
+
+- [DOCUMENTATION.md](./DOCUMENTATION.md) — reference: stack, structure, config, commands, components, type-safe API, testing, conventions
+- [GUIDE.md](./GUIDE.md) — guides: navigation, auth, data fetching, i18n, upgrading, storage, UI, forms
+- [Live HTML version](https://9qa062832ngrzt64r5wy0aphamfng9vq.pastehtml.dev/) — both docs combined in one page
+
+Upstream Obytes starter docs:
+
 - [Rules and Conventions](https://starter.obytes.com/getting-started/rules-and-conventions/)
 - [Project structure](https://starter.obytes.com/getting-started/project-structure)
 - [Environment vars and config](https://starter.obytes.com/getting-started/environment-vars-config)
