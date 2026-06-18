@@ -8,8 +8,8 @@ import 'tsx/cjs';
 // eslint-disable-next-line perfectionist/sort-imports
 import Env from './env';
 
-const EXPO_ACCOUNT_OWNER = 'plusconnect';
-const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044';
+const EXPO_ACCOUNT_OWNER = 'goldentik';
+const EAS_PROJECT_ID = '16fa87e2-b408-4086-b569-ff8164f154e6';
 
 const appIconBadgeConfig: AppIconBadgeConfig = {
   enabled: Env.EXPO_PUBLIC_APP_ENV !== 'production',
@@ -40,6 +40,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'automatic',
   updates: {
     fallbackToCacheTimeout: 0,
+    url: 'https://u.expo.dev/16fa87e2-b408-4086-b569-ff8164f154e6',
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
   assetBundlePatterns: ['**/*'],
   ios: {
