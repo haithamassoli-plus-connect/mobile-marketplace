@@ -44,6 +44,4 @@ const _useAuthStore = create<AuthState>((set, get) => ({
 
 export const useAuthStore = createSelectors(_useAuthStore);
 
-export const signOut = () => _useAuthStore.getState().signOut();
-export const signIn = (token: TokenType) => _useAuthStore.getState().signIn(token);
 export const hydrateAuth = () => _useAuthStore.getState().hydrate();

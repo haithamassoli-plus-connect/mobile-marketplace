@@ -16,6 +16,7 @@ const images = [
 type Props = Post;
 
 export function PostCard({ title, body, id }: Props) {
+  const uri = images[id % images.length];
   return (
     <Link href={`/feed/${id}`} asChild>
       <Pressable>
@@ -23,10 +24,7 @@ export function PostCard({ title, body, id }: Props) {
           <Image
             className="h-56 w-full overflow-hidden rounded-t-xl"
             contentFit="cover"
-            source={{
-              // eslint-disable-next-line react-hooks/purity
-              uri: images[Math.floor(Math.random() * images.length)],
-            }}
+            source={{ uri }}
           />
 
           <View className="p-2">

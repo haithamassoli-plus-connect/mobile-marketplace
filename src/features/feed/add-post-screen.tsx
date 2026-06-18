@@ -32,7 +32,6 @@ export function AddPostScreen() {
       onChange: schema as any,
     },
     onSubmit: ({ value }) => {
-      console.log(value);
       addPost(
         { ...value, userId: 1 },
         {
@@ -41,8 +40,6 @@ export function AddPostScreen() {
               message: 'Post added successfully',
               type: 'success',
             });
-            // here you can navigate to the post list and refresh the list data
-            // queryClient.invalidateQueries(usePosts.getKey());
           },
           onError: () => {
             showErrorMessage('Error adding post');

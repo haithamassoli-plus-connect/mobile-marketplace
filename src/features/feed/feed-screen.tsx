@@ -26,7 +26,7 @@ export function FeedScreen() {
       <FlashList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(_, index) => `item-${index}`}
+        keyExtractor={item => `item-${item.id}`}
         ListEmptyComponent={<EmptyList isLoading={isPending} />}
       />
     </View>

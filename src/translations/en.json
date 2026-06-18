@@ -1,7 +1,4 @@
 {
-  "onboarding": {
-    "message": "Welcome to obytes app site"
-  },
   "settings": {
     "about": "About",
     "app_name": "App Name",
@@ -12,7 +9,6 @@
     "language": "Language",
     "links": "Links",
     "logout": "Logout",
-    "more": "More",
     "privacy": "Privacy Policy",
     "rate": "Rate",
     "share": "Share",
@@ -28,6 +24,5 @@
     "title": "Settings",
     "version": "Version",
     "website": "Website"
-  },
-  "welcome": "Welcome to obytes app site"
+  }
 }

@@ -21,7 +21,7 @@ const button = tv({
       },
       secondary: {
         container: 'bg-primary-600',
-        label: 'text-secondary-600',
+        label: 'text-white',
         indicator: 'text-white',
       },
       outline: {
@@ -47,7 +47,7 @@ const button = tv({
     },
     size: {
       default: {
-        container: 'h-10 px-4',
+        container: 'h-10',
         label: 'text-base',
       },
       lg: {
@@ -69,9 +69,6 @@ const button = tv({
       },
     },
     fullWidth: {
-      true: {
-        container: '',
-      },
       false: {
         container: 'self-center',
       },

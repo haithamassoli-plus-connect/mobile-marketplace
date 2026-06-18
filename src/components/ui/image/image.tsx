@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import type { ImageProps } from 'expo-image';
 import { Image as NImage } from 'expo-image';
 import * as React from 'react';
@@ -24,8 +23,4 @@ export function Image({
       {...props}
     />
   );
-}
-
-export function preloadImages(sources: string[]) {
-  NImage.prefetch(sources);
 }

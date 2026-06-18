@@ -1,5 +1,7 @@
 # Mobile Marketplace — Project Documentation
 
+[Live HTML version](https://9qa062832ngrzt64r5wy0aphamfng9vq.pastehtml.dev/)
+
 Reference documentation for the `mobile-marketplace` app. This is the **what** and **where**: the stack, the project layout, the configuration, the available commands, the component library, how to add a type-safe API, how testing works, and the conventions that hold the codebase together.
 
 For step-by-step **how-to** guides (navigation, authentication, data fetching, i18n, storage, forms, upgrading), see **[GUIDE.md](./GUIDE.md)**.

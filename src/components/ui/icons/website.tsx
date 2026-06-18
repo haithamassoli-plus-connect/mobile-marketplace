@@ -11,7 +11,7 @@ export function Website({
   return (
     <Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
       <G
-        clipPath="url(#a)"
+        clipPath="url(#website)"
         stroke={color}
         strokeWidth={1.219}
         strokeLinecap="round"
@@ -21,7 +21,7 @@ export function Website({
         <Path d="M12 20.756c2.07 0 3.75-3.92 3.75-8.756S14.07 3.244 12 3.244c-2.071 0-3.75 3.92-3.75 8.756s1.679 8.756 3.75 8.756Z" />
       </G>
       <Defs>
-        <ClipPath id="a">
+        <ClipPath id="website">
           <Path fill="#fff" d="M0 0h24v24H0z" />
         </ClipPath>
       </Defs>

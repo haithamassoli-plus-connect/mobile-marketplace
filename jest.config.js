@@ -6,10 +6,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!**/coverage/**',
     '!**/node_modules/**',
-    '!**/babel.config.js',
     '!**/jest-setup.ts',
-    '!**/docs/**',
-    '!**/cli/**',
   ],
   moduleFileExtensions: ['js', 'ts', 'tsx'],
   transformIgnorePatterns: [

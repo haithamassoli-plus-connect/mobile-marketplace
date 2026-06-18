@@ -1,5 +1,7 @@
 # Mobile Marketplace — Developer Guide
 
+[Live HTML version](https://9qa062832ngrzt64r5wy0aphamfng9vq.pastehtml.dev/)
+
 Task-oriented guides for working in this codebase. Each section is a "how do I…" with the real files and snippets you'll touch.
 
 For the **reference** material (full stack, structure, config, commands, component props, testing setup), see **[DOCUMENTATION.md](./DOCUMENTATION.md)**.

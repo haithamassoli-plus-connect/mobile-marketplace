@@ -1,7 +1,4 @@
 {
-  "onboarding": {
-    "message": "مرحبا بكم في موقع تطبيق obytes"
-  },
   "settings": {
     "about": "حول التطبيق ",
     "app_name": "اسم التطبيق",
@@ -12,7 +9,6 @@
     "language": "لغة",
     "links": "الروابط",
     "logout": "تسجيل خروج",
-    "more": "أكثر",
     "privacy": "سياسة الخصوصية",
     "rate": "تقييم",
     "share": "شارك",
@@ -28,6 +24,5 @@
     "title": "إعدادات",
     "version": "إصدار",
     "website": "موقع الكتروني"
-  },
-  "welcome": "test arabic"
+  }
 }

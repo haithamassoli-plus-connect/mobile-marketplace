@@ -1,4 +1,4 @@
-import type TranslateOptions from 'i18next';
+import type { TOptions } from 'i18next';
 import type { Language, resources } from './resources';
 import type { RecursiveKeyOf } from './types';
 import i18n from 'i18next';
@@ -20,7 +20,7 @@ export const getLanguage = () => storage.getString(LOCAL);
 export const translate = memoize(
   (key: TxKeyPath, options = undefined) =>
     i18n.t(key, options) as unknown as string,
-  (key: TxKeyPath, options: typeof TranslateOptions) =>
+  (key: TxKeyPath, options?: TOptions) =>
     options ? key + JSON.stringify(options) : key,
 );
 

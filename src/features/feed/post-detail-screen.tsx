@@ -16,34 +16,38 @@ export function PostDetailScreen() {
     variables: { id: local.id },
   });
 
+  let content: React.ReactNode;
   if (isPending) {
-    return (
+    content = (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
         <ActivityIndicator />
       </View>
     );
   }
-  if (isError) {
-    return (
+  else if (isError) {
+    content = (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
         <Text className="text-center">Error loading post</Text>
+      </View>
+    );
+  }
+  else {
+    content = (
+      <View className="flex-1 p-3">
+        <Text className="text-xl">{data.title}</Text>
+        <Text>
+          {data.body}
+          {' '}
+        </Text>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 p-3">
+    <>
       <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
       <FocusAwareStatusBar />
-      <Text className="text-xl">{data.title}</Text>
-      <Text>
-        {data.body}
-        {' '}
-      </Text>
-    </View>
+      {content}
+    </>
   );
 }

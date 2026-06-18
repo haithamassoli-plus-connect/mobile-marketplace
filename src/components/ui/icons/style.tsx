@@ -2,7 +2,7 @@ import type { SvgProps } from 'react-native-svg';
 import * as React from 'react';
 import Svg, { ClipPath, Defs, G, Path } from 'react-native-svg';
 
-export function Style({ color, ...props }: SvgProps) {
+export function Style({ color = '#000', ...props }: SvgProps) {
   return (
     <Svg width={25} height={24} fill="none" viewBox="0 0 25 24" {...props}>
       <G

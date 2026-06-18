@@ -25,7 +25,7 @@ type PostResponse = Post;
 type PostVariables = { id: string };
 
 export const usePost = createQuery<PostResponse, PostVariables, AxiosError>({
-  queryKey: ['posts'],
+  queryKey: ['post'],
   fetcher: (variables) => {
     return client
       .get(`posts/${variables.id}`)
