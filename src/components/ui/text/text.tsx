@@ -4,7 +4,7 @@ import type { TxKeyPath } from '@/lib/i18n';
 import * as React from 'react';
 import { I18nManager, Text as NNText, StyleSheet } from 'react-native';
 
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from 'cnfast';
 import { translate } from '@/lib/i18n';
 
 type Props = {

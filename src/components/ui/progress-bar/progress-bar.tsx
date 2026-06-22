@@ -7,7 +7,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from 'cnfast';
 
 type Props = {
   initialProgress?: number;
