@@ -54,6 +54,7 @@
     "app-icon-badge": "^0.1.2",
     "axios": "^1.13.2",
     "cnfast": "^0.0.8",
+    "convex": "^1.41.0",
     "expo": "~56.0.12",
     "expo-constants": "~56.0.18",
     "expo-crypto": "^56.0.4",
