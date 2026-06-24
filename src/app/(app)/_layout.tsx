@@ -1,11 +1,6 @@
 import { Redirect, Tabs } from 'expo-router';
 import * as React from 'react';
 
-import {
-  Feed as FeedIcon,
-  Settings as SettingsIcon,
-  Style as StyleIcon,
-} from '@/components/ui/icons';
 import { useAuthStore as useAuth } from '@/features/auth';
 import { useIsFirstTime } from '@/lib/hooks';
 
@@ -28,8 +23,7 @@ export default function TabLayout() {
           headerShown: false,
           // Home renders its own floating pill nav (features/home) — hide the default bar.
           tabBarStyle: { display: 'none' },
-          tabBarIcon: ({ color }) => <FeedIcon color={color} />,
-          tabBarButtonTestID: 'feed-tab',
+          tabBarButtonTestID: 'home-tab',
         }}
       />
 
@@ -38,7 +32,6 @@ export default function TabLayout() {
         options={{
           title: 'Style',
           headerShown: false,
-          tabBarIcon: ({ color }) => <StyleIcon color={color} />,
           tabBarButtonTestID: 'style-tab',
         }}
       />
@@ -47,7 +40,6 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           headerShown: false,
-          tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
           tabBarButtonTestID: 'settings-tab',
         }}
       />
