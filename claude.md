@@ -17,8 +17,8 @@
 ```
 src/
 ├── app/              # Expo Router file-based routes (add new routes here)
-├── features/         # Feature modules - auth, feed, settings are EXAMPLES
-├── components/ui/    # Pre-built UI components (button, input, modal, etc.)
+├── features/         # Feature modules - auth, home, onboarding
+├── components/ui/    # Pre-built UI components (button, input, text, image, input, modal, etc.)
 ├── lib/              # Pre-configured utilities (api, auth, i18n, storage)
 ├── translations/     # i18n files (en.json, ar.json - add more languages)
 └── global.css        # TailwindCSS configuration
@@ -53,7 +53,7 @@ npm run build:production:ios       # EAS production build
 - **Create features**: New folder in `src/features/[your-feature]/` with screens, components, API hooks
 - **Add routes**: Create files in `src/app/` (file-based routing)
 - **Forms**: Use TanStack Form + Zod (see `src/features/auth/components/login-form.tsx`)
-- **Data fetching**: Use React Query (see `src/features/feed/api.ts`)
+- **Data fetching**: Use React Query (the axios client + provider live in `src/lib/api`)
 - **Global state**: Use Zustand (see `src/features/auth/use-auth-store.tsx`)
 - **Styling**: NativeWind/Tailwind classes (see `src/components/ui/button.tsx`)
 - **Storage**: Use MMKV via `src/lib/storage.tsx` for sensitive data

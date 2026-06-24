@@ -106,7 +106,7 @@ export function BottomNav({
           className={
             mini
               ? 'flex-row items-center gap-[18px] self-center rounded-[22px] border border-[#eef0f3] bg-white px-3.5 py-2'
-              : 'mx-4 flex-row items-center justify-between self-stretch rounded-[28px] border border-[#eef0f3] bg-white px-4 py-2.5'
+              : 'mx-4 flex-row items-center self-stretch rounded-[28px] border border-[#eef0f3] bg-white px-4 py-2.5'
           }
         >
           {TABS.map(tab => (
@@ -141,7 +141,7 @@ function TabButton({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected: active }}
-      className="items-center gap-1"
+      className={mini ? 'items-center gap-1' : 'flex-1 items-center gap-1'}
     >
       <View className="relative" style={{ width: size, height: size }}>
         <Image
@@ -206,15 +206,20 @@ function ScrollTopHandle({ onPress }: { onPress?: () => void }) {
             style={GOLD_SHADOW}
           />
           <View
-            className="-mt-[32px] h-10 w-full rounded-[28px] bg-primary-500"
+            className="-mt-[28px] h-10 w-full rounded-[28px] bg-primary-500"
             style={GOLD_SHADOW}
           />
         </View>
         <View
           pointerEvents="none"
-          className="absolute inset-x-0 top-2 items-center"
+          className="absolute inset-x-0 top-0 h-[20px] items-center justify-center"
         >
-          <Icon name="chevron-up" size={16} color="#ffffff" />
+          <Icon
+            name="chevron-up"
+            size={14}
+            color="#ffffff"
+            style={{ includeFontPadding: false }}
+          />
         </View>
       </Pressable>
     </Animated.View>
