@@ -1,7 +1,6 @@
-import { Link, Redirect, Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import * as React from 'react';
 
-import { Pressable, Text } from '@/components/ui';
 import {
   Feed as FeedIcon,
   Settings as SettingsIcon,
@@ -25,9 +24,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Feed',
+          title: 'Home',
+          headerShown: false,
+          // Home renders its own floating pill nav (features/home) — hide the default bar.
+          tabBarStyle: { display: 'none' },
           tabBarIcon: ({ color }) => <FeedIcon color={color} />,
-          headerRight: () => <CreateNewPostLink />,
           tabBarButtonTestID: 'feed-tab',
         }}
       />
@@ -51,15 +52,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  );
-}
-
-function CreateNewPostLink() {
-  return (
-    <Link href="/feed/add-post" asChild>
-      <Pressable>
-        <Text className="px-3 text-primary-300">Create</Text>
-      </Pressable>
-    </Link>
   );
 }
