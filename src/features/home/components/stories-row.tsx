@@ -24,14 +24,15 @@ export function StoriesRow() {
             {story.live
               ? (
                   <View className="absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full bg-gold-500 px-1.5">
-                    <Text className="text-[9px] font-bold text-white">LIVE</Text>
+                    <Text variant="caption-2" className="font-bold text-white">LIVE</Text>
                   </View>
                 )
               : null}
           </View>
           <Text
             numberOfLines={1}
-            className="mt-1.5 text-center text-[12px] text-ink-800"
+            variant="caption-1"
+            className="mt-1.5 text-center text-ink-800"
           >
             {story.label}
           </Text>

@@ -45,7 +45,7 @@ function ColorCard({ color, value }: { value: string; color: string }) {
         className="h-14 w-full rounded-sm"
         style={{ backgroundColor: color }}
       />
-      <Text className="text-sm">{value}</Text>
+      <Text variant="footnote">{value}</Text>
     </View>
   );
 }

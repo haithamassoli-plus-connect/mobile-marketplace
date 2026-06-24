@@ -9,11 +9,11 @@ export function DiscoverSection() {
   return (
     <View className="mt-8 px-4">
       {/* Header */}
-      <Text className="text-[12px] font-semibold tracking-wider text-gold-500">
+      <Text variant="caption-1" className="font-semibold tracking-wider text-gold-500">
         {discover.eyebrow}
       </Text>
-      <Text className="text-[22px] font-bold text-ink-800">{discover.title}</Text>
-      <Text className="mt-1 text-[14px] text-neutral-500">{discover.subtitle}</Text>
+      <Text variant="title-2" emphasized className="text-ink-800">{discover.title}</Text>
+      <Text variant="subheadline" className="mt-1 text-neutral-500">{discover.subtitle}</Text>
 
       {/* Tabs — segmented control, index 0 active */}
       <View className="mt-4 flex-row rounded-full bg-neutral-100 p-1">
@@ -25,11 +25,9 @@ export function DiscoverSection() {
             }`}
           >
             <Text
-              className={
-                i === 0
-                  ? 'text-[15px] font-semibold text-ink-800'
-                  : 'text-[15px] font-medium text-neutral-500'
-              }
+              variant="subheadline"
+              emphasized={i === 0}
+              className={i === 0 ? 'text-ink-800' : 'font-medium text-neutral-500'}
             >
               {tab}
             </Text>
@@ -46,19 +44,19 @@ export function DiscoverSection() {
         />
         <View className="flex-1">
           <View className="self-start rounded-full bg-neutral-100 px-2 py-0.5">
-            <Text className="text-[11px] text-neutral-600">{discover.featured.reason}</Text>
+            <Text variant="caption-2" className="text-neutral-600">{discover.featured.reason}</Text>
           </View>
-          <Text className="mt-1 text-[16px] font-bold text-ink-800">
+          <Text variant="callout" className="mt-1 font-bold text-ink-800">
             {discover.featured.title}
           </Text>
           <View className="mt-1 flex-row items-center gap-2">
-            <Text className="text-[15px] font-bold text-gold-500">
+            <Text variant="subheadline" className="font-bold text-gold-500">
               {`$ ${discover.featured.price}`}
             </Text>
             <Rating value={discover.featured.rating} />
           </View>
           <View className="mt-2 self-start rounded-xl bg-gold-500 px-4 py-2">
-            <Text className="text-[13px] font-semibold text-white">View item</Text>
+            <Text variant="footnote" emphasized className="text-white">View item</Text>
           </View>
         </View>
       </View>
@@ -77,8 +75,8 @@ export function DiscoverSection() {
 
       {/* Recommended */}
       <View className="mt-5 flex-row items-center justify-between">
-        <Text className="text-[16px] font-bold text-ink-800">Recommended for you</Text>
-        <Text className="text-[13px] font-semibold text-gold-500">See all</Text>
+        <Text variant="callout" className="font-bold text-ink-800">Recommended for you</Text>
+        <Text variant="footnote" emphasized className="text-gold-500">See all</Text>
       </View>
 
       <View className="mt-3 flex-row flex-wrap gap-3">

@@ -159,11 +159,9 @@ function TabButton({
         ? null
         : (
             <Text
-              className={
-                active
-                  ? 'text-[10px] font-semibold text-neutral-900'
-                  : 'text-[10px] font-medium text-[#8a909c]'
-              }
+              variant="caption-2"
+              emphasized={active}
+              className={active ? 'text-neutral-900' : 'font-medium text-[#8a909c]'}
             >
               {tab.label}
             </Text>

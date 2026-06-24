@@ -20,19 +20,20 @@ export function LiveVideo() {
         {/* LIVE pill */}
         <View className="flex-row items-center gap-1 rounded-full bg-red-600 px-2.5 py-1">
           <View className="size-1.5 rounded-full bg-white" />
-          <Text className="text-[11px] font-bold text-white">{live.badge}</Text>
+          <Text variant="caption-2" className="font-bold text-white">{live.badge}</Text>
         </View>
         {/* Viewers pill */}
         <View className="flex-row items-center gap-1 rounded-full bg-black/40 px-2.5 py-1">
           <Icon name="eye" size={12} color="#ffffff" />
-          <Text className="text-[11px] text-white">{live.viewers}</Text>
+          <Text variant="caption-2" className="text-white">{live.viewers}</Text>
         </View>
       </View>
 
       {/* Bottom content */}
       <View className="absolute inset-x-3 bottom-3">
         <Text
-          className="text-[18px] leading-[24px] font-bold text-white"
+          variant="headline"
+          className="font-bold text-white"
           numberOfLines={2}
         >
           {live.title}
@@ -40,7 +41,7 @@ export function LiveVideo() {
 
         <View className="mt-2 flex-row items-center gap-2">
           <Icon name="store" size={14} color="#DBB42C" />
-          <Text className="text-[13px] text-white/90">{live.host}</Text>
+          <Text variant="footnote" className="text-white/90">{live.host}</Text>
         </View>
 
         {/* Mini product chips */}
@@ -57,12 +58,14 @@ export function LiveVideo() {
               />
               <View>
                 <Text
-                  className="text-[11px] font-semibold text-ink-800"
+                  variant="caption-2"
+                  emphasized
+                  className="text-ink-800"
                   numberOfLines={1}
                 >
                   {product.title}
                 </Text>
-                <Text className="text-[11px] font-bold text-gold-600">
+                <Text variant="caption-2" className="font-bold text-gold-600">
                   {`$ ${product.price}`}
                 </Text>
               </View>

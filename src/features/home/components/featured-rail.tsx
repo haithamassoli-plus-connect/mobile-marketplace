@@ -27,18 +27,20 @@ export function FeaturedRail() {
           {/* Top content */}
           <View className="p-4">
             <View className="self-start rounded-full bg-white/20 px-2.5 py-1">
-              <Text className="text-[11px] font-semibold text-white">
+              <Text variant="caption-2" emphasized className="text-white">
                 {item.brand}
               </Text>
             </View>
             <Text
-              className="mt-3 text-[18px] font-bold text-white"
+              variant="headline"
+              className="mt-3 font-bold text-white"
               numberOfLines={2}
             >
               {item.title}
             </Text>
             <Text
-              className="mt-1 text-[13px] text-white/80"
+              variant="footnote"
+              className="mt-1 text-white/80"
               numberOfLines={2}
             >
               {item.description}
@@ -48,11 +50,11 @@ export function FeaturedRail() {
           {/* Bottom bar */}
           <View className="absolute inset-x-4 bottom-4 flex-row items-center justify-between">
             <View className="h-[34px] flex-row items-center rounded-full bg-white/15 px-3">
-              <Text className="text-[13px] font-bold text-gold-300">
+              <Text variant="footnote" className="font-bold text-gold-300">
                 {item.discount}
               </Text>
-              <Text className="mx-2 text-white/40">|</Text>
-              <Text className="text-[13px] font-bold text-white">BUY NOW</Text>
+              <Text variant="footnote" className="mx-2 text-white/40">|</Text>
+              <Text variant="footnote" className="font-bold text-white">BUY NOW</Text>
             </View>
             <View className="flex-row gap-2">
               <IconButton name="shopping-cart" />

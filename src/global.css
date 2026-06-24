@@ -5,7 +5,7 @@
 /* Theme — synced from Figma color system (node 68-3522). */
 @theme {
   /* Font families */
-  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-family-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
 
   /* Base colors */
   --color-white: #ffffff;

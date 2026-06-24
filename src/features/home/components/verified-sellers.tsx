@@ -10,11 +10,11 @@ export function VerifiedSellers() {
       <View className="flex-row items-center justify-between px-4">
         <View className="flex-row items-center gap-2">
           <Icon name="badge-check" size={22} color="#DBB42C" />
-          <Text className="text-[20px] font-bold text-ink-800">
+          <Text variant="title-3" className="font-bold text-ink-800">
             Verified Sellers
           </Text>
         </View>
-        <Text className="text-[14px] font-semibold text-gold-500">View all</Text>
+        <Text variant="subheadline" emphasized className="text-gold-500">View all</Text>
       </View>
 
       {/* Cards rail */}
@@ -40,15 +40,17 @@ export function VerifiedSellers() {
               </View>
               <View className="flex-1">
                 <Text
-                  className="text-[16px] font-semibold text-ink-800"
+                  variant="callout"
+                  emphasized
+                  className="text-ink-800"
                   numberOfLines={1}
                 >
                   {seller.name}
                 </Text>
                 <View className="mt-0.5 flex-row items-center gap-1.5">
                   <Rating value={seller.rating} />
-                  <Text className="text-neutral-400">·</Text>
-                  <Text className="text-[12px] text-neutral-500">
+                  <Text variant="caption-1" className="text-neutral-400">·</Text>
+                  <Text variant="caption-1" className="text-neutral-500">
                     {seller.reviews}
                   </Text>
                 </View>
@@ -58,7 +60,7 @@ export function VerifiedSellers() {
 
             {/* Category badge */}
             <View className="mt-3 self-start rounded-full bg-neutral-100 px-2.5 py-1">
-              <Text className="text-[12px] font-medium text-neutral-600">
+              <Text variant="caption-1" emphasized className="text-neutral-600">
                 {seller.category}
               </Text>
             </View>
@@ -77,7 +79,7 @@ export function VerifiedSellers() {
 
             {/* Visit shop button */}
             <View className="mt-3 h-[44px] items-center justify-center rounded-xl border border-gold-500 bg-gold-50">
-              <Text className="text-[15px] font-semibold text-gold-700">
+              <Text variant="subheadline" emphasized className="text-gold-700">
                 Visit Shop
               </Text>
             </View>

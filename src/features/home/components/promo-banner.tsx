@@ -17,8 +17,8 @@ const TIMER_CELLS = [
 function TimerCell({ value, label }: { value: string; label: string }) {
   return (
     <View className="h-[60px] w-[72px] items-center justify-center rounded-2xl bg-white/25">
-      <Text className="text-[28px] font-bold text-white">{value}</Text>
-      <Text className="mt-0.5 text-[11px] text-white/80">{label}</Text>
+      <Text variant="title-1" emphasized className="text-white">{value}</Text>
+      <Text variant="caption-2" className="mt-0.5 text-white/80">{label}</Text>
     </View>
   );
 }
@@ -27,7 +27,7 @@ export function PromoBanner() {
   return (
     <View className="mt-8 w-full bg-gold-500 py-6">
       {/* Eyebrow */}
-      <Text className="px-5 text-[13px] font-bold tracking-wide text-ink-900">
+      <Text variant="footnote" className="px-5 font-bold tracking-wide text-ink-900">
         {promo.eyebrow}
       </Text>
 
@@ -37,7 +37,7 @@ export function PromoBanner() {
           <View key={cell.label} className="flex-row items-center">
             {index > 0
               ? (
-                  <Text className="mx-1 text-[24px] font-bold text-white">:</Text>
+                  <Text variant="title-2" emphasized className="mx-1 text-white">:</Text>
                 )
               : null}
             <TimerCell value={cell.value} label={cell.label} />
@@ -61,14 +61,14 @@ export function PromoBanner() {
 
       {/* Footer */}
       <View className="mt-6 px-5">
-        <Text className="text-[22px] font-bold text-ink-900">{promo.headline}</Text>
+        <Text variant="title-2" emphasized className="text-ink-900">{promo.headline}</Text>
 
         <View className="mt-3 h-[51px] flex-row items-center justify-center gap-2 rounded-xl bg-ink-900">
-          <Text className="text-[16px] font-semibold text-white">{promo.cta}</Text>
+          <Text variant="callout" emphasized className="text-white">{promo.cta}</Text>
           <Icon name="arrow-right" size={18} color="#ffffff" />
         </View>
 
-        <Text className="mt-3 text-center text-[13px] text-ink-900/70 underline">
+        <Text variant="footnote" className="mt-3 text-center text-ink-900/70 underline">
           {promo.dismiss}
         </Text>
       </View>

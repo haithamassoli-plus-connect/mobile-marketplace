@@ -38,7 +38,9 @@ export function Chip({ label, active = false }: { label: string; active?: boolea
       }`}
     >
       <Text
-        className={`text-[13px] font-semibold ${active ? 'text-white' : 'text-ink-800'}`}
+        variant="footnote"
+        emphasized
+        className={active ? 'text-white' : 'text-ink-800'}
       >
         {label}
       </Text>
@@ -51,7 +53,7 @@ export function Rating({ value }: { value: number }) {
   return (
     <View className="flex-row items-center gap-1">
       <Icon name="star" size={12} color="#DBB42C" />
-      <Text className="text-[12px] font-semibold text-ink-800">{value.toFixed(1)}</Text>
+      <Text variant="caption-1" className="font-semibold text-ink-800">{value.toFixed(1)}</Text>
     </View>
   );
 }
@@ -75,18 +77,18 @@ export function SectionHeader({
       <View className="flex-row items-center justify-between">
         <View className="flex-1 flex-row items-center gap-2">
           {icon ? <Icon name={icon} size={20} color="#DBB42C" /> : null}
-          <Text className="text-[20px] font-bold text-ink-800">{title}</Text>
+          <Text variant="title-3" className="font-bold text-ink-800">{title}</Text>
         </View>
         {actionLabel
           ? (
               <Pressable className="flex-row items-center gap-1 rounded-full bg-gold-500 px-4 py-2">
-                <Text className="text-[13px] font-semibold text-white">{actionLabel}</Text>
+                <Text variant="footnote" emphasized className="text-white">{actionLabel}</Text>
                 <Icon name="arrow-right" size={14} color="#ffffff" />
               </Pressable>
             )
           : null}
       </View>
-      {subtitle ? <Text className="mt-1 text-[14px] text-neutral-500">{subtitle}</Text> : null}
+      {subtitle ? <Text variant="subheadline" className="mt-1 text-neutral-500">{subtitle}</Text> : null}
     </View>
   );
 }
@@ -103,7 +105,7 @@ export function ProductBadge({
     <View
       className={`rounded-full px-2 py-1 ${tone === 'gold' ? 'bg-gold-500' : 'bg-[#1a1a2e]'}`}
     >
-      <Text className="text-[11px] font-semibold text-white">{label}</Text>
+      <Text variant="caption-2" emphasized className="text-white">{label}</Text>
     </View>
   );
 }
@@ -122,22 +124,22 @@ export function ProductCard({ product }: { product: Product }) {
       </View>
 
       <View className="gap-1 px-2 pt-2.5">
-        <Text numberOfLines={1} className="text-[15px] font-semibold text-ink-800">
+        <Text numberOfLines={1} variant="subheadline" emphasized className="text-ink-800">
           {product.title}
         </Text>
         {product.rating ? <Rating value={product.rating} /> : null}
         <View className="flex-row items-baseline gap-1.5">
-          <Text className="text-[17px] font-semibold text-gold-500">{`$ ${product.price}`}</Text>
+          <Text variant="headline" className="text-gold-500">{`$ ${product.price}`}</Text>
           {product.oldPrice
             ? (
-                <Text className="text-[12px] text-neutral-500 line-through">{`$ ${product.oldPrice}`}</Text>
+                <Text variant="caption-1" className="text-neutral-500 line-through">{`$ ${product.oldPrice}`}</Text>
               )
             : null}
         </View>
       </View>
 
       <Pressable className="mx-2 mt-2.5 h-[42px] items-center justify-center rounded-xl bg-gold-500">
-        <Text className="text-[13px] font-semibold text-white">Add to cart</Text>
+        <Text variant="footnote" emphasized className="text-white">Add to cart</Text>
       </Pressable>
     </View>
   );

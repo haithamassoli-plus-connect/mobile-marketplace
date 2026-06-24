@@ -22,7 +22,7 @@ import { Text } from '../text';
 const selectTv = tv({
   slots: {
     container: 'mb-4',
-    label: 'text-grey-100 mb-1 text-lg dark:text-neutral-100',
+    label: 'text-grey-100 mb-1 text-[17px] leading-[22px] dark:text-neutral-100',
     input:
       'border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border-[0.5px] p-3 dark:border-neutral-500 dark:bg-neutral-800',
     inputValue: 'dark:text-neutral-100',
@@ -210,7 +210,8 @@ export function Select(props: SelectProps) {
         {error && (
           <Text
             testID={`${testID}-error`}
-            className="text-sm text-error-300 dark:text-error-600"
+            variant="footnote"
+            className="text-error-300 dark:text-error-600"
           >
             {error}
           </Text>

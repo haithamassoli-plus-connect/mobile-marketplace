@@ -5,10 +5,10 @@ export function TrustedBrands() {
   return (
     <View className="mt-8 w-full">
       <View className="items-center px-4">
-        <Text className="text-[20px] font-bold text-ink-800">
+        <Text variant="title-3" className="font-bold text-ink-800">
           {trustedBrands.title}
         </Text>
-        <Text className="mt-1 text-[14px] text-neutral-500">
+        <Text variant="subheadline" className="mt-1 text-neutral-500">
           {trustedBrands.subtitle}
         </Text>
       </View>
@@ -31,7 +31,8 @@ export function TrustedBrands() {
             />
             <Text
               numberOfLines={1}
-              className="mt-1 text-[12px] font-semibold text-ink-800"
+              variant="caption-1"
+              className="mt-1 font-semibold text-ink-800"
             >
               {brand.name}
             </Text>

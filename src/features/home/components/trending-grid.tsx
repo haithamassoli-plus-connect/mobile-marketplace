@@ -21,11 +21,11 @@ export function TrendingGrid() {
           <View className="absolute inset-x-0 bottom-0 h-1/3 bg-black/45" />
           <View className="absolute inset-x-3 bottom-3">
             {!!featured.subtitle && (
-              <Text className="text-[11px] text-white/80 uppercase">
+              <Text variant="caption-2" className="text-white/80 uppercase">
                 {featured.subtitle}
               </Text>
             )}
-            <Text className="text-[15px] font-semibold text-white">
+            <Text variant="subheadline" emphasized className="text-white">
               {featured.title}
             </Text>
           </View>
@@ -46,11 +46,11 @@ export function TrendingGrid() {
               <View className="absolute inset-x-0 bottom-0 h-1/3 bg-black/45" />
               <View className="absolute inset-x-2 bottom-2">
                 {!!item.subtitle && (
-                  <Text className="text-[10px] text-white/80 uppercase">
+                  <Text variant="caption-2" className="text-white/80 uppercase">
                     {item.subtitle}
                   </Text>
                 )}
-                <Text className="text-[13px] font-semibold text-white">
+                <Text variant="footnote" emphasized className="text-white">
                   {item.title}
                 </Text>
               </View>
