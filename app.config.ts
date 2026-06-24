@@ -87,6 +87,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             'node_modules/@expo-google-fonts/noto-sans/500Medium/NotoSans_500Medium.ttf',
             'node_modules/@expo-google-fonts/noto-sans/600SemiBold/NotoSans_600SemiBold.ttf',
             'node_modules/@expo-google-fonts/noto-sans/700Bold/NotoSans_700Bold.ttf',
+            'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/400Regular/IBMPlexSansArabic_400Regular.ttf',
+            'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/500Medium/IBMPlexSansArabic_500Medium.ttf',
+            'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/600SemiBold/IBMPlexSansArabic_600SemiBold.ttf',
+            'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/700Bold/IBMPlexSansArabic_700Bold.ttf',
           ],
         },
         android: {
@@ -108,6 +112,27 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
                 },
                 {
                   path: 'node_modules/@expo-google-fonts/noto-sans/700Bold/NotoSans_700Bold.ttf',
+                  weight: 700,
+                },
+              ],
+            },
+            {
+              fontFamily: 'IBM Plex Sans Arabic',
+              fontDefinitions: [
+                {
+                  path: 'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/400Regular/IBMPlexSansArabic_400Regular.ttf',
+                  weight: 400,
+                },
+                {
+                  path: 'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/500Medium/IBMPlexSansArabic_500Medium.ttf',
+                  weight: 500,
+                },
+                {
+                  path: 'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/600SemiBold/IBMPlexSansArabic_600SemiBold.ttf',
+                  weight: 600,
+                },
+                {
+                  path: 'node_modules/@expo-google-fonts/ibm-plex-sans-arabic/700Bold/IBMPlexSansArabic_700Bold.ttf',
                   weight: 700,
                 },
               ],

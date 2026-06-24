@@ -1,15 +1,21 @@
 import type { Href } from 'expo-router';
+import type { SharedValue } from 'react-native-reanimated';
 import { router, usePathname } from 'expo-router';
+import { useEffect } from 'react';
+import { useWindowDimensions } from 'react-native';
 import Animated, {
+  Easing,
   FadeInDown,
   FadeOutDown,
-  LinearTransition,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 
 import { Image, Pressable, Text, View } from '@/components/ui';
-
-import { Icon } from './icon';
 
 // ponytail: floating tab bar (Figma 98:4507 default / 361:4781 mini). Routes via
 // expo-router — the active tab is derived from the current path. Filled icon =
@@ -71,6 +77,13 @@ const PILL_SHADOW = {
   elevation: 12,
 } as const;
 
+// Default ⇄ mini morph driven by one shared value, so the whole pill moves on a
+// single 350ms ease-in-out timeline. No LinearTransition snapshot + a stable tree
+// (labels stay mounted, just collapsed) means no ghosting/afterimage.
+const MORPH = { duration: 350, easing: Easing.inOut(Easing.quad) } as const;
+const MINI_W = 220; // ponytail: mini pill width; eyeball-tune to Figma 361:4781.
+const LABEL_H = 13; // caption-2 line height (text.tsx: leading-[13px]).
+
 type Props = {
   /** Shrinks to the icon-only pill (set while scrolling down). */
   mini?: boolean;
@@ -86,7 +99,22 @@ export function BottomNav({
 }: Props) {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
+  const { width: winW } = useWindowDimensions();
   const active = TABS.find(tab => tab.route === pathname)?.key ?? 'home';
+
+  // 0 = expanded, 1 = mini. Seeded to the current state so the first paint isn't
+  // animated; every later toggle eases over MORPH (same curve both directions).
+  const p = useSharedValue(mini ? 1 : 0);
+  useEffect(() => {
+    p.value = withTiming(mini ? 1 : 0, MORPH);
+  }, [mini, p]);
+
+  const containerStyle = useAnimatedStyle(() => ({
+    width: interpolate(p.value, [0, 1], [winW - 32, MINI_W]), // mx-4 → compact
+    paddingHorizontal: interpolate(p.value, [0, 1], [16, 14]), // px-4 → px-3.5
+    paddingVertical: interpolate(p.value, [0, 1], [10, 8]), // py-2.5 → py-2
+    borderRadius: interpolate(p.value, [0, 1], [28, 22]),
+  }), [winW]);
 
   return (
     <View
@@ -96,25 +124,20 @@ export function BottomNav({
     >
       <View pointerEvents="box-none" className="relative w-full items-center">
         {showScrollTop && !mini
-          ? <ScrollTopHandle onPress={onScrollToTop} />
+          ? <ScrollTopHandle onPress={onScrollToTop} pillWidth={winW - 32} />
           : null}
 
-        {/* Pill — morphs between default and mini via layout animation. */}
+        {/* Pill — morphs between default and mini off the shared `p` value. */}
         <Animated.View
-          layout={LinearTransition.duration(220)}
-          style={PILL_SHADOW}
-          className={
-            mini
-              ? 'flex-row items-center gap-[18px] self-center rounded-[22px] border border-[#eef0f3] bg-white px-3.5 py-2'
-              : 'mx-4 flex-row items-center self-stretch rounded-[28px] border border-[#eef0f3] bg-white px-4 py-2.5'
-          }
+          style={[PILL_SHADOW, containerStyle, { alignSelf: 'center' }]}
+          className="flex-row items-center border border-[#eef0f3] bg-white"
         >
           {TABS.map(tab => (
             <TabButton
               key={tab.key}
               tab={tab}
               active={active === tab.key}
-              mini={mini}
+              p={p}
               onPress={() => router.navigate(tab.route)}
             />
           ))}
@@ -127,26 +150,37 @@ export function BottomNav({
 function TabButton({
   tab,
   active,
-  mini,
+  p,
   onPress,
 }: {
   tab: Tab;
   active: boolean;
-  mini: boolean;
+  p: SharedValue<number>;
   onPress: () => void;
 }) {
-  const size = mini ? 20 : 24;
+  const iconStyle = useAnimatedStyle(() => {
+    const size = interpolate(p.value, [0, 1], [24, 20]);
+    return { width: size, height: size };
+  });
+  // Collapse the label (height + its 4px gap) and fade it out in lockstep with the
+  // pill so the row height follows intrinsically — no popping, no afterimage.
+  const labelStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(p.value, [0, 1], [1, 0]),
+    height: interpolate(p.value, [0, 1], [LABEL_H, 0]),
+    marginTop: interpolate(p.value, [0, 1], [4, 0]),
+  }));
+
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected: active }}
-      className={mini ? 'items-center gap-1' : 'flex-1 items-center gap-1'}
+      className="flex-1 items-center"
     >
-      <View className="relative" style={{ width: size, height: size }}>
+      <Animated.View className="relative" style={iconStyle}>
         <Image
           source={active ? tab.filled : tab.outline}
-          style={{ width: size, height: size }}
+          style={{ width: '100%', height: '100%' }}
           contentFit="contain"
         />
         {tab.dot
@@ -154,71 +188,87 @@ function TabButton({
               <View className="absolute -top-0.5 -right-1 size-[7px] rounded-full border border-white bg-error-500" />
             )
           : null}
-      </View>
-      {mini
-        ? null
-        : (
-            <Text
-              variant="caption-2"
-              emphasized={active}
-              className={active ? 'text-neutral-900' : 'font-medium text-[#8a909c]'}
-            >
-              {tab.label}
-            </Text>
-          )}
+      </Animated.View>
+      <Animated.View style={[labelStyle, { overflow: 'hidden' }]}>
+        <Text
+          variant="caption-2"
+          numberOfLines={1}
+          emphasized={active}
+          className={active ? 'text-neutral-900' : 'font-medium text-[#8a909c]'}
+        >
+          {tab.label}
+        </Text>
+      </Animated.View>
     </Pressable>
   );
 }
 
+const GOLD = '#dbb42c'; // primary-500
+
+// Scroll-to-top handle (Figma 233:5078): a gold rounded card with a gentle center
+// hump + white chevron, sitting BEHIND the pill so only the top band and hump peek
+// above. Drawn as one SVG path so the hump blends seamlessly into the card; the
+// chevron is a second path inside the same viewBox so it tracks the hump at any
+// scale. ViewBox units mirror the Figma pixel grid.
+const GOLD_VB_W = 396;
+const GOLD_VB_H = 81;
+const GOLD_PATH
+  = 'M0,38 A22,22 0 0 1 22,16 L154,16 C168,-2 228,-2 242,16 L374,16 '
+    + 'A22,22 0 0 1 396,38 L396,81 L0,81 Z';
+const CHEVRON_PATH = 'M189,15 L198,7 L207,15';
+
 const GOLD_SHADOW = {
   shadowColor: '#9a7b10',
-  shadowOpacity: 0.3,
-  shadowRadius: 8,
+  shadowOpacity: 0.22,
+  shadowRadius: 7,
   shadowOffset: { width: 0, height: 4 },
-  elevation: 8,
+  elevation: 6,
 } as const;
 
-// Gold backdrop with a centered dome "tab" + white chevron (Figma 233:5078),
-// peeking up from behind the pill. The dome is a circle whose lower half the bar
-// paints over, so the two gold pieces read as one shape.
-function ScrollTopHandle({ onPress }: { onPress?: () => void }) {
+function ScrollTopHandle({
+  onPress,
+  pillWidth,
+}: {
+  onPress?: () => void;
+  pillWidth: number;
+}) {
+  // Gold is inset ~6% from the pill so the pill's white corners sit proud of it.
+  const w = pillWidth * 0.936;
+  const h = (w * GOLD_VB_H) / GOLD_VB_W;
+  // Lift so the shoulder (vb y16) clears the pill top by the rise (vb 14); the rest
+  // tucks behind the pill. top = -(16+14)/vbW · w collapses the viewBox math.
+  const top = -(w * 30) / GOLD_VB_W;
+
   return (
     <Animated.View
       entering={FadeInDown.duration(220)}
       exiting={FadeOutDown.duration(180)}
       pointerEvents="box-none"
-      // ponytail: top offset eyeballed from Figma — nudge if the gold peek/dome looks off.
-      className="absolute inset-x-4 items-center"
-      style={{ top: -24 }}
+      className="absolute inset-x-0 items-center"
+      style={{ top }}
     >
       <Pressable
         onPress={onPress}
         hitSlop={16}
         accessibilityRole="button"
         accessibilityLabel="Scroll to top"
-        className="w-full items-center"
       >
-        <View pointerEvents="none" className="w-full items-center">
-          <View
-            className="size-12 rounded-full bg-primary-500"
-            style={GOLD_SHADOW}
-          />
-          <View
-            className="-mt-[28px] h-10 w-full rounded-[28px] bg-primary-500"
-            style={GOLD_SHADOW}
-          />
-        </View>
-        <View
-          pointerEvents="none"
-          className="absolute inset-x-0 top-0 h-[20px] items-center justify-center"
+        <Svg
+          width={w}
+          height={h}
+          viewBox={`0 0 ${GOLD_VB_W} ${GOLD_VB_H}`}
+          style={GOLD_SHADOW}
         >
-          <Icon
-            name="chevron-up"
-            size={14}
-            color="#ffffff"
-            style={{ includeFontPadding: false }}
+          <Path d={GOLD_PATH} fill={GOLD} />
+          <Path
+            d={CHEVRON_PATH}
+            stroke="#ffffff"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
           />
-        </View>
+        </Svg>
       </Pressable>
     </Animated.View>
   );

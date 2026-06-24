@@ -7,11 +7,12 @@ import { I18nManager, Text as NNText, StyleSheet } from 'react-native';
 import { tv } from 'tailwind-variants';
 
 import { translate } from '@/lib/i18n';
+import { FONT_CLASS } from '../font';
 
 // iOS HIG type scale (Noto Sans) — size/line-height baked in per variant.
 // `emphasized` bumps each style to its Figma "Emphasized" weight.
 const text = tv({
-  base: 'font-sans text-black dark:text-white',
+  base: `${FONT_CLASS} text-black dark:text-white`,
   variants: {
     variant: {
       'large-title': 'text-[34px] leading-[41px] font-normal',

@@ -6,6 +6,7 @@
 @theme {
   /* Font families */
   --font-family-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-family-arabic: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
 
   /* Base colors */
   --color-white: #ffffff;

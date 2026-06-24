@@ -5,6 +5,7 @@ import { I18nManager, TextInput as NTextInput, StyleSheet, View } from 'react-na
 import { tv } from 'tailwind-variants';
 
 import colors from '../colors';
+import { FONT_CLASS } from '../font';
 import { Text } from '../text';
 
 const inputTv = tv({
@@ -12,7 +13,7 @@ const inputTv = tv({
     container: 'mb-2',
     label: 'text-grey-100 mb-1 text-[17px] leading-[22px] dark:text-neutral-100',
     input:
-      'font-sans mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 text-[17px] leading-[22px] font-medium dark:border-neutral-700 dark:bg-neutral-800 dark:text-white',
+      `${FONT_CLASS} mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 text-[17px] leading-[22px] font-medium dark:border-neutral-700 dark:bg-neutral-800 dark:text-white`,
   },
 
   variants: {

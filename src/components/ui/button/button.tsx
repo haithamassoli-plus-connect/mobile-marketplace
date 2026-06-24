@@ -5,10 +5,12 @@ import * as React from 'react';
 import { ActivityIndicator, Pressable, Text } from 'react-native';
 import { tv } from 'tailwind-variants';
 
+import { FONT_CLASS } from '../font';
+
 const button = tv({
   slots: {
     container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
-    label: 'font-sans text-[16px] leading-[21px] font-semibold',
+    label: `${FONT_CLASS} text-[16px] leading-[21px] font-semibold`,
     indicator: 'h-6 text-white',
   },
 
