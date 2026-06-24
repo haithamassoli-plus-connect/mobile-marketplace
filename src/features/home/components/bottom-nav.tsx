@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import type { Href } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 import Animated, {
   FadeInDown,
   FadeOutDown,
@@ -10,12 +11,13 @@ import { Image, Pressable, Text, View } from '@/components/ui';
 
 import { Icon } from './icon';
 
-// ponytail: presentational floating tab bar (Figma 98:4507 default / 361:4781 mini).
-// Tabs don't route — they mirror the marketplace design. Filled icon = active,
-// outline = inactive (the SVGs already carry the right colors, so no tinting).
+// ponytail: floating tab bar (Figma 98:4507 default / 361:4781 mini). Routes via
+// expo-router — the active tab is derived from the current path. Filled icon =
+// active, outline = inactive (the SVGs already carry the right colors, no tinting).
 type Tab = {
   key: string;
   label: string;
+  route: Href;
   filled: number;
   outline: number;
   dot?: boolean;
@@ -25,18 +27,21 @@ const TABS: Tab[] = [
   {
     key: 'home',
     label: 'Home',
+    route: '/',
     filled: require('@/components/ui/icons/bottom-tabs/home-filled.svg'),
     outline: require('@/components/ui/icons/bottom-tabs/home-outline.svg'),
   },
   {
     key: 'categories',
     label: 'Categories',
+    route: '/categories',
     filled: require('@/components/ui/icons/bottom-tabs/categories-filled.svg'),
     outline: require('@/components/ui/icons/bottom-tabs/categories-outline.svg'),
   },
   {
     key: 'live',
     label: 'Live',
+    route: '/live',
     dot: true,
     filled: require('@/components/ui/icons/bottom-tabs/tv-filled.svg'),
     outline: require('@/components/ui/icons/bottom-tabs/tv-outline.svg'),
@@ -44,12 +49,14 @@ const TABS: Tab[] = [
   {
     key: 'cart',
     label: 'Cart',
+    route: '/cart',
     filled: require('@/components/ui/icons/bottom-tabs/cart-filled.svg'),
     outline: require('@/components/ui/icons/bottom-tabs/cart-outline.svg'),
   },
   {
     key: 'account',
     label: 'Account',
+    route: '/profile',
     filled: require('@/components/ui/icons/bottom-tabs/profile-filled.svg'),
     outline: require('@/components/ui/icons/bottom-tabs/profile-outline.svg'),
   },
@@ -78,7 +85,8 @@ export function BottomNav({
   onScrollToTop,
 }: Props) {
   const insets = useSafeAreaInsets();
-  const [active, setActive] = useState('home');
+  const pathname = usePathname();
+  const active = TABS.find(tab => tab.route === pathname)?.key ?? 'home';
 
   return (
     <View
@@ -107,7 +115,7 @@ export function BottomNav({
               tab={tab}
               active={active === tab.key}
               mini={mini}
-              onPress={() => setActive(tab.key)}
+              onPress={() => router.navigate(tab.route)}
             />
           ))}
         </Animated.View>

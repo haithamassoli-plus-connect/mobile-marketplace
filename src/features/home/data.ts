@@ -255,13 +255,3 @@ export const sellerCta = {
     { icon: 'briefcase-business' as IconName, label: 'Join 50K+ verified sellers' },
   ],
 };
-
-/* ------------------------------- Bottom nav -------------------------------- */
-export type NavItem = { icon: IconName; label: string; active?: boolean; badge?: number };
-export const navItems: NavItem[] = [
-  { icon: 'house', label: 'Home', active: true },
-  { icon: 'layout-grid', label: 'Categories' },
-  { icon: 'heart', label: 'Wishlist' },
-  { icon: 'shopping-bag', label: 'Cart', badge: 3 },
-  { icon: 'user', label: 'Profile' },
-];
