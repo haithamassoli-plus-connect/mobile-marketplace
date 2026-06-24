@@ -3,11 +3,11 @@
 ## Imports
 
 ```tsx
+// After
+import { AudioModule, RecordingPresets, setAudioModeAsync, useAudioPlayer, useAudioRecorder } from 'expo-audio';
+
 // Before
 import { Audio } from 'expo-av';
-
-// After
-import { useAudioPlayer, useAudioRecorder, RecordingPresets, AudioModule, setAudioModeAsync } from 'expo-audio';
 ```
 
 ## Audio Playback

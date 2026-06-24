@@ -39,7 +39,7 @@ assets/
 
 ```tsx
 // React Native selects best one for device
-<Image source={require('./assets/image.jpg')} />
+<Image source={require('./assets/image.jpg')} />;
 ```
 
 ## Android: Automatic Optimization

@@ -129,10 +129,10 @@ npx expo install eslint-plugin-react-compiler -- -D
 Configure ESLint:
 
 ```javascript
-// .eslintrc.js
-const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 const reactCompiler = require('eslint-plugin-react-compiler');
+// .eslintrc.js
+const { defineConfig } = require('eslint/config');
 
 module.exports = defineConfig([
   expoConfig,
@@ -166,7 +166,8 @@ export default function MyApp() {
   if ($[0] === Symbol.for('react.memo_cache_sentinel')) {
     t0 = <div>Hello World</div>;
     $[0] = t0;
-  } else {
+  }
+  else {
     t0 = $[0];
   }
   return t0;
@@ -281,7 +282,8 @@ export default function MyApp() {
     );
     $[0] = value;
     $[1] = t0;
-  } else {
+  }
+  else {
     t0 = $[1]; // Return cached JSX
   }
   return t0;
@@ -298,43 +300,45 @@ Test transformations at [React Playground](https://playground.react.dev/).
 
 ```jsx
 // Components - auto-memoized
-const Button = ({ onPress, label }) => (
-  <Pressable onPress={onPress}>
-    <Text>{label}</Text>
-  </Pressable>
-);
+function Button({ onPress, label }) {
+  return (
+    <Pressable onPress={onPress}>
+      <Text>{label}</Text>
+    </Pressable>
+  );
+}
 
 // Callbacks - auto-cached (no useCallback needed)
-const handlePress = () => {
+function handlePress() {
   console.log('pressed');
-};
+}
 
 // Expensive computations - auto-cached (no useMemo needed)
-const filtered = items.filter((item) => item.active);
+const filtered = items.filter(item => item.active);
 ```
 
 ### What Breaks Compilation
 
 ```jsx
 // BAD: Mutating props
-const BadComponent = ({ items }) => {
+function BadComponent({ items }) {
   items.push('new item'); // Mutation!
   return <List data={items} />;
-};
+}
 
 // BAD: Mutating during render
-const BadMutation = () => {
+function BadMutation() {
   const [items, setItems] = useState([]);
   items.push('new'); // Mutation during render!
   return <List data={items} />;
-};
+}
 
 // BAD: Non-idempotent render
 let counter = 0;
-const BadRender = () => {
+function BadRender() {
   counter++; // Side effect during render!
   return <Text>{counter}</Text>;
-};
+}
 ```
 
 ## Should You Remove Manual Memoization?

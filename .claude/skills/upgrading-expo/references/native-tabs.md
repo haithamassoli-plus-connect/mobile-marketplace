@@ -7,15 +7,15 @@ In SDK 55, `Label`, `Icon`, `Badge`, and `VectorIcon` are now accessed as static
 ```tsx
 // SDK 53/54
 import {
-  NativeTabs,
+  Badge,
   Icon,
   Label,
-  Badge,
+  NativeTabs,
   VectorIcon,
-} from "expo-router/unstable-native-tabs";
+} from 'expo-router/unstable-native-tabs';
 
 // SDK 55+
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 ```
 
 ## Component Changes
@@ -42,7 +42,7 @@ New component for Apple Music-style mini players on iOS +26 that float above the
   <NativeTabs.Trigger name="(index)">
     <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
   </NativeTabs.Trigger>
-</NativeTabs>
+</NativeTabs>;
 ```
 
 On Android and web, this component will render as a no-op. Position a view absolutely above the tab bar instead.
@@ -52,7 +52,7 @@ On Android and web, this component will render as a no-op. Position a view absol
 New `md` prop for Material icon glyphs on Android (alongside existing `drawable`):
 
 ```tsx
-<NativeTabs.Trigger.Icon sf="house" md="home" />
+<NativeTabs.Trigger.Icon sf="house" md="home" />;
 ```
 
 ## Full Migration Example
@@ -61,11 +61,11 @@ New `md` prop for Material icon glyphs on Android (alongside existing `drawable`
 
 ```tsx
 import {
-  NativeTabs,
+  Badge,
   Icon,
   Label,
-  Badge,
-} from "expo-router/unstable-native-tabs";
+  NativeTabs,
+} from 'expo-router/unstable-native-tabs';
 
 export default function TabLayout() {
   return (
@@ -90,7 +90,7 @@ export default function TabLayout() {
 ### After (SDK 55+)
 
 ```tsx
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 
 export default function TabLayout() {
   return (

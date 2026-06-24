@@ -44,7 +44,7 @@ Add to `babel.config.js`:
 
 ```javascript
 module.exports = {
-  plugins: ['react-native-worklets/plugin'],  // Must be last
+  plugins: ['react-native-worklets/plugin'], // Must be last
 };
 ```
 
@@ -67,12 +67,12 @@ module.exports = {
 
 ```jsx
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withTiming
 } from 'react-native-reanimated';
 
-const FadeInView = () => {
+function FadeInView() {
   const opacity = useSharedValue(0);
 
   // This runs on UI thread - won't be blocked by JS
@@ -85,7 +85,7 @@ const FadeInView = () => {
   }, []);
 
   return <Animated.View style={[styles.box, animatedStyle]} />;
-};
+}
 ```
 
 ### 2. Run Code on UI Thread with `scheduleOnUI`
@@ -93,13 +93,13 @@ const FadeInView = () => {
 ```jsx
 import { scheduleOnUI } from 'react-native-worklets';
 
-const triggerAnimation = () => {
+function triggerAnimation() {
   scheduleOnUI(() => {
     'worklet';
     console.log('Running on UI thread');
     // Direct UI manipulations here
   });
-};
+}
 ```
 
 ### 3. Call JS from UI Thread with `scheduleOnRN`
@@ -108,11 +108,11 @@ const triggerAnimation = () => {
 import { scheduleOnRN } from 'react-native-worklets';
 
 // Regular JS function
-const trackAnalytics = (value) => {
+function trackAnalytics(value) {
   analytics.track('animation_complete', { value });
-};
+}
 
-const AnimatedComponent = () => {
+function AnimatedComponent() {
   const progress = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -124,7 +124,7 @@ const AnimatedComponent = () => {
   });
 
   return <Animated.View style={animatedStyle} />;
-};
+}
 ```
 
 ### 4. Animation with Callback
@@ -132,7 +132,7 @@ const AnimatedComponent = () => {
 ```jsx
 import { scheduleOnRN } from 'react-native-worklets';
 
-const AnimatedButton = () => {
+function AnimatedButton() {
   const scale = useSharedValue(1);
 
   const onComplete = () => {
@@ -162,7 +162,7 @@ const AnimatedButton = () => {
       </Animated.View>
     </Pressable>
   );
-};
+}
 ```
 
 ## When to Use What
@@ -234,8 +234,8 @@ withSpring(value, {
 
 // After (v4)
 withSpring(value, {
-  energyThreshold: 0.01,  // Replaces both threshold parameters
-  duration: 200,          // Duration is now "perceptual" (~1.5x actual time)
+  energyThreshold: 0.01, // Replaces both threshold parameters
+  duration: 200, // Duration is now "perceptual" (~1.5x actual time)
 });
 ```
 

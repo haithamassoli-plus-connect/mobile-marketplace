@@ -13,13 +13,13 @@ Fix TextInput synchronization and flickering issues by using uncontrolled compon
 **Before (controlled - may flicker on legacy arch):**
 
 ```jsx
-<TextInput value={text} onChangeText={setText} />
+<TextInput value={text} onChangeText={setText} />;
 ```
 
 **After (uncontrolled - native owns state):**
 
 ```jsx
-<TextInput defaultValue={text} onChangeText={setText} />
+<TextInput defaultValue={text} onChangeText={setText} />;
 ```
 
 ## When to Use
@@ -56,16 +56,16 @@ The diagram shows what happens when typing "TEST" with a controlled `TextInput`:
 
 ```jsx
 // Controlled - value prop syncs state to native
-const ControlledInput = () => {
+function ControlledInput() {
   const [value, setValue] = useState('');
-  
+
   return (
     <TextInput
-      value={value}           // This causes sync issues
+      value={value} // This causes sync issues
       onChangeText={setValue}
     />
   );
-};
+}
 ```
 
 ### 2. Convert to Uncontrolled
@@ -74,16 +74,16 @@ Remove the `value` prop to make it uncontrolled:
 
 ```jsx
 // Uncontrolled - native owns the state
-const UncontrolledInput = () => {
+function UncontrolledInput() {
   const [value, setValue] = useState('');
-  
+
   return (
     <TextInput
-      defaultValue={value}     // Only sets initial value
-      onChangeText={setValue}  // Still updates React state
+      defaultValue={value} // Only sets initial value
+      onChangeText={setValue} // Still updates React state
     />
   );
-};
+}
 ```
 
 ### 3. Use Ref for Programmatic Control
@@ -91,25 +91,25 @@ const UncontrolledInput = () => {
 If you need to read/set value programmatically:
 
 ```jsx
-const UncontrolledWithRef = () => {
+function UncontrolledWithRef() {
   const inputRef = useRef(null);
-  
+
   const clearInput = () => {
     inputRef.current?.clear();
   };
-  
+
   const getValue = () => {
     // Use onChangeText to track value, or native methods
   };
-  
+
   return (
     <TextInput
       ref={inputRef}
       defaultValue=""
-      onChangeText={(text) => console.log('Current:', text)}
+      onChangeText={text => console.log('Current:', text)}
     />
   );
-};
+}
 ```
 
 ## Code Examples
@@ -119,51 +119,51 @@ const UncontrolledWithRef = () => {
 **Before (Controlled):**
 
 ```jsx
-const SearchInput = () => {
+function SearchInput() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  
+
   const handleChange = (text) => {
     setQuery(text);
     fetchResults(text).then(setResults);
   };
-  
+
   return (
     <View>
       <TextInput
-        value={query}              // Remove this
+        value={query} // Remove this
         onChangeText={handleChange}
         placeholder="Search..."
       />
       <ResultsList data={results} />
     </View>
   );
-};
+}
 ```
 
 **After (Uncontrolled):**
 
 ```jsx
-const SearchInput = () => {
+function SearchInput() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  
+
   const handleChange = (text) => {
     setQuery(text);
     fetchResults(text).then(setResults);
   };
-  
+
   return (
     <View>
       <TextInput
-        defaultValue=""           // Initial value only
+        defaultValue="" // Initial value only
         onChangeText={handleChange}
         placeholder="Search..."
       />
       <ResultsList data={results} />
     </View>
   );
-};
+}
 ```
 
 ### When You Need Value Control
@@ -172,22 +172,22 @@ For input masking or validation that modifies input:
 
 ```jsx
 // Option 1: Accept the controlled behavior (may flicker)
-const MaskedInput = () => {
+function MaskedInput() {
   const [value, setValue] = useState('');
-  
+
   const handleChange = (text) => {
     // Phone mask: (123) 456-7890
     const masked = maskPhone(text);
     setValue(masked);
   };
-  
+
   return (
     <TextInput
-      value={value}  // Necessary for masking
+      value={value} // Necessary for masking
       onChangeText={handleChange}
     />
   );
-};
+}
 
 // Option 2: Use a native masked input library
 // react-native-masked-text handles this natively

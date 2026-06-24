@@ -41,7 +41,7 @@ Follow these styling patterns for cleaner, more consistent React Native code.
 <View style={{ padding: 16, gap: 12 }}>
   <Text>First</Text>
   <Text>Second</Text>
-</View>
+</View>;
 ```
 
 **Use `experimental_backgroundImage` for linear gradients:**

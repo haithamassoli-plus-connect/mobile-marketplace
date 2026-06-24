@@ -97,48 +97,48 @@ After fixing, re-profile. All bars should turn gray (except the most recent).
 
 ```jsx
 // BAD: Memory leak
-const BadEventComponent = () => {
+function BadEventComponent() {
   useEffect(() => {
     const subscription = EventEmitter.addListener('myEvent', handleEvent);
     // Missing cleanup!
   }, []);
-  
+
   return <Text>Listening...</Text>;
-};
+}
 
 // GOOD: Proper cleanup
-const GoodEventComponent = () => {
+function GoodEventComponent() {
   useEffect(() => {
     const subscription = EventEmitter.addListener('myEvent', handleEvent);
     return () => subscription.remove(); // Cleanup!
   }, []);
-  
+
   return <Text>Listening...</Text>;
-};
+}
 ```
 
 **2. Timers Not Cleared:**
 
 ```jsx
 // BAD: Memory leak
-const BadTimerComponent = () => {
+function BadTimerComponent() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCount(prev => prev + 1);
     }, 1000);
     // Missing cleanup!
   }, []);
-};
+}
 
 // GOOD: Proper cleanup
-const GoodTimerComponent = () => {
+function GoodTimerComponent() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCount(prev => prev + 1);
     }, 1000);
     return () => clearInterval(timer); // Cleanup!
   }, []);
-};
+}
 ```
 
 **3. Closures Capturing Large Objects:**
@@ -147,7 +147,7 @@ const GoodTimerComponent = () => {
 // BAD: Closure captures entire array
 class BadClosureExample {
   private largeData = new Array(1000000).fill('data');
-  
+
   createLeakyFunction() {
     return () => this.largeData.length; // Captures this.largeData
   }
@@ -156,7 +156,7 @@ class BadClosureExample {
 // GOOD: Only capture what's needed
 class GoodClosureExample {
   private largeData = new Array(1000000).fill('data');
-  
+
   createEfficientFunction() {
     const length = this.largeData.length; // Extract value
     return () => length; // Only captures primitive
@@ -168,20 +168,20 @@ class GoodClosureExample {
 
 ```jsx
 // BAD: Global array never cleared
-let leakyClosures = [];
+const leakyClosures = [];
 
-const createLeak = () => {
+function createLeak() {
   const data = generateLargeData();
   leakyClosures.push(() => data); // Keeps growing!
-};
+}
 
 // GOOD: Clear when done or use WeakRef
-const createNoLeak = () => {
+function createNoLeak() {
   const data = generateLargeData();
   const closure = () => data;
   // Use it and let it be garbage collected
   return closure;
-};
+}
 ```
 
 ## Memory Profiler Metrics

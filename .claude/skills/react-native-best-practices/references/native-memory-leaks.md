@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), Callback {
         super.onCreate(savedInstanceState)
         EventManager.addListener(this)
     }
-    
+
     override fun onDestroy() {
         EventManager.removeListener(this)
         super.onDestroy()

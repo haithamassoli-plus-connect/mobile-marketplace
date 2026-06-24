@@ -15,13 +15,13 @@ latest value.
 **Incorrect (reads state directly):**
 
 ```tsx
-const [size, setSize] = useState<Size | undefined>(undefined)
+const [size, setSize] = useState<Size | undefined>(undefined);
 
-const onLayout = (e: LayoutChangeEvent) => {
-  const { width, height } = e.nativeEvent.layout
+function onLayout(e: LayoutChangeEvent) {
+  const { width, height } = e.nativeEvent.layout;
   // size may be stale in this closure
   if (size?.width !== width || size?.height !== height) {
-    setSize({ width, height })
+    setSize({ width, height });
   }
 }
 ```
@@ -29,14 +29,15 @@ const onLayout = (e: LayoutChangeEvent) => {
 **Correct (dispatch updater):**
 
 ```tsx
-const [size, setSize] = useState<Size | undefined>(undefined)
+const [size, setSize] = useState<Size | undefined>(undefined);
 
-const onLayout = (e: LayoutChangeEvent) => {
-  const { width, height } = e.nativeEvent.layout
+function onLayout(e: LayoutChangeEvent) {
+  const { width, height } = e.nativeEvent.layout;
   setSize((prev) => {
-    if (prev?.width === width && prev?.height === height) return prev
-    return { width, height }
-  })
+    if (prev?.width === width && prev?.height === height)
+      return prev;
+    return { width, height };
+  });
 }
 ```
 
@@ -48,22 +49,22 @@ re-render.
 **Incorrect (unnecessary comparison for primitive state):**
 
 ```tsx
-const [size, setSize] = useState<Size | undefined>(undefined)
+const [size, setSize] = useState<Size | undefined>(undefined);
 
-const onLayout = (e: LayoutChangeEvent) => {
-  const { width, height } = e.nativeEvent.layout
-  setSize((prev) => (prev === width ? prev : width))
+function onLayout(e: LayoutChangeEvent) {
+  const { width, height } = e.nativeEvent.layout;
+  setSize(prev => (prev === width ? prev : width));
 }
 ```
 
 **Correct (sets primitive state directly):**
 
 ```tsx
-const [size, setSize] = useState<Size | undefined>(undefined)
+const [size, setSize] = useState<Size | undefined>(undefined);
 
-const onLayout = (e: LayoutChangeEvent) => {
-  const { width, height } = e.nativeEvent.layout
-  setSize(width)
+function onLayout(e: LayoutChangeEvent) {
+  const { width, height } = e.nativeEvent.layout;
+  setSize(width);
 }
 ```
 
@@ -73,19 +74,19 @@ dispatch updater.
 **Incorrect (reads state directly from the callback):**
 
 ```tsx
-const [count, setCount] = useState(0)
+const [count, setCount] = useState(0);
 
-const onTap = () => {
-  setCount(count + 1)
+function onTap() {
+  setCount(count + 1);
 }
 ```
 
 **Correct (dispatch updater):**
 
 ```tsx
-const [count, setCount] = useState(0)
+const [count, setCount] = useState(0);
 
-const onTap = () => {
-  setCount((prev) => prev + 1)
+function onTap() {
+  setCount(prev => prev + 1);
 }
 ```

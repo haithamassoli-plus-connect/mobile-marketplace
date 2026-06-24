@@ -23,22 +23,30 @@ function UserProfile({ user, theme }) {
       src={user.avatarUrl}
       className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}
     />
-  )
+  );
 
   // Defined inside to access `user` - BAD
   const Stats = () => (
     <div>
-      <span>{user.followers} followers</span>
-      <span>{user.posts} posts</span>
+      <span>
+        {user.followers}
+        {' '}
+        followers
+      </span>
+      <span>
+        {user.posts}
+        {' '}
+        posts
+      </span>
     </div>
-  )
+  );
 
   return (
     <div>
       <Avatar />
       <Stats />
     </div>
-  )
+  );
 }
 ```
 
@@ -53,16 +61,24 @@ function Avatar({ src, theme }: { src: string; theme: string }) {
       src={src}
       className={theme === 'dark' ? 'avatar-dark' : 'avatar-light'}
     />
-  )
+  );
 }
 
 function Stats({ followers, posts }: { followers: number; posts: number }) {
   return (
     <div>
-      <span>{followers} followers</span>
-      <span>{posts} posts</span>
+      <span>
+        {followers}
+        {' '}
+        followers
+      </span>
+      <span>
+        {posts}
+        {' '}
+        posts
+      </span>
     </div>
-  )
+  );
 }
 
 function UserProfile({ user, theme }) {
@@ -71,7 +87,7 @@ function UserProfile({ user, theme }) {
       <Avatar src={user.avatarUrl} theme={theme} />
       <Stats followers={user.followers} posts={user.posts} />
     </div>
-  )
+  );
 }
 ```
 

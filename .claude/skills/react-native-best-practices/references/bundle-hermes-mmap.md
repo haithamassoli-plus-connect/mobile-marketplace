@@ -73,11 +73,11 @@ android {
         applicationId "com.myapp"
         // ...
     }
-    
+
     androidResources {
         noCompress += ["bundle"]
     }
-    
+
     buildTypes {
         release {
             minifyEnabled true

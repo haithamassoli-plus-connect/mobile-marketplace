@@ -3,12 +3,12 @@
 ## Imports
 
 ```tsx
-// Before
-import { Video, ResizeMode } from 'expo-av';
-
-// After
-import { useVideoPlayer, VideoView, VideoSource } from 'expo-video';
 import { useEvent, useEventListener } from 'expo';
+
+// Before
+import { ResizeMode, Video } from 'expo-av';
+// After
+import { useVideoPlayer, VideoSource, VideoView } from 'expo-video';
 ```
 
 ## Video Playback
@@ -26,7 +26,7 @@ const [status, setStatus] = useState({});
   resizeMode={ResizeMode.CONTAIN}
   isLooping
   onPlaybackStatusUpdate={setStatus}
-/>
+/>;
 
 // Control
 videoRef.current?.playAsync();
@@ -36,7 +36,7 @@ videoRef.current?.pauseAsync();
 ### After (expo-video)
 
 ```tsx
-const player = useVideoPlayer('https://example.com/video.mp4', player => {
+const player = useVideoPlayer('https://example.com/video.mp4', (player) => {
   player.loop = true;
 });
 
@@ -46,7 +46,7 @@ const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.play
   player={player}
   style={{ width: 350, height: 200 }}
   contentFit="contain"
-/>
+/>;
 
 // Control
 player.play();
@@ -59,13 +59,14 @@ player.pause();
 
 ```tsx
 <Video
-  onPlaybackStatusUpdate={status => {
+  onPlaybackStatusUpdate={(status) => {
     if (status.isLoaded) {
       console.log(status.positionMillis, status.durationMillis, status.isPlaying);
-      if (status.didJustFinish) console.log('finished');
+      if (status.didJustFinish)
+        console.log('finished');
     }
   }}
-/>
+/>;
 ```
 
 ### After (expo-video)
@@ -86,7 +87,7 @@ console.log(player.currentTime, player.duration, player.playing);
 ### Before (expo-av)
 
 ```tsx
-<Video source={require('./video.mp4')} />
+<Video source={require('./video.mp4')} />;
 ```
 
 ### After (expo-video)
@@ -104,7 +105,7 @@ const player = useVideoPlayer({ assetId: require('./video.mp4') });
   allowsPictureInPicture
   onFullscreenEnter={() => {}}
   onFullscreenExit={() => {}}
-/>
+/>;
 ```
 
 For PiP and background playback, add to app.json:

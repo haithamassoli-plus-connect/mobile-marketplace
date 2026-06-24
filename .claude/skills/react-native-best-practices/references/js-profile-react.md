@@ -107,9 +107,9 @@ For non-React performance issues:
 ### Before: Unnecessary Re-renders
 
 ```jsx
-const App = () => {
+function App() {
   const [count, setCount] = useState(0);
-  
+
   return (
     <View>
       <Text>{count}</Text>
@@ -117,31 +117,33 @@ const App = () => {
       <Button onPress={() => setCount(count + 1)} title="Press" />
     </View>
   );
-};
+}
 
-const Button = ({onPress, title}) => (
-  <Pressable onPress={onPress}>
-    <Text>{title}</Text>
-  </Pressable>
-);
+function Button({ onPress, title }) {
+  return (
+    <Pressable onPress={onPress}>
+      <Text>{title}</Text>
+    </Pressable>
+  );
+}
 ```
 
 ### After: Memoized
 
 ```jsx
-const App = () => {
+function App() {
   const [count, setCount] = useState(0);
   const onPressHandler = useCallback(() => setCount(c => c + 1), []);
-  
+
   return (
     <View>
       <Text>{count}</Text>
       <Button onPress={onPressHandler} title="Press" />
     </View>
   );
-};
+}
 
-const Button = memo(({onPress, title}) => (
+const Button = memo(({ onPress, title }) => (
   <Pressable onPress={onPress}>
     <Text>{title}</Text>
   </Pressable>

@@ -13,17 +13,17 @@ Replace web polyfills and JS navigators with native React Native implementations
 **Before (JS polyfills - 430+ KB):**
 
 ```tsx
-import '@formatjs/intl-datetimeformat/polyfill';
-import CryptoJS from 'crypto-js';
 import { createStackNavigator } from '@react-navigation/stack';
+import CryptoJS from 'crypto-js';
+import '@formatjs/intl-datetimeformat/polyfill';
 ```
 
 **After (native implementations):**
 
 ```tsx
-// Hermes has native Intl.DateTimeFormat support, so this polyfill is often unnecessary
-import { createHash } from 'react-native-quick-crypto';  // 58x faster
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// Hermes has native Intl.DateTimeFormat support, so this polyfill is often unnecessary
+import { createHash } from 'react-native-quick-crypto'; // 58x faster
 ```
 
 ## When to Use
@@ -119,19 +119,20 @@ npm install @react-navigation/native-stack react-native-screens
 ```
 
 ```tsx
-// BEFORE: JS-based stack (more flexible, less native)
-import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
-
 // AFTER: Native stack (native feel, better performance)
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// BEFORE: JS-based stack (more flexible, less native)
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();
 
 // Usage is nearly identical
 <Stack.Navigator>
   <Stack.Screen name="Home" component={HomeScreen} />
   <Stack.Screen name="Details" component={DetailsScreen} />
-</Stack.Navigator>
+</Stack.Navigator>;
 ```
 
 **Benefits:**
@@ -147,18 +148,19 @@ npm install @bottom-tabs/react-navigation react-native-bottom-tabs
 ```
 
 ```tsx
-// BEFORE: JS tabs
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tabs = createBottomTabNavigator();
-
 // AFTER: Native tabs
 import { createNativeBottomTabNavigator } from '@bottom-tabs/react-navigation';
+
+// BEFORE: JS tabs
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tabs = createBottomTabNavigator();
 const Tabs = createNativeBottomTabNavigator();
 
 <Tabs.Navigator>
   <Tabs.Screen name="Home" component={HomeScreen} />
   <Tabs.Screen name="Profile" component={ProfileScreen} />
-</Tabs.Navigator>
+</Tabs.Navigator>;
 ```
 
 ## Recommended Native Libraries

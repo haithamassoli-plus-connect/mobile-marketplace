@@ -35,13 +35,13 @@ import Button from './components/Button';
 
 ```tsx
 // components/index.ts (barrel file)
+// Usage (barrel import)
+import { Button } from './components';
+
 export { Button } from './Button';
 export { Card } from './Card';
 export { Modal } from './Modal';
 export { Sidebar } from './Sidebar';
-
-// Usage (barrel import)
-import { Button } from './components';
 ```
 
 ## Problems with Barrel Imports
@@ -65,7 +65,7 @@ import { Button } from './components';
 // JavaScript must evaluate:
 // - Button.tsx
 // - Card.tsx
-// - Modal.tsx  
+// - Modal.tsx
 // - Sidebar.tsx
 // Even though you only use Button
 ```
@@ -123,6 +123,7 @@ Enable tree shaking to automatically remove unused barrel exports.
 ```tsx
 // metro.config.js
 const { getDefaultConfig } = require('expo/metro-config');
+
 const config = getDefaultConfig(__dirname);
 
 config.transformer.getTransformOptions = async () => ({
@@ -154,11 +155,11 @@ Tree shaking built-in.
 
 ```tsx
 // BAD: Imports entire library
-import { format, addDays, isToday } from 'date-fns';
+import { addDays, format, isToday } from 'date-fns';
 
+import addDays from 'date-fns/addDays';
 // GOOD: Direct imports
 import format from 'date-fns/format';
-import addDays from 'date-fns/addDays';
 import isToday from 'date-fns/isToday';
 ```
 
@@ -172,7 +173,7 @@ Some libraries provide Babel plugins:
 // babel.config.js
 module.exports = {
   plugins: [
-    'react-native-paper/babel',  // Auto-transforms imports
+    'react-native-paper/babel', // Auto-transforms imports
   ],
 };
 ```
@@ -212,11 +213,11 @@ If your package is consumed by others:
 ```tsx
 // Keep index.ts for package API
 // components/index.ts
-export { Button } from './Button';
-
 // Internal code uses direct imports
 // src/screens/Home.tsx
 import Button from '../components/Button';
+
+export { Button } from './Button';
 ```
 
 ## Migration Script Example

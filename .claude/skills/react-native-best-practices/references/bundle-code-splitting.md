@@ -25,7 +25,7 @@ const SettingsScreen = React.lazy(() =>
 
 <Suspense fallback={<Loading />}>
   <SettingsScreen />
-</Suspense>
+</Suspense>;
 ```
 
 ## When to Use
@@ -82,28 +82,29 @@ const SettingsScreen = React.lazy(() =>
 ### 3. Wrap with Suspense
 
 ```tsx
-import React, { Suspense } from 'react';
+import * as React from 'react';
+import { Suspense } from 'react';
 
-const App = () => {
+function App() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <SettingsScreen />
     </Suspense>
   );
-};
+}
 ```
 
 ### 4. Configure Chunk Loading
 
 ```jsx
 // index.js (before AppRegistry)
-import { ScriptManager, Script } from '@callstack/repack/client';
+import { Script, ScriptManager } from '@callstack/repack/client';
 
 const CHUNK_URLS = {
   settings: 'https://assets.example.com/app/v42/settings.chunk.bundle',
 };
 
-ScriptManager.shared.addResolver((scriptId) => ({
+ScriptManager.shared.addResolver(scriptId => ({
   url: __DEV__ ? Script.getDevServerURL(scriptId) : getChunkUrl(scriptId),
 }));
 
@@ -132,24 +133,25 @@ Deploy chunks to a first-party CDN with versioned paths, and keep the allowlist 
 
 ```tsx
 // App.tsx
-import React, { Suspense, useState } from 'react';
-import { Button, View, ActivityIndicator } from 'react-native';
+import * as React from 'react';
+import { Suspense, useState } from 'react';
+import { ActivityIndicator, Button, View } from 'react-native';
 
 // Lazy load heavy feature
 const HeavyFeature = React.lazy(() =>
   import(/* webpackChunkName: "heavy-feature" */ './HeavyFeature')
 );
 
-const App = () => {
+function App() {
   const [showFeature, setShowFeature] = useState(false);
-  
+
   return (
     <View>
-      <Button 
-        title="Load Feature" 
-        onPress={() => setShowFeature(true)} 
+      <Button
+        title="Load Feature"
+        onPress={() => setShowFeature(true)}
       />
-      
+
       {showFeature && (
         <Suspense fallback={<ActivityIndicator />}>
           <HeavyFeature />
@@ -157,7 +159,7 @@ const App = () => {
       )}
     </View>
   );
-};
+}
 ```
 
 ## Module Federation (Advanced)
@@ -188,7 +190,7 @@ Consider [Zephyr Cloud](https://zephyr-cloud.io/) for:
 ## Caching Strategy
 
 ```tsx
-ScriptManager.shared.addResolver((scriptId) => ({
+ScriptManager.shared.addResolver(scriptId => ({
   url: getChunkUrl(scriptId),
   cache: {
     // Enable caching

@@ -127,6 +127,7 @@ if (Platform.select({ ios: true, android: false }) === 'ios') {
 
 ```tsx
 import * as RN from 'react-native';
+
 if (RN.Platform.OS === 'ios') {
   // NOT removed - optimization fails
 }
@@ -190,11 +191,13 @@ Or specify files with side effects:
 
 ```tsx
 // test-treeshake.js
-export const usedFunction = () => 'used';
-export const unusedFunction = () => 'unused'; // Should be removed
+// Should be removed
 
 // app.js
 import { usedFunction } from './test-treeshake';
+
+export const usedFunction = () => 'used';
+export const unusedFunction = () => 'unused';
 ```
 
 After building, search bundle for `unusedFunction`. Should not exist.

@@ -14,8 +14,8 @@ Replace ScrollView with FlatList or FlashList for performant large list renderin
 
 ```jsx
 <ScrollView>
-  {items.map((item) => <Item key={item.id} {...item} />)}
-</ScrollView>
+  {items.map(item => <Item key={item.id} {...item} />)}
+</ScrollView>;
 ```
 
 **Correct:**
@@ -23,9 +23,9 @@ Replace ScrollView with FlatList or FlashList for performant large list renderin
 ```jsx
 <FlashList
   data={items}
-  keyExtractor={(item) => item.id}
+  keyExtractor={item => item.id}
   renderItem={({ item }) => <Item {...item} />}
-/>
+/>;
 ```
 
 ## When to Use
@@ -59,15 +59,17 @@ The FPS graph shows a severe performance problem during list rendering:
 
 ```jsx
 // BAD: ScrollView renders ALL items at once
-const BadList = ({ items }) => (
-  <ScrollView>
-    {items.map((item, index) => (
-      <View key={index}>
-        <Text>{item}</Text>
-      </View>
-    ))}
-  </ScrollView>
-);
+function BadList({ items }) {
+  return (
+    <ScrollView>
+      {items.map((item, index) => (
+        <View key={index}>
+          <Text>{item}</Text>
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
 ```
 
 With 5000 items, this creates 5000 views immediately, causing:
@@ -80,13 +82,13 @@ With 5000 items, this creates 5000 views immediately, causing:
 ```jsx
 import { FlatList } from 'react-native';
 
-const BetterList = ({ items }) => {
+function BetterList({ items }) {
   const renderItem = ({ item }) => (
     <View>
       <Text>{item}</Text>
     </View>
   );
-  
+
   return (
     <FlatList
       data={items}
@@ -94,7 +96,7 @@ const BetterList = ({ items }) => {
       keyExtractor={(item, index) => index.toString()}
     />
   );
-};
+}
 ```
 
 FlatList only renders visible items + buffer (windowing).
@@ -106,19 +108,19 @@ For fixed-height items, skip layout measurement:
 ```jsx
 const ITEM_HEIGHT = 50;
 
-const OptimizedList = ({ items }) => {
+function OptimizedList({ items }) {
   const renderItem = ({ item }) => (
     <View style={{ height: ITEM_HEIGHT }}>
       <Text>{item}</Text>
     </View>
   );
-  
+
   const getItemLayout = (_, index) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,
   });
-  
+
   return (
     <FlatList
       data={items}
@@ -127,7 +129,7 @@ const OptimizedList = ({ items }) => {
       getItemLayout={getItemLayout}
     />
   );
-};
+}
 ```
 
 ### 4. Upgrade to FlashList (Best Performance)
@@ -139,21 +141,21 @@ npm install @shopify/flash-list
 ```jsx
 import { FlashList } from '@shopify/flash-list';
 
-const BestList = ({ items }) => {
+function BestList({ items }) {
   const renderItem = ({ item }) => (
     <View style={{ height: 50 }}>
       <Text>{item}</Text>
     </View>
   );
-  
+
   return (
     <FlashList
       data={items}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={item => item.id}
     />
   );
-};
+}
 ```
 
 For FlashList v1, add `estimatedItemSize` with a realistic average item height. For FlashList v2+, skip that prop and focus on stable keys, lightweight item components, and `getItemType` when item shapes differ.
@@ -176,7 +178,7 @@ For FlashList v1, add `estimatedItemSize` with a realistic average item height. 
   data={items}
   renderItem={renderItem}
   estimatedItemSize={100}
-/>
+/>;
 ```
 
 ### Mixed Item Types
@@ -185,12 +187,14 @@ For FlashList v1, add `estimatedItemSize` with a realistic average item height. 
 <FlashList
   data={items}
   renderItem={({ item }) => {
-    if (item.type === 'header') return <Header {...item} />;
-    if (item.type === 'product') return <Product {...item} />;
+    if (item.type === 'header')
+      return <Header {...item} />;
+    if (item.type === 'product')
+      return <Product {...item} />;
     return <DefaultItem {...item} />;
   }}
-  getItemType={(item) => item.type}  // Helps recycling
-/>
+  getItemType={item => item.type} // Helps recycling
+/>;
 ```
 
 If the project is still on FlashList v1, keep `estimatedItemSize` alongside `getItemType`.
@@ -208,9 +212,9 @@ If the project is still on FlashList v1, keep `estimatedItemSize` alongside `get
   initialNumToRender={10}
   windowSize={5}
   // Avoid re-renders
-  keyExtractor={(item) => item.id}
-  extraData={selectedId}  // Only when selection changes
-/>
+  keyExtractor={item => item.id}
+  extraData={selectedId} // Only when selection changes
+/>;
 ```
 
 ## Performance Comparison

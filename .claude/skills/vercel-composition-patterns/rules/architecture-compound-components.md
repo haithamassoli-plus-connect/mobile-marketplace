@@ -27,35 +27,37 @@ function Composer({
       {renderHeader?.()}
       <Input />
       {showAttachments && <Attachments />}
-      {renderFooter ? (
-        renderFooter()
-      ) : (
-        <Footer>
-          {showFormatting && <Formatting />}
-          {showEmojis && <Emojis />}
-          {renderActions?.()}
-        </Footer>
-      )}
+      {renderFooter
+        ? (
+            renderFooter()
+          )
+        : (
+            <Footer>
+              {showFormatting && <Formatting />}
+              {showEmojis && <Emojis />}
+              {renderActions?.()}
+            </Footer>
+          )}
     </form>
-  )
+  );
 }
 ```
 
 **Correct (compound components with shared context):**
 
 ```tsx
-const ComposerContext = createContext<ComposerContextValue | null>(null)
+const ComposerContext = createContext<ComposerContextValue | null>(null);
 
 function ComposerProvider({ children, state, actions, meta }: ProviderProps) {
   return (
     <ComposerContext value={{ state, actions, meta }}>
       {children}
     </ComposerContext>
-  )
+  );
 }
 
 function ComposerFrame({ children }: { children: React.ReactNode }) {
-  return <form>{children}</form>
+  return <form>{children}</form>;
 }
 
 function ComposerInput() {
@@ -63,21 +65,21 @@ function ComposerInput() {
     state,
     actions: { update },
     meta: { inputRef },
-  } = use(ComposerContext)
+  } = use(ComposerContext);
   return (
     <TextInput
       ref={inputRef}
       value={state.input}
-      onChangeText={(text) => update((s) => ({ ...s, input: text }))}
+      onChangeText={text => update(s => ({ ...s, input: text }))}
     />
-  )
+  );
 }
 
 function ComposerSubmit() {
   const {
     actions: { submit },
-  } = use(ComposerContext)
-  return <Button onPress={submit}>Send</Button>
+  } = use(ComposerContext);
+  return <Button onPress={submit}>Send</Button>;
 }
 
 // Export as compound component
@@ -91,7 +93,7 @@ const Composer = {
   Attachments: ComposerAttachments,
   Formatting: ComposerFormatting,
   Emojis: ComposerEmojis,
-}
+};
 ```
 
 **Usage:**
@@ -106,7 +108,7 @@ const Composer = {
       <Composer.Submit />
     </Composer.Footer>
   </Composer.Frame>
-</Composer.Provider>
+</Composer.Provider>;
 ```
 
 Consumers explicitly compose exactly what they need. No hidden conditionals. And the state, actions and meta are dependency-injected by a parent provider, allowing multiple usages of the same component structure.

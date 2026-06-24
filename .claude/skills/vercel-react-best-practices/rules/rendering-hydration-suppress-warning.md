@@ -13,7 +13,7 @@ In SSR frameworks (e.g., Next.js), some values are intentionally different on se
 
 ```tsx
 function Timestamp() {
-  return <span>{new Date().toLocaleString()}</span>
+  return <span>{new Date().toLocaleString()}</span>;
 }
 ```
 
@@ -25,6 +25,6 @@ function Timestamp() {
     <span suppressHydrationWarning>
       {new Date().toLocaleString()}
     </span>
-  )
+  );
 }
 ```

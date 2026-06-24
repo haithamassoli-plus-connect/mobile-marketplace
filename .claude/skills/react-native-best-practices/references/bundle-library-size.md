@@ -82,10 +82,10 @@ code --install-extension wix.vscode-import-cost
 Shows inline size next to imports:
 
 ```tsx
-import React from 'react';           // 6.5K (gzipped)
-import { View, Text } from 'react-native';  // 0B (native)
-import lodash from 'lodash';         // 71.5K (gzipped: 24.7K)
-import get from 'lodash/get';        // 8K (gzipped: 2.9K)
+import lodash from 'lodash'; // 71.5K (gzipped: 24.7K)
+import get from 'lodash/get'; // 8K (gzipped: 2.9K)
+import * as React from 'react'; // 6.5K (gzipped)
+import { Text, View } from 'react-native'; // 0B (native)
 ```
 
 ### Limitations
@@ -160,10 +160,11 @@ npm pack <package-name> --dry-run 2>&1 | grep "total files"
 ```tsx
 // BAD: Full library (71.5 KB)
 import _ from 'lodash';
-_.get(obj, 'path.to.value');
 
 // BETTER: Specific import (8 KB)
 import get from 'lodash/get';
+
+_.get(obj, 'path.to.value');
 get(obj, 'path.to.value');
 
 // BEST: Native JS (0 KB)

@@ -54,15 +54,15 @@ const deferredQuery = useDeferredValue(query);
 Use when a value drives expensive computation but you want input to stay responsive.
 
 ```jsx
-import { useState, useDeferredValue } from 'react';
+import { useDeferredValue, useState } from 'react';
 
-const SearchScreen = () => {
+function SearchScreen() {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
-  
+
   // query updates immediately (input stays responsive)
   // deferredQuery updates when React has time
-  
+
   return (
     <View>
       <TextInput
@@ -74,17 +74,17 @@ const SearchScreen = () => {
       <ExpensiveList query={deferredQuery} />
     </View>
   );
-};
+}
 ```
 
 ### Pattern 2: Show Stale Content While Loading
 
 ```jsx
-const SearchWithStaleIndicator = () => {
+function SearchWithStaleIndicator() {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
   const isStale = query !== deferredQuery;
-  
+
   return (
     <View>
       <TextInput value={query} onChangeText={setQuery} />
@@ -94,7 +94,7 @@ const SearchWithStaleIndicator = () => {
       {isStale && <ActivityIndicator />}
     </View>
   );
-};
+}
 ```
 
 ### Pattern 3: Transition Non-Critical Updates with `useTransition`
@@ -104,29 +104,32 @@ Use when you have multiple state updates and want to mark some as low-priority.
 ```jsx
 import { useState, useTransition } from 'react';
 
-const TransitionExample = () => {
+function TransitionExample() {
   const [count, setCount] = useState(0);
   const [heavyData, setHeavyData] = useState(null);
   const [isPending, startTransition] = useTransition();
-  
+
   const handleIncrement = () => {
     // High priority - updates immediately
     setCount(c => c + 1);
-    
+
     // Low priority - can be interrupted
     startTransition(() => {
       setHeavyData(computeExpensiveData());
     });
   };
-  
+
   return (
     <View>
-      <Text>Count: {count}</Text>
+      <Text>
+        Count:
+        {count}
+      </Text>
       {isPending ? <ActivityIndicator /> : <HeavyComponent data={heavyData} />}
       <Button onPress={handleIncrement} title="Increment" />
     </View>
   );
-};
+}
 ```
 
 ### Pattern 4: Suspense for Data Fetching
@@ -134,10 +137,10 @@ const TransitionExample = () => {
 ```jsx
 import { Suspense, useDeferredValue } from 'react';
 
-const DataScreen = () => {
+function DataScreen() {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
-  
+
   return (
     <View>
       <TextInput value={query} onChangeText={setQuery} />
@@ -146,7 +149,7 @@ const DataScreen = () => {
       </Suspense>
     </View>
   );
-};
+}
 ```
 
 ## Code Examples
@@ -155,29 +158,31 @@ const DataScreen = () => {
 
 ```jsx
 // Without Concurrent React - UI freezes
-const SlowSearch = () => {
+function SlowSearch() {
   const [query, setQuery] = useState('');
-  
+
   return (
     <>
       <TextInput value={query} onChangeText={setQuery} />
-      <SlowComponent query={query} /> {/* Blocks every keystroke */}
+      <SlowComponent query={query} />
+      {' '}
+      {/* Blocks every keystroke */}
     </>
   );
-};
+}
 
-// With Concurrent React - UI stays responsive  
-const FastSearch = () => {
+// With Concurrent React - UI stays responsive
+function FastSearch() {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
-  
+
   return (
     <>
       <TextInput value={query} onChangeText={setQuery} />
       <SlowComponent query={deferredQuery} />
     </>
   );
-};
+}
 
 // Important: Wrap SlowComponent in memo to prevent re-renders from parent
 const SlowComponent = memo(({ query }) => {

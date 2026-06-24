@@ -132,16 +132,16 @@ If **Both drop:**
 // 60 FPS = 16.6ms per frame
 const FRAME_BUDGET_60 = 16.6;
 
-// 120 FPS = 8.3ms per frame  
+// 120 FPS = 8.3ms per frame
 const FRAME_BUDGET_120 = 8.3;
 
 // If your function takes longer, it will drop frames
-const longRunningFunction = () => {
+function longRunningFunction() {
   let i = 0;
   while (i < 1000000000) { // This blocks for seconds!
     i++;
   }
-};
+}
 ```
 
 ## Interpreting Results

@@ -163,9 +163,9 @@ Main Thread: Apply layout to native views
 ```kotlin
 class MyModule(reactContext: ReactApplicationContext) :
     NativeMyModuleSpec(reactContext) {
-    
+
     private val moduleScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-    
+
     override fun heavyWork(promise: Promise?) {
         moduleScope.launch {
             // Heavy computation here
@@ -173,7 +173,7 @@ class MyModule(reactContext: ReactApplicationContext) :
             promise?.resolve(result)
         }
     }
-    
+
     override fun invalidate() {
         super.invalidate()
         moduleScope.cancel()  // Important: cancel to prevent leaks
@@ -195,7 +195,7 @@ class MyModule(reactContext: ReactApplicationContext) :
 ```swift
 DispatchQueue.global().async {
     let result = self.heavyComputation()
-    
+
     DispatchQueue.main.async {
         // Safe to update UI here
         self.updateUI(with: result)
@@ -208,7 +208,7 @@ DispatchQueue.global().async {
 ```kotlin
 moduleScope.launch(Dispatchers.Default) {
     val result = heavyComputation()
-    
+
     withContext(Dispatchers.Main) {
         // Safe to update UI here
         updateUI(result)

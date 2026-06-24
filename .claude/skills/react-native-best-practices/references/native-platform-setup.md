@@ -73,7 +73,7 @@ bundle install                         # Install ruby bundler
 cd ios && bundle exec pod install      # Install pods
 xcrun simctl list                      # List simulators
 
-# Android  
+# Android
 cd android && ./gradlew clean          # Clean build
 ./gradlew tasks                        # List available tasks
 ./gradlew assembleRelease              # Build release APK

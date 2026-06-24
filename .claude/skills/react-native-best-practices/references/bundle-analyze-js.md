@@ -83,7 +83,7 @@ Opens browser with treemap visualization:
 The treemap shows:
 - **Hierarchy**: `node_modules/` → `react-native/` → `Libraries/` → individual files
 - **Size**: Box area proportional to file size (KB shown in labels)
-- **Major components visible**: 
+- **Major components visible**:
   - `react-native` (724.18 KB, 80.5%)
   - `Renderer` (208.44 KB) - ReactNativeRenderer-prod.js, ReactFabric-prod.js
   - `Components` (125.29 KB) - Touchable, ScrollView, etc.
@@ -236,7 +236,7 @@ npx react-native bundle \
   --minify true && \
 npx source-map-explorer ios-bundle.js --no-border-checks
 
-# Android bundle analysis  
+# Android bundle analysis
 npx react-native bundle \
   --entry-file index.js \
   --bundle-output android-bundle.js \

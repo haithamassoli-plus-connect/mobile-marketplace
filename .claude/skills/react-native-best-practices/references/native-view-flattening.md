@@ -14,9 +14,11 @@ Understand and debug React Native's view flattening optimization.
 
 ```jsx
 <NativeTabBar>
-  <Tab1 />  // May be flattened, breaking native component
+  <Tab1 />
+  {' '}
+  // May be flattened, breaking native component
   <Tab2 />
-</NativeTabBar>
+</NativeTabBar>;
 ```
 
 **Solution (prevent flattening):**
@@ -25,7 +27,7 @@ Understand and debug React Native's view flattening optimization.
 <NativeTabBar>
   <Tab1 collapsable={false} />
   <Tab2 collapsable={false} />
-</NativeTabBar>
+</NativeTabBar>;
 ```
 
 ## When to Use
@@ -53,7 +55,7 @@ React Native's renderer automatically removes "layout-only" views that:
   <Child1 />
   <Child2 />
   <Child3 />
-</MyNativeComponent>
+</MyNativeComponent>;
 ```
 
 If `Child1` is flattened, its internal views become direct children:
@@ -61,12 +63,18 @@ If `Child1` is flattened, its internal views become direct children:
 ```tsx
 // Native side receives 5 views instead of 3!
 <MyNativeComponent>
-  <View />   // Was inside Child1
-  <View />   // Was inside Child1  
-  <View />   // Was inside Child1
+  <View />
+  {' '}
+  // Was inside Child1
+  <View />
+  {' '}
+  // Was inside Child1
+  <View />
+  {' '}
+  // Was inside Child1
   <Child2 />
   <Child3 />
-</MyNativeComponent>
+</MyNativeComponent>;
 ```
 
 ## Preventing Flattening with `collapsable`
@@ -76,7 +84,7 @@ If `Child1` is flattened, its internal views become direct children:
   <Child1 collapsable={false} />
   <Child2 collapsable={false} />
   <Child3 collapsable={false} />
-</MyNativeComponent>
+</MyNativeComponent>;
 ```
 
 Now native side always receives exactly 3 children.
@@ -116,46 +124,52 @@ Use native debugging tools to see the actual view hierarchy:
 const NativeTabBar = requireNativeComponent('RCTTabBar');
 
 // BAD: TabContent might get flattened
-const MyTabs = () => (
-  <NativeTabBar>
-    <TabContent title="Home">
-      <View><Text>Home content</Text></View>
-    </TabContent>
-    <TabContent title="Profile">
-      <View><Text>Profile content</Text></View>
-    </TabContent>
-  </NativeTabBar>
-);
+function MyTabs() {
+  return (
+    <NativeTabBar>
+      <TabContent title="Home">
+        <View><Text>Home content</Text></View>
+      </TabContent>
+      <TabContent title="Profile">
+        <View><Text>Profile content</Text></View>
+      </TabContent>
+    </NativeTabBar>
+  );
+}
 
 // GOOD: Prevent flattening
-const MyTabs = () => (
-  <NativeTabBar>
-    <TabContent title="Home" collapsable={false}>
-      <View><Text>Home content</Text></View>
-    </TabContent>
-    <TabContent title="Profile" collapsable={false}>
-      <View><Text>Profile content</Text></View>
-    </TabContent>
-  </NativeTabBar>
-);
+function MyTabs() {
+  return (
+    <NativeTabBar>
+      <TabContent title="Home" collapsable={false}>
+        <View><Text>Home content</Text></View>
+      </TabContent>
+      <TabContent title="Profile" collapsable={false}>
+        <View><Text>Profile content</Text></View>
+      </TabContent>
+    </NativeTabBar>
+  );
+}
 ```
 
 ### Wrapper Component with collapsable
 
 ```tsx
 // Wrapper that prevents flattening
-const NativeChildWrapper = ({ children, ...props }) => (
-  <View collapsable={false} {...props}>
-    {children}
-  </View>
-);
+function NativeChildWrapper({ children, ...props }) {
+  return (
+    <View collapsable={false} {...props}>
+      {children}
+    </View>
+  );
+}
 
 // Usage
 <NativeComponent>
   <NativeChildWrapper>
     <ComplexChild />
   </NativeChildWrapper>
-</NativeComponent>
+</NativeComponent>;
 ```
 
 ## When Views Get Flattened

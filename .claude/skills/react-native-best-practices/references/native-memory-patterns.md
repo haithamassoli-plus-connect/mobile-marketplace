@@ -47,11 +47,11 @@ void takeOwnership(std::unique_ptr<std::string> s) {
 
 int main() {
     auto str = std::make_unique<std::string>("Hello");
-    
+
     // Can only be moved, not copied
     takeOwnership(std::move(str));
     // str is now empty
-    
+
     return 0;
 }
 ```
@@ -69,10 +69,10 @@ void useReference(const std::shared_ptr<std::string>& s) {
 
 int main() {
     auto str = std::make_shared<std::string>("Hello");
-    
+
     useShared(str);      // Copies pointer, ref count +1
     useReference(str);   // No copy, ref count unchanged
-    
+
     std::cout << *str;   // Still valid
     return 0;
 }
@@ -92,11 +92,11 @@ void useWeak(std::weak_ptr<std::string> weak) {
 int main() {
     auto str = std::make_shared<std::string>("Hello");
     std::weak_ptr<std::string> weak = str;  // No ref count increase
-    
+
     useWeak(weak);  // Works
     str.reset();    // Destroys object
     useWeak(weak);  // "Object destroyed"
-    
+
     return 0;
 }
 ```
@@ -112,11 +112,11 @@ class Person {
 
 do {
     let person1 = Person(name: "John")  // Ref count: 1
-    
+
     do {
         let person2 = person1  // Ref count: 2
     }  // person2 out of scope, ref count: 1
-    
+
 }  // person1 out of scope, ref count: 0, "Deallocated"
 ```
 
@@ -164,11 +164,11 @@ println(weakMap.size)  // 0 (key was collected)
 class DataManager {
     // Weak references to listeners prevent memory leaks
     private val listeners = mutableListOf<WeakReference<DataListener>>()
-    
+
     fun addListener(listener: DataListener) {
         listeners.add(WeakReference(listener))
     }
-    
+
     fun notifyListeners(data: String) {
         listeners.forEach { ref ->
             ref.get()?.onDataChanged(data)
@@ -217,7 +217,7 @@ class MyClass {
     private val listener = object : Callback {
         override fun onEvent() { /* ... */ }
     }
-    
+
     init {
         EventManager.addListener(listener)
         // Never removed!
@@ -229,11 +229,11 @@ class MyClass : AutoCloseable {
     private val listener = object : Callback {
         override fun onEvent() { /* ... */ }
     }
-    
+
     init {
         EventManager.addListener(listener)
     }
-    
+
     override fun close() {
         EventManager.removeListener(listener)
     }
