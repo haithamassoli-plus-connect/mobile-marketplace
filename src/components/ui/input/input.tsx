@@ -23,8 +23,8 @@ const inputTv = tv({
     },
     error: {
       true: {
-        input: 'border-danger-600',
-        label: 'text-danger-600 dark:text-danger-600',
+        input: 'border-error-600',
+        label: 'text-error-600 dark:text-error-600',
       },
     },
     disabled: {
@@ -99,7 +99,7 @@ export function Input({ ref, ...props }: NInputProps & { ref?: React.Ref<NTextIn
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-400 dark:text-danger-600"
+          className="text-sm text-error-400 dark:text-error-600"
         >
           {error}
         </Text>
