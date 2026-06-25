@@ -4,6 +4,7 @@ import {
   BottomSheetView,
   BottomSheetModal as Sheet,
 } from '@gorhom/bottom-sheet';
+import { router } from 'expo-router';
 import * as React from 'react';
 import { Pressable } from 'react-native';
 
@@ -25,6 +26,7 @@ type Option = {
   badge: { label: string; bg: string; color: string; dot?: boolean };
   body: string;
   team?: boolean; // Live Chat only — avatar stack + reply-time footer
+  route?: Parameters<typeof router.push>[0]; // navigate on press, else just dismiss
 };
 
 const SUCCESS = '#027a48'; // success-700
@@ -41,6 +43,7 @@ const OPTIONS: Option[] = [
     badge: { label: 'Online', bg: 'bg-success-50', color: 'text-success-700', dot: true },
     body: 'Talk to a real person — contact our support workers about orders, payments and delivery.',
     team: true,
+    route: '/live-chat',
   },
   {
     icon: 'bot',
@@ -49,6 +52,7 @@ const OPTIONS: Option[] = [
     title: 'Ask the AI',
     badge: { label: '24/7 • INSTANT', bg: 'bg-primary-50', color: 'text-primary-700' },
     body: 'Get instant answers — ask a question about a product, track an order, or check our return policy.',
+    route: '/ai-chat',
   },
   {
     icon: 'ticket',
@@ -125,7 +129,14 @@ export function SupportModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
         {/* Options */}
         <View className="gap-3">
           {OPTIONS.map(o => (
-            <Card key={o.title} option={o} onPress={modal.dismiss} />
+            <Card
+              key={o.title}
+              option={o}
+              onPress={() => {
+                modal.dismiss();
+                if (o.route) router.push(o.route);
+              }}
+            />
           ))}
         </View>
 
