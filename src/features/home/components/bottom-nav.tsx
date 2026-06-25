@@ -1,4 +1,6 @@
 import type { Href } from 'expo-router';
+import type { RefObject } from 'react';
+import type { View as RNView } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 import { router, usePathname } from 'expo-router';
@@ -91,12 +93,15 @@ type Props = {
   /** Show the scroll-to-top handle (only honored in the default, non-mini state). */
   showScrollTop?: boolean;
   onScrollToTop?: () => void;
+  /** BlurTargetView ref Android samples for the backdrop blur (omit → no Android blur). */
+  blurTarget?: RefObject<RNView | null>;
 };
 
 export function BottomNav({
   mini = false,
   showScrollTop = false,
   onScrollToTop,
+  blurTarget,
 }: Props) {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
@@ -126,6 +131,7 @@ export function BottomNav({
           Shrinks with the pill (same `p` timeline). */}
       <ProgressiveBlur
         p={p}
+        blurTarget={blurTarget}
         expandedHeight={insets.bottom + 132}
         miniHeight={insets.bottom + 84}
       />
@@ -164,6 +170,8 @@ export function BottomNav({
 // bottom with a higher top edge — overlap count grows downward, giving a near-linear
 // ramp (iOS compounds stacked blurs; Android approximates).
 // ponytail: 6 fixed bands; bump BANDS or switch to MaskedView + gradient if it bands.
+// On Android each band is a dimezisBlurViewSdk31Plus pass (cheap RenderNode on 12+,
+// no-op below) — if 8 stacked passes jank while scrolling, drop BLUR_BANDS for Android.
 const BLUR_BANDS = 8;
 const BLUR_INTENSITY = 13; // per band; ≈×6 at the very bottom
 
@@ -172,10 +180,12 @@ const BLUR_INTENSITY = 13; // per band; ≈×6 at the very bottom
 // area; per-band intensity is left constant (animating it needs AnimatedBlurView).
 function ProgressiveBlur({
   p,
+  blurTarget,
   expandedHeight,
   miniHeight,
 }: {
   p: SharedValue<number>;
+  blurTarget?: RefObject<RNView | null>;
   expandedHeight: number;
   miniHeight: number;
 }) {
@@ -194,6 +204,8 @@ function ProgressiveBlur({
           key={`band-${i}`}
           tint="light"
           intensity={BLUR_INTENSITY}
+          blurTarget={blurTarget}
+          blurMethod="dimezisBlurViewSdk31Plus"
           style={{
             position: 'absolute',
             left: 0,
