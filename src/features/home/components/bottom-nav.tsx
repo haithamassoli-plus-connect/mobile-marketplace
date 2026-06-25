@@ -1,5 +1,6 @@
 import type { Href } from 'expo-router';
 import type { SharedValue } from 'react-native-reanimated';
+import { BlurView } from 'expo-blur';
 import { router, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
@@ -110,7 +111,7 @@ export function BottomNav({
   }, [mini, p]);
 
   const containerStyle = useAnimatedStyle(() => ({
-    width: interpolate(p.value, [0, 1], [winW - 32, MINI_W]), // mx-4 → compact
+    width: interpolate(p.value, [0, 1], [winW - 38, MINI_W]), // mx-4 → compact
     paddingHorizontal: interpolate(p.value, [0, 1], [16, 14]), // px-4 → px-3.5
     paddingVertical: interpolate(p.value, [0, 1], [10, 8]), // py-2.5 → py-2
     borderRadius: interpolate(p.value, [0, 1], [28, 22]),
@@ -120,9 +121,20 @@ export function BottomNav({
     <View
       pointerEvents="box-none"
       className="absolute inset-x-0 bottom-0 items-center"
-      style={{ paddingBottom: insets.bottom + 8 }}
     >
-      <View pointerEvents="box-none" className="relative w-full items-center">
+      {/* Progressive backdrop blur behind the pill (Figma "Background blur bottom nav").
+          Shrinks with the pill (same `p` timeline). */}
+      <ProgressiveBlur
+        p={p}
+        expandedHeight={insets.bottom + 132}
+        miniHeight={insets.bottom + 84}
+      />
+
+      <View
+        pointerEvents="box-none"
+        className="relative w-full items-center"
+        style={{ paddingBottom: insets.bottom + 8 }}
+      >
         {showScrollTop && !mini
           ? <ScrollTopHandle onPress={onScrollToTop} pillWidth={winW - 32} />
           : null}
@@ -144,6 +156,54 @@ export function BottomNav({
         </Animated.View>
       </View>
     </View>
+  );
+}
+
+// Figma "Background blur bottom nav": blur ramps 0 → ~45px, top → bottom. expo-blur
+// has no gradient, so approximate it by stacking equal light bands each pinned to the
+// bottom with a higher top edge — overlap count grows downward, giving a near-linear
+// ramp (iOS compounds stacked blurs; Android approximates).
+// ponytail: 6 fixed bands; bump BANDS or switch to MaskedView + gradient if it bands.
+const BLUR_BANDS = 8;
+const BLUR_INTENSITY = 13; // per band; ≈×6 at the very bottom
+
+// Band tops are percentages so they scale when the container height animates between
+// the expanded and mini heights (driven by `p`). ponytail: height shrinks the blur
+// area; per-band intensity is left constant (animating it needs AnimatedBlurView).
+function ProgressiveBlur({
+  p,
+  expandedHeight,
+  miniHeight,
+}: {
+  p: SharedValue<number>;
+  expandedHeight: number;
+  miniHeight: number;
+}) {
+  const heightStyle = useAnimatedStyle(() => ({
+    height: interpolate(p.value, [0, 1], [expandedHeight, miniHeight]),
+    // Fade the blur out as the pill goes mini — no backdrop in small mode.
+    opacity: interpolate(p.value, [0, 1], [1, 0]),
+  }));
+  return (
+    <Animated.View
+      pointerEvents="none"
+      style={[{ position: 'absolute', left: 0, right: 0, bottom: 0 }, heightStyle]}
+    >
+      {Array.from({ length: BLUR_BANDS }, (_, i) => (
+        <BlurView
+          key={`band-${i}`}
+          tint="light"
+          intensity={BLUR_INTENSITY}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: `${(i + 4 / BLUR_BANDS) * 100}%`,
+          }}
+        />
+      ))}
+    </Animated.View>
   );
 }
 

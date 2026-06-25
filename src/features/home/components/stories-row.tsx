@@ -1,4 +1,5 @@
-import { Image, ScrollView, Text, View } from '@/components/ui';
+import { router } from 'expo-router';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { stories } from '@/features/home/data';
 
 export function StoriesRow() {
@@ -23,19 +24,24 @@ export function StoriesRow() {
             />
             {story.live
               ? (
-                  <View className="absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full bg-gold-500 px-1.5">
+                  <View className="bg-gold-500 absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full px-1.5">
                     <Text variant="caption-2" className="font-bold text-white">LIVE</Text>
                   </View>
                 )
               : null}
           </View>
-          <Text
-            numberOfLines={1}
-            variant="caption-1"
-            className="mt-1.5 text-center text-ink-800"
+          <Button
+            onPress={() => router.push(`/live2`)}
           >
-            {story.label}
-          </Text>
+
+            <Text
+              numberOfLines={1}
+              variant="caption-1"
+              className="text-ink-800 mt-1.5 text-center"
+            >
+              {story.label}
+            </Text>
+          </Button>
         </View>
       ))}
     </ScrollView>
