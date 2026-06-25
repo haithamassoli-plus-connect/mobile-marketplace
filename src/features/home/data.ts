@@ -27,6 +27,43 @@ export const nav = {
   tagline: 'Everything you need in one place',
 };
 
+/* -------------------------------- Wishlist --------------------------------- */
+export type WishlistItem = {
+  id: string;
+  title: string;
+  image: string;
+  category: string; // "Watches · Aurelius"
+  price: number;
+  oldPrice?: number;
+  priceDropped?: boolean; // green "Price dropped" pill w/ trending-down icon
+  stockBadge?: { label: string; tone: 'success' | 'error' }; // "Only 3 left"
+  meta?: string; // trailing note next to the cart button, e.g. "In stock", "★ 4.8"
+  metaTone?: 'success' | 'muted';
+};
+export const wishlist: WishlistItem[] = [
+  {
+    id: 'wl1',
+    title: 'Heritage Watch',
+    image: img('tr-watch', 360, 360),
+    category: 'Watches · Aurelius',
+    price: 249,
+    oldPrice: 399,
+    priceDropped: true,
+    meta: 'In stock',
+    metaTone: 'success',
+  },
+  {
+    id: 'wl2',
+    title: 'Aviator Shades',
+    image: img('tr-shades', 360, 360),
+    category: 'Eyewear · SunCo',
+    price: 95,
+    stockBadge: { label: 'Only 3 left', tone: 'error' },
+    meta: '★ 4.8',
+    metaTone: 'muted',
+  },
+];
+
 /* --------------------------------- Stories --------------------------------- */
 export type Story = { id: string; label: string; image: string; live?: boolean };
 export const stories: Story[] = [

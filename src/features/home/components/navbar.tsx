@@ -2,6 +2,7 @@ import type { RefObject } from 'react';
 import type { View as RNView } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
+import { Pressable } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -11,8 +12,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Text, View } from '@/components/ui';
+import { Image, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
+import { LocaleModal } from '@/features/home/components/locale-modal';
+import { SupportModal } from '@/features/home/components/support-modal';
+import { WishlistModal } from '@/features/home/components/wishlist-modal';
 import { nav } from '@/features/home/data';
 
 // Slide (hide/reveal) and cross-fade (black ⇄ blur) timelines.
@@ -40,6 +44,9 @@ type Props = {
 export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
   const insets = useSafeAreaInsets();
   const navH = useSharedValue(0);
+  const support = useModal();
+  const wishlist = useModal();
+  const locale = useModal();
 
   const hideP = useDerivedValue<number>(() =>
     withTiming(hidden.value ? 1 : 0, HIDE));
@@ -74,27 +81,42 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
 
           <View className="flex-row items-center gap-2">
             {/* Locale switcher */}
-            <View className="h-9 flex-row items-center gap-1 rounded-lg bg-white px-2.5">
+            <Pressable
+              onPress={() => locale.present()}
+              accessibilityRole="button"
+              accessibilityLabel="region and language"
+              className="h-9 flex-row items-center gap-1 rounded-lg bg-white px-2.5 active:opacity-80"
+            >
               <Icon name="globe" size={16} color={INK} />
               <Text variant="footnote" emphasized className="text-ink-800">
                 {nav.locale}
               </Text>
-            </View>
+            </Pressable>
 
             {/* Support */}
-            <View className="size-9 items-center justify-center rounded-lg bg-white">
+            <Pressable
+              onPress={() => support.present()}
+              accessibilityRole="button"
+              accessibilityLabel="help and support"
+              className="size-9 items-center justify-center rounded-lg bg-white active:opacity-80"
+            >
               <Icon name="headphones" size={20} color={INK} />
-            </View>
+            </Pressable>
 
             {/* Wishlist */}
-            <View className="size-9 items-center justify-center rounded-lg bg-white">
+            <Pressable
+              onPress={() => wishlist.present()}
+              accessibilityRole="button"
+              accessibilityLabel="wishlist"
+              className="size-9 items-center justify-center rounded-lg bg-white active:opacity-80"
+            >
               <Icon name="heart" size={20} color={INK} />
               <View className="absolute -top-1 -right-1 size-[18px] items-center justify-center rounded-full bg-error-500">
                 <Text variant="caption-2" emphasized className="text-white">
                   {nav.wishlistCount}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           </View>
         </View>
 
@@ -114,6 +136,10 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
           </View>
         </View>
       </View>
+
+      <LocaleModal ref={locale.ref} />
+      <SupportModal ref={support.ref} />
+      <WishlistModal ref={wishlist.ref} />
     </Animated.View>
   );
 }
