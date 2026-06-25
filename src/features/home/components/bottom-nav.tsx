@@ -6,12 +6,12 @@ import { useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
-  FadeInDown,
   FadeOutDown,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  ZoomIn,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
@@ -300,9 +300,15 @@ function ScrollTopHandle({
   const top = -(w * 30) / GOLD_VB_W;
 
   return (
+    // Enter: ZoomIn on the MORPH curve — the handle grows out of the pill, in
+    // lockstep with the nav expanding mini→full.
+    // Exit: NOT ZoomOut. An unmounting view is frozen by Reanimated at its old
+    // position while the nav shrinks (its top drops ~25px), so a scale-to-center
+    // would leave the handle floating above the now-smaller nav. FadeOutDown slides
+    // down 25px (≈ that exact drop) + fades, so it tucks away with the shrink.
     <Animated.View
-      entering={FadeInDown.duration(220)}
-      exiting={FadeOutDown.duration(180)}
+      entering={ZoomIn.duration(MORPH.duration).easing(MORPH.easing)}
+      exiting={FadeOutDown.duration(200)}
       pointerEvents="box-none"
       className="absolute inset-x-0 items-center"
       style={{ top }}
