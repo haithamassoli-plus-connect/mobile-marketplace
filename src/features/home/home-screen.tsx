@@ -20,6 +20,7 @@ import { ProductRail } from './components/primitives';
 import { PromoBanner } from './components/promo-banner';
 import { SellerCta } from './components/seller-cta';
 import { StoriesRow } from './components/stories-row';
+import { Tagline } from './components/tagline';
 import { TrendingGrid } from './components/trending-grid';
 import { TrustedBrands } from './components/trusted-brands';
 import { VerifiedSellers } from './components/verified-sellers';
@@ -100,6 +101,7 @@ export function HomeScreen() {
           contentContainerStyle={{ paddingTop: navHeight, paddingBottom: 120 }}
         >
           <View className="bg-neutral-50 pb-4">
+            <Tagline />
             <StoriesRow />
             <FeaturedRail />
             <TrendingGrid />

@@ -21,7 +21,6 @@ export type Product = {
 
 /* ---------------------------------- Navbar --------------------------------- */
 export const nav = {
-  brand: 'Golden Place',
   locale: 'En / JOD',
   wishlistCount: 2,
   searchPlaceholder: 'Search for products, brands, or categories',

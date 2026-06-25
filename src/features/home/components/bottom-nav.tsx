@@ -48,12 +48,11 @@ const TABS: Tab[] = [
     outline: require('@/components/ui/icons/bottom-tabs/categories-outline.svg'),
   },
   {
-    key: 'live',
-    label: 'Live',
-    route: '/live',
-    dot: true,
-    filled: require('@/components/ui/icons/bottom-tabs/tv-filled.svg'),
-    outline: require('@/components/ui/icons/bottom-tabs/tv-outline.svg'),
+    key: 'showcase',
+    label: 'Showcase',
+    route: '/showcase',
+    filled: require('@/components/ui/icons/bottom-tabs/showcase-filled.svg'),
+    outline: require('@/components/ui/icons/bottom-tabs/showcase-outline.svg'),
   },
   {
     key: 'cart',

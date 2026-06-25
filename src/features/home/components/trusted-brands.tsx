@@ -5,7 +5,7 @@ export function TrustedBrands() {
   return (
     <View className="mt-8 w-full">
       <View className="items-center px-4">
-        <Text variant="title-3" className="font-bold text-ink-800">
+        <Text variant="title-3" className="text-ink-800 font-bold">
           {trustedBrands.title}
         </Text>
         <Text variant="subheadline" className="mt-1 text-neutral-500">
@@ -22,7 +22,7 @@ export function TrustedBrands() {
         {trustedBrands.brands.map(brand => (
           <View
             key={brand.id}
-            className="h-16 w-[120px] items-center justify-center overflow-hidden rounded-2xl border border-[#e9eaeb] bg-white p-2 shadow-sm"
+            className="h-16 w-[120px] items-center justify-center overflow-hidden rounded-2xl border border-neutral-200 bg-white p-2 shadow-sm"
           >
             <Image
               source={brand.logo}
@@ -32,7 +32,7 @@ export function TrustedBrands() {
             <Text
               numberOfLines={1}
               variant="caption-1"
-              className="mt-1 font-semibold text-ink-800"
+              className="text-ink-800 mt-1 font-semibold"
             >
               {brand.name}
             </Text>

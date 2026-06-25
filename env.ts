@@ -24,24 +24,24 @@ const EXPO_PUBLIC_APP_ENV = (process.env.EXPO_PUBLIC_APP_ENV
   ?? 'development') as z.infer<typeof envSchema>['EXPO_PUBLIC_APP_ENV'];
 
 const BUNDLE_IDS = {
-  development: 'com.mobile-marketplace.development',
-  preview: 'com.mobile-marketplace.preview',
-  production: 'com.mobile-marketplace',
+  development: 'com.goldenplace.development',
+  preview: 'com.goldenplace.preview',
+  production: 'com.goldenplace',
 } as const;
 
 const PACKAGES = {
-  development: 'com.mobilemarketplace.development',
-  preview: 'com.mobilemarketplace.preview',
-  production: 'com.mobilemarketplace',
+  development: 'com.goldenplace.development',
+  preview: 'com.goldenplace.preview',
+  production: 'com.goldenplace',
 } as const;
 
 const SCHEMES = {
-  development: 'Mobile-Marketplace',
-  preview: 'Mobile-Marketplace.preview',
-  production: 'Mobile-Marketplace',
+  development: 'Goldenplace',
+  preview: 'Goldenplace.preview',
+  production: 'Goldenplace',
 } as const;
 
-const NAME = 'Mobile-Marketplace';
+const NAME = 'Goldenplace';
 
 // Check if strict validation is required (before prebuild)
 const STRICT_ENV_VALIDATION = process.env.STRICT_ENV_VALIDATION === '1';

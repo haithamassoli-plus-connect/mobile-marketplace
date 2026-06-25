@@ -10,7 +10,7 @@ export function VerifiedSellers() {
       <View className="flex-row items-center justify-between px-4">
         <View className="flex-row items-center gap-2">
           <Icon name="badge-check" size={22} color="#DBB42C" />
-          <Text variant="title-3" className="font-bold text-ink-800">
+          <Text variant="title-3" className="text-ink-800 font-bold">
             Verified Sellers
           </Text>
         </View>
@@ -27,11 +27,11 @@ export function VerifiedSellers() {
         {sellers.map(seller => (
           <View
             key={seller.id}
-            className="w-[300px] rounded-2xl border border-[#e9eaeb] bg-white p-4 shadow-sm"
+            className="w-[300px] rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
           >
             {/* Shop header */}
             <View className="flex-row items-center gap-3">
-              <View className="rounded-full border-2 border-gold-400 p-px">
+              <View className="border-gold-400 rounded-full border-2 p-px">
                 <Image
                   source={seller.avatar}
                   contentFit="cover"
@@ -78,7 +78,7 @@ export function VerifiedSellers() {
             </View>
 
             {/* Visit shop button */}
-            <View className="mt-3 h-[44px] items-center justify-center rounded-xl border border-gold-500 bg-gold-50">
+            <View className="border-gold-500 bg-gold-50 mt-3 h-[44px] items-center justify-center rounded-xl border">
               <Text variant="subheadline" emphasized className="text-gold-700">
                 Visit Shop
               </Text>

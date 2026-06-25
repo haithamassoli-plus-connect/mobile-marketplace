@@ -25,9 +25,9 @@ function TimerCell({ value, label }: { value: string; label: string }) {
 
 export function PromoBanner() {
   return (
-    <View className="mt-8 w-full bg-gold-500 py-6">
+    <View className="bg-gold-500 mt-8 w-full py-6">
       {/* Eyebrow */}
-      <Text variant="footnote" className="px-5 font-bold tracking-wide text-ink-900">
+      <Text variant="footnote" className="text-ink-900 px-5 font-bold tracking-wide">
         {promo.eyebrow}
       </Text>
 
@@ -63,12 +63,12 @@ export function PromoBanner() {
       <View className="mt-6 px-5">
         <Text variant="title-2" emphasized className="text-ink-900">{promo.headline}</Text>
 
-        <View className="mt-3 h-[51px] flex-row items-center justify-center gap-2 rounded-xl bg-ink-900">
+        <View className="bg-ink-900 mt-3 h-[51px] flex-row items-center justify-center gap-2 rounded-xl">
           <Text variant="callout" emphasized className="text-white">{promo.cta}</Text>
           <Icon name="arrow-right" size={18} color="#ffffff" />
         </View>
 
-        <Text variant="footnote" className="mt-3 text-center text-ink-900/70 underline">
+        <Text variant="footnote" className="text-ink-900/70 mt-3 text-center underline">
           {promo.dismiss}
         </Text>
       </View>

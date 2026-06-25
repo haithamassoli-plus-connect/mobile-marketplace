@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mobile Marketplace — Documentation &amp; Guide</title>
+<title>Goldenplace — Documentation &amp; Guide</title>
 <style>
   :root{
     --bg:#0d1117; --bg-elev:#161b22; --bg-code:#1c2128; --border:#30363d;
@@ -67,7 +67,7 @@
 <div class="layout">
 
 <nav class="sidebar">
-  <div class="brand"><span class="dot"></span>Mobile Marketplace</div>
+  <div class="brand"><span class="dot"></span>Goldenplace</div>
   <div class="tag">Docs &amp; Developer Guide</div>
 
   <h4>Reference</h4>
@@ -98,7 +98,7 @@
 <main>
 <header class="page" id="top">
   <span class="pill">Expo SDK 56 · React Native 0.85 · React 19 · TypeScript</span>
-  <h1>Mobile Marketplace</h1>
+  <h1>Goldenplace</h1>
   <p class="lead">Project documentation &amp; developer guide. This page combines the reference (<em>what</em> &amp; <em>where</em>) and the task-oriented guides (<em>how</em>) into one document.</p>
 </header>
 
@@ -206,9 +206,9 @@
 <h4><code>env.ts</code> — typed, validated environment</h4>
 <p>A single Zod schema (<code>envSchema</code>) describes every environment variable. Two classes: <strong><code>EXPO_PUBLIC_*</code></strong> (inlined into the bundle, readable at runtime) and <strong>build-only</strong> (e.g. <code>APP_BUILD_ONLY_VAR</code>, available only to <code>app.config.ts</code>, never shipped to the client). The active environment is chosen by <code>EXPO_PUBLIC_APP_ENV</code> (<code>development | preview | production</code>), which selects bundle id, Android package and scheme:</p>
 <pre><code>const BUNDLE_IDS = {
-  development: 'com.mobile-marketplace.development',
-  preview: 'com.mobile-marketplace.preview',
-  production: 'com.mobile-marketplace',
+  development: 'com.goldenplace.development',
+  preview: 'com.goldenplace.preview',
+  production: 'com.goldenplace',
 } as const;</code></pre>
 <p>Validation is <strong>opt-in via <code>STRICT_ENV_VALIDATION=1</code></strong> (set by every <code>prebuild:*</code> script). When strict, invalid/missing vars <code>throw</code>; otherwise the raw env is used. <code>export default Env</code> is the validated, typed object you import as <code>import Env from 'env'</code> / <code>@env</code>.</p>
 <h4><code>app.config.ts</code> — Expo app config</h4>
@@ -287,7 +287,7 @@
 <thead><tr><th>Command</th><th>What it does</th></tr></thead>
 <tbody>
 <tr><td><code>install-maestro</code></td><td>Install the Maestro CLI</td></tr>
-<tr><td><code>e2e-test</code></td><td><code>maestro test .maestro/ -e APP_ID=com.mobile-marketplace.development</code></td></tr>
+<tr><td><code>e2e-test</code></td><td><code>maestro test .maestro/ -e APP_ID=com.goldenplace.development</code></td></tr>
 <tr><td><code>prepare</code></td><td>Husky git-hook install (runs on <code>npm install</code>)</td></tr>
 <tr><td><code>app-release</code></td><td>Versioned release via <code>np</code></td></tr>
 </tbody>
@@ -754,7 +754,7 @@ const form = useForm({
 </section>
 
 <hr>
-<p style="color:var(--muted);font-size:.85rem">Generated documentation for the <strong>mobile-marketplace</strong> project · Expo SDK 56 · React Native 0.85.3 · React 19.2.3. Mirrors <code>DOCUMENTATION.md</code> and <code>GUIDE.md</code> in the repository.</p>
+<p style="color:var(--muted);font-size:.85rem">Generated documentation for the <strong>goldenplace</strong> project · Expo SDK 56 · React Native 0.85.3 · React 19.2.3. Mirrors <code>DOCUMENTATION.md</code> and <code>GUIDE.md</code> in the repository.</p>
 
 </main>
 </div>

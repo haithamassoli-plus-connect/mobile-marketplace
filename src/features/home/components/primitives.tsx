@@ -53,7 +53,7 @@ export function Rating({ value }: { value: number }) {
   return (
     <View className="flex-row items-center gap-1">
       <Icon name="star" size={12} color="#DBB42C" />
-      <Text variant="caption-1" className="font-semibold text-ink-800">{value.toFixed(1)}</Text>
+      <Text variant="caption-1" className="text-ink-800 font-semibold">{value.toFixed(1)}</Text>
     </View>
   );
 }
@@ -77,11 +77,11 @@ export function SectionHeader({
       <View className="flex-row items-center justify-between">
         <View className="flex-1 flex-row items-center gap-2">
           {icon ? <Icon name={icon} size={20} color="#DBB42C" /> : null}
-          <Text variant="title-3" className="font-bold text-ink-800">{title}</Text>
+          <Text variant="title-3" className="text-ink-800 font-bold">{title}</Text>
         </View>
         {actionLabel
           ? (
-              <Pressable className="flex-row items-center gap-1 rounded-full bg-gold-500 px-4 py-2">
+              <Pressable className="bg-gold-500 flex-row items-center gap-1 rounded-full px-4 py-2">
                 <Text variant="footnote" emphasized className="text-white">{actionLabel}</Text>
                 <Icon name="arrow-right" size={14} color="#ffffff" />
               </Pressable>
@@ -114,7 +114,7 @@ export function ProductBadge({
 // Fills its parent width. Wrap in a fixed-width View (rails) or flex-1 (grids).
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <View className="w-full overflow-hidden rounded-2xl border border-[#e9eaeb] bg-white pt-2 pb-3 shadow-sm">
+    <View className="w-full overflow-hidden rounded-2xl border border-neutral-200 bg-white pt-2 pb-3 shadow-sm">
       <View className="relative mx-2 h-[149px] overflow-hidden rounded-xl">
         <Image source={product.image} className="size-full" contentFit="cover" />
         <View className="absolute inset-x-0 top-0 flex-row items-start justify-between p-2">
@@ -138,7 +138,7 @@ export function ProductCard({ product }: { product: Product }) {
         </View>
       </View>
 
-      <Pressable className="mx-2 mt-2.5 h-[42px] items-center justify-center rounded-xl bg-gold-500">
+      <Pressable className="bg-gold-500 mx-2 mt-2.5 h-[42px] items-center justify-center rounded-xl">
         <Text variant="footnote" emphasized className="text-white">Add to cart</Text>
       </Pressable>
     </View>

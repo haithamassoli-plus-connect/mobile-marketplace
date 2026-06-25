@@ -1,8 +1,8 @@
-# Mobile Marketplace — Project Documentation
+# Goldenplace — Project Documentation
 
 [Live HTML version](https://9qa062832ngrzt64r5wy0aphamfng9vq.pastehtml.dev/)
 
-Reference documentation for the `mobile-marketplace` app. This is the **what** and **where**: the stack, the project layout, the configuration, the available commands, the component library, how to add a type-safe API, how testing works, and the conventions that hold the codebase together.
+Reference documentation for the `goldenplace` app. This is the **what** and **where**: the stack, the project layout, the configuration, the available commands, the component library, how to add a type-safe API, how testing works, and the conventions that hold the codebase together.
 
 For step-by-step **how-to** guides (navigation, authentication, data fetching, i18n, storage, forms, upgrading), see **[GUIDE.md](./GUIDE.md)**.
 
@@ -136,9 +136,9 @@ The active environment is chosen by `EXPO_PUBLIC_APP_ENV` (`development` | `prev
 
 ```ts
 const BUNDLE_IDS = {
-  development: 'com.mobile-marketplace.development',
-  preview: 'com.mobile-marketplace.preview',
-  production: 'com.mobile-marketplace',
+  development: 'com.goldenplace.development',
+  preview: 'com.goldenplace.preview',
+  production: 'com.goldenplace',
 } as const;
 ```
 
@@ -242,7 +242,7 @@ These set `EXPO_PUBLIC_APP_ENV` via `cross-env` before delegating:
 | Command | What it does |
 | --- | --- |
 | `install-maestro` | Install the Maestro CLI |
-| `e2e-test` | `maestro test .maestro/ -e APP_ID=com.mobile-marketplace.development` |
+| `e2e-test` | `maestro test .maestro/ -e APP_ID=com.goldenplace.development` |
 | `prepare` | Husky git-hook install (runs on `npm install`) |
 | `app-release` | Versioned release via `np` |
 

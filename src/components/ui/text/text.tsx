@@ -1,4 +1,3 @@
-/* eslint-disable better-tailwindcss/no-unknown-classes */
 import type { TextProps, TextStyle } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import type { TxKeyPath } from '@/lib/i18n';

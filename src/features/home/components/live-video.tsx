@@ -65,7 +65,7 @@ export function LiveVideo() {
                 >
                   {product.title}
                 </Text>
-                <Text variant="caption-2" className="font-bold text-gold-600">
+                <Text variant="caption-2" className="text-gold-600 font-bold">
                   {`$ ${product.price}`}
                 </Text>
               </View>

@@ -1,4 +1,4 @@
-# Mobile Marketplace — Developer Guide
+# Goldenplace — Developer Guide
 
 [Live HTML version](https://9qa062832ngrzt64r5wy0aphamfng9vq.pastehtml.dev/)
 

@@ -9,7 +9,7 @@ export function DiscoverSection() {
   return (
     <View className="mt-8 px-4">
       {/* Header */}
-      <Text variant="caption-1" className="font-semibold tracking-wider text-gold-500">
+      <Text variant="caption-1" className="text-gold-500 font-semibold tracking-wider">
         {discover.eyebrow}
       </Text>
       <Text variant="title-2" emphasized className="text-ink-800">{discover.title}</Text>
@@ -36,7 +36,7 @@ export function DiscoverSection() {
       </View>
 
       {/* Featured pick */}
-      <View className="mt-4 flex-row items-center gap-3 rounded-2xl border border-[#e9eaeb] bg-white p-3">
+      <View className="mt-4 flex-row items-center gap-3 rounded-2xl border border-neutral-200 bg-white p-3">
         <Image
           source={discover.featured.image}
           className="size-20 rounded-xl"
@@ -46,16 +46,16 @@ export function DiscoverSection() {
           <View className="self-start rounded-full bg-neutral-100 px-2 py-0.5">
             <Text variant="caption-2" className="text-neutral-600">{discover.featured.reason}</Text>
           </View>
-          <Text variant="callout" className="mt-1 font-bold text-ink-800">
+          <Text variant="callout" className="text-ink-800 mt-1 font-bold">
             {discover.featured.title}
           </Text>
           <View className="mt-1 flex-row items-center gap-2">
-            <Text variant="subheadline" className="font-bold text-gold-500">
+            <Text variant="subheadline" className="text-gold-500 font-bold">
               {`$ ${discover.featured.price}`}
             </Text>
             <Rating value={discover.featured.rating} />
           </View>
-          <View className="mt-2 self-start rounded-xl bg-gold-500 px-4 py-2">
+          <View className="bg-gold-500 mt-2 self-start rounded-xl px-4 py-2">
             <Text variant="footnote" emphasized className="text-white">View item</Text>
           </View>
         </View>
@@ -75,7 +75,7 @@ export function DiscoverSection() {
 
       {/* Recommended */}
       <View className="mt-5 flex-row items-center justify-between">
-        <Text variant="callout" className="font-bold text-ink-800">Recommended for you</Text>
+        <Text variant="callout" className="text-ink-800 font-bold">Recommended for you</Text>
         <Text variant="footnote" emphasized className="text-gold-500">See all</Text>
       </View>
 

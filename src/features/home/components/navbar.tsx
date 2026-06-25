@@ -10,9 +10,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
 
-import { Text, View } from '@/components/ui';
+import { Image, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { nav } from '@/features/home/data';
 
@@ -67,12 +66,11 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
       <View className="px-4 pb-5" style={{ paddingTop: insets.top + 8 }}>
         {/* Row 1: logo + action cards */}
         <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-2">
-            <Icon name="shopping-cart" size={26} color="#DBB42C" />
-            <Text variant="title-2" emphasized className="text-white">
-              {nav.brand}
-            </Text>
-          </View>
+          <Image
+            source={require('@/components/ui/icons/logo.svg')}
+            style={{ width: 88, height: 33 }}
+            contentFit="contain"
+          />
 
           <View className="flex-row items-center gap-2">
             {/* Locale switcher */}
@@ -114,22 +112,6 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
             <Icon name="mic" size={20} color={ICON_GRAY} />
             <Icon name="camera" size={20} color={ICON_GRAY} />
           </View>
-        </View>
-
-        {/* Tagline + wavy gold underline */}
-        <View className="mt-4 items-center">
-          <Text variant="subheadline" className="font-medium text-white">
-            {nav.tagline}
-          </Text>
-          <Svg width={180} height={10} viewBox="0 0 180 10" className="mt-1">
-            <Path
-              d="M2 6 C 30 0, 60 0, 90 5 S 150 10, 178 4"
-              stroke="#DBB42C"
-              strokeWidth={3}
-              strokeLinecap="round"
-              fill="none"
-            />
-          </Svg>
         </View>
       </View>
     </Animated.View>

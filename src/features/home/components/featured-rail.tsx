@@ -50,7 +50,7 @@ export function FeaturedRail() {
           {/* Bottom bar */}
           <View className="absolute inset-x-4 bottom-4 flex-row items-center justify-between">
             <View className="h-[34px] flex-row items-center rounded-full bg-white/15 px-3">
-              <Text variant="footnote" className="font-bold text-gold-300">
+              <Text variant="footnote" className="text-gold-300 font-bold">
                 {item.discount}
               </Text>
               <Text variant="footnote" className="mx-2 text-white/40">|</Text>
