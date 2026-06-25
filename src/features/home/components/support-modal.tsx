@@ -134,7 +134,8 @@ export function SupportModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
               option={o}
               onPress={() => {
                 modal.dismiss();
-                if (o.route) router.push(o.route);
+                if (o.route)
+                  router.push(o.route);
               }}
             />
           ))}

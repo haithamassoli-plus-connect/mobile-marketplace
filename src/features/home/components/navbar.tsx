@@ -79,16 +79,17 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
             contentFit="contain"
           />
 
-          <View className="flex-row items-center gap-2">
-            {/* Locale switcher */}
+          <View className="flex-row items-center gap-3">
+            {/* Locale switcher — Figma uses a Jordan flag; ponytail: keep a
+                globe icon as the dummy substitute (no Figma asset download). */}
             <Pressable
               onPress={() => locale.present()}
               accessibilityRole="button"
               accessibilityLabel="region and language"
-              className="h-9 flex-row items-center gap-1 rounded-lg bg-white px-2.5 active:opacity-80"
+              className="h-[34px] flex-row items-center gap-1 rounded-sm border border-neutral-200 bg-white py-2 pr-3 pl-2 shadow-sm active:opacity-80"
             >
-              <Icon name="globe" size={16} color={INK} />
-              <Text variant="footnote" emphasized className="text-ink-800">
+              <Icon name="globe" size={18} color={INK} />
+              <Text variant="caption-2" emphasized className="text-ink-800">
                 {nav.locale}
               </Text>
             </Pressable>
@@ -98,7 +99,7 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
               onPress={() => support.present()}
               accessibilityRole="button"
               accessibilityLabel="help and support"
-              className="size-9 items-center justify-center rounded-lg bg-white active:opacity-80"
+              className="h-[34px] w-[33px] items-center justify-center rounded-sm bg-white shadow-sm active:opacity-80"
             >
               <Icon name="headphones" size={20} color={INK} />
             </Pressable>
@@ -108,7 +109,7 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
               onPress={() => wishlist.present()}
               accessibilityRole="button"
               accessibilityLabel="wishlist"
-              className="size-9 items-center justify-center rounded-lg bg-white active:opacity-80"
+              className="h-[34px] w-[33px] items-center justify-center rounded-sm border border-secondary-100 bg-white shadow-sm active:opacity-80"
             >
               <Icon name="heart" size={20} color={INK} />
               <View className="absolute -top-1 -right-1 size-[18px] items-center justify-center rounded-full bg-error-500">
@@ -121,7 +122,7 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
         </View>
 
         {/* Row 2: search bar */}
-        <View className="mt-4 h-[44px] flex-row items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-100 px-4">
+        <View className="mt-4 h-[44px] flex-row items-center gap-2.5 rounded-lg border border-neutral-200 bg-neutral-100 py-1.5 pr-2 pl-4">
           <Icon name="search" size={18} color={ICON_GRAY} />
           <Text
             numberOfLines={1}
@@ -130,7 +131,7 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
           >
             {nav.searchPlaceholder}
           </Text>
-          <View className="flex-row items-center gap-3">
+          <View className="flex-row items-center gap-2.5">
             <Icon name="mic" size={20} color={ICON_GRAY} />
             <Icon name="camera" size={20} color={ICON_GRAY} />
           </View>

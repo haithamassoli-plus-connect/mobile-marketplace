@@ -70,12 +70,13 @@ const TABS: Tab[] = [
   },
 ];
 
-// Two-layer drop shadow from the Figma pill.
+// Dominant layer of the Figma pill's two-part shadow (RN has one native layer):
+// 0px 10px 28px rgba(15,23,41,0.14). The lighter 0,2,6 @0.07 layer is dropped.
 const PILL_SHADOW = {
   shadowColor: '#0f1729',
   shadowOpacity: 0.14,
   shadowRadius: 14,
-  shadowOffset: { width: 0, height: 8 },
+  shadowOffset: { width: 0, height: 10 },
   elevation: 12,
 } as const;
 
@@ -84,7 +85,7 @@ const PILL_SHADOW = {
 // (labels stay mounted, just collapsed) means no ghosting/afterimage.
 const MORPH = { duration: 350, easing: Easing.inOut(Easing.quad) } as const;
 const MINI_W = 220; // ponytail: mini pill width; eyeball-tune to Figma 361:4781.
-const LABEL_H = 13; // caption-2 line height (text.tsx: leading-[13px]).
+const LABEL_H = 12; // Figma tab label line height (iOS/Tab Bar: 10/12).
 
 type Props = {
   /** Shrinks to the icon-only pill (set while scrolling down). */
@@ -147,7 +148,7 @@ export function BottomNav({
         {/* Pill — morphs between default and mini off the shared `p` value. */}
         <Animated.View
           style={[PILL_SHADOW, containerStyle, { alignSelf: 'center' }]}
-          className="flex-row items-center border border-[#eef0f3] bg-white"
+          className="flex-row items-center border border-neutral-200 bg-white"
         >
           {TABS.map(tab => (
             <TabButton
@@ -261,11 +262,16 @@ function TabButton({
           : null}
       </Animated.View>
       <Animated.View style={[labelStyle, { overflow: 'hidden' }]}>
+        {/* ponytail: Figma tab label is 10/12 (smaller than caption-2 11/13), so
+            size + leading are set explicitly. Active = SemiBold neutral-900,
+            inactive = Medium neutral-500. */}
         <Text
-          variant="caption-2"
           numberOfLines={1}
-          emphasized={active}
-          className={active ? 'text-neutral-900' : 'font-medium text-[#8a909c]'}
+          className={`text-[10px] leading-[12px] ${
+            active
+              ? 'font-semibold text-neutral-900'
+              : 'font-medium text-neutral-500'
+          }`}
         >
           {tab.label}
         </Text>

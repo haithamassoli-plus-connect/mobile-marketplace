@@ -67,14 +67,16 @@ export const wishlist: WishlistItem[] = [
 /* --------------------------------- Stories --------------------------------- */
 export type Story = { id: string; label: string; image: string; live?: boolean };
 export const stories: Story[] = [
-  { id: 'st1', label: 'Flash Sale', image: img('story-flash', 200, 200), live: true },
-  { id: 'st2', label: 'New Drops', image: img('story-drops', 200, 200) },
-  { id: 'st3', label: 'Top Picks', image: img('story-picks', 200, 200) },
-  { id: 'st4', label: 'Tech', image: img('story-tech', 200, 200), live: true },
-  { id: 'st5', label: 'Fashion', image: img('story-fashion', 200, 200) },
-  { id: 'st6', label: 'Beauty', image: img('story-beauty', 200, 200) },
-  { id: 'st7', label: 'Home', image: img('story-home', 200, 200) },
-  { id: 'st8', label: 'Sports', image: img('story-sports', 200, 200) },
+  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), live: true },
+  { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200) },
+  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200) },
+  { id: 'st4', label: 'MerchantMeadow', image: img('story-meadow', 200, 200) },
+  { id: 'st5', label: 'RetailRealm', image: img('story-realm', 200, 200) },
+  { id: 'st6', label: 'CommerceCorner', image: img('story-corner', 200, 200) },
+  { id: 'st7', label: 'BazaarBuddy', image: img('story-bazaar', 200, 200) },
+  { id: 'st8', label: 'DealDome', image: img('story-dome', 200, 200) },
+  { id: 'st9', label: 'TradeTrove', image: img('story-trove', 200, 200) },
+  { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200) },
 ];
 
 /* ---------------------------- Featured hero rail --------------------------- */
@@ -119,7 +121,7 @@ export const featured: Featured[] = [
     brand: 'Apple',
     title: 'All you need in one laptop',
     description:
-      'Showcasing dynamic performance that effortlessly shifts from work to play.',
+      'Showcasing 12 dynamic hues that effortlessly shift from matte to metallic.',
     image: img('feature-laptop', 720, 860),
     discount: '20% OFF',
   },
