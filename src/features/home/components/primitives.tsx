@@ -131,6 +131,14 @@ export function ProductCard({ product }: { product: Product }) {
             )
           : null}
         <IconButton name="heart" size={18} className="absolute top-2 right-2 bg-white" />
+        {product.timeAgo
+          ? (
+              <View className="absolute bottom-2 left-2 flex-row items-center gap-1 rounded-xl bg-[#1a1a2e] px-1.5 py-1">
+                <Icon name="clock" size={11} color="#FFFFFF" />
+                <Text variant="caption-2" emphasized className="text-white">{product.timeAgo}</Text>
+              </View>
+            )
+          : null}
       </View>
 
       <View className="gap-1">

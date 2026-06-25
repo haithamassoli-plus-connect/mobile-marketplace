@@ -17,6 +17,7 @@ export type Product = {
   badge?: string;
   badgeTone?: 'dark' | 'gold';
   rating?: number;
+  timeAgo?: string; // dark "4h ago" pill on the image corner (new arrivals)
 };
 
 /* ---------------------------------- Navbar --------------------------------- */
@@ -194,7 +195,7 @@ export const topRated: Product[] = [
 
 /* -------------------------------- Discover --------------------------------- */
 export const discover = {
-  eyebrow: 'DISCOVER',
+  eyebrow: 'Products made for you',
   title: 'Discover',
   subtitle: 'Curated picks for you and the freshest drops.',
   tabs: ['For you', 'New arrivals'],
@@ -207,11 +208,23 @@ export const discover = {
   },
   categories: ['Sneakers', 'Watches', 'Bags', 'Eyewear'],
   recommended: [
-    { id: 'rc1', title: 'Heritage Watch', image: img('tr-watch', 360, 360), price: 249, badge: 'FOR YOU', badgeTone: 'gold' },
-    { id: 'rc2', title: 'Aviator Shades', image: img('tr-shades', 360, 360), price: 95, badge: 'FOR YOU', badgeTone: 'gold' },
-    { id: 'rc3', title: 'Cobalt Tote', image: img('tr-tote', 360, 360), price: 189, badge: 'FOR YOU', badgeTone: 'gold' },
-    { id: 'rc4', title: 'Trail Sneaker', image: img('tr-sneaker', 360, 360), price: 119, badge: 'FOR YOU', badgeTone: 'gold' },
+    { id: 'rc1', title: 'Heritage Watch', image: img('tr-watch', 360, 360), price: 249 },
+    { id: 'rc2', title: 'Aviator Shades', image: img('tr-shades', 360, 360), price: 95 },
+    { id: 'rc3', title: 'Cobalt Tote', image: img('tr-tote', 360, 360), price: 189 },
+    { id: 'rc4', title: 'Trail Sneaker', image: img('tr-sneaker', 360, 360), price: 119 },
   ] as Product[],
+  // New arrivals tab — "Just Dropped" hero + "Fresh this week" grid (New badge + time-ago).
+  newArrivals: {
+    hero: { image: img('disc-runner', 720, 520), timeAgo: '2h ago' },
+    items: [
+      { id: 'na1', title: 'Aviator Watch', image: img('bs-watch', 360, 360), price: 199, badge: 'New', badgeTone: 'dark' },
+      { id: 'na2', title: 'Cobalt Tote', image: img('tr-tote', 360, 360), price: 189, badge: 'New', badgeTone: 'dark', timeAgo: '4h ago' },
+      { id: 'na3', title: 'Aviator Shades', image: img('tr-shades', 360, 360), price: 95, badge: 'New', badgeTone: 'dark', timeAgo: '1d ago' },
+      { id: 'na4', title: 'Trail Sneaker', image: img('tr-sneaker', 360, 360), price: 119, badge: 'New', badgeTone: 'dark', timeAgo: '2d ago' },
+      { id: 'na5', title: 'Heritage Watch', image: img('tr-watch', 360, 360), price: 249, badge: 'New', badgeTone: 'dark', timeAgo: '3d ago' },
+      { id: 'na6', title: 'Linen Cushion', image: img('na-cushion', 360, 360), price: 45, badge: 'New', badgeTone: 'dark', timeAgo: '5d ago' },
+    ] as Product[],
+  },
 };
 
 /* ----------------------------- Trusted brands ------------------------------ */
