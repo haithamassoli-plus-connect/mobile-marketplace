@@ -166,7 +166,7 @@ function Backdrop({
       <Animated.View
         pointerEvents="none"
         style={blurStyle}
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-0 overflow-hidden rounded-b-3xl"
       >
         {/* blurTarget + dimezisBlurViewSdk31Plus = real blur on Android 12+,
             cheap fallback (no blur) below it; iOS ignores both and blurs live. */}
