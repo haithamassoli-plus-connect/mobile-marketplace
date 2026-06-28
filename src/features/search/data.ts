@@ -1,10 +1,9 @@
 // Static dummy data for the search discovery screen (Figma 610:1555).
 // ponytail: hardcoded — swap for React Query hooks when a backend exists.
+import { img as buildImg } from '@/features/home/data';
 import type { IconName } from '@/features/home/components/icon';
 
-function img(seed: string) {
-  return `https://picsum.photos/seed/${seed}/80/80`;
-}
+const img = (seed: string) => buildImg(seed, 80, 80);
 
 export const searchPlaceholder = 'Search for products, brands, or categories';
 

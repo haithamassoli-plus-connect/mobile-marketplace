@@ -1,11 +1,89 @@
 // Static dummy data for the marketplace home screen.
-// Images use Lorem Picsum with stable seeds (https://picsum.photos/seed/<seed>/<w>/<h>).
+// Images via LoremFlickr — real keyword-matched photos, free, no API key:
+//   https://loremflickr.com/<w>/<h>/<keyword>?lock=<n>
+// Each seed encodes its subject; we map it to a search keyword and hash it to a
+// stable `lock` so every item keeps the same photo across reloads.
 // ponytail: hardcoded content — replace with React Query hooks when a backend exists.
 
 import type { IconName } from './components/icon';
 
-function img(seed: string, w: number, h: number) {
-  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+// Real product photos from DummyJSON (free, no key) — clean white-bg shots:
+//   https://cdn.dummyjson.com/product-images/<category>/<slug>/thumbnail.webp
+// token → [category, ...slugs]; the seed hash picks a slug so product rails stay varied.
+const PRODUCT: Record<string, [string, string, ...string[]]> = {
+  watch: ['mens-watches', 'longines-master-collection', 'rolex-datejust', 'rolex-cellini-moonphase', 'brown-leather-belt-watch'],
+  smart: ['mens-watches', 'rolex-cellini-date-black-dial', 'rolex-datejust'],
+  band: ['mens-watches', 'brown-leather-belt-watch', 'longines-master-collection'],
+  bag: ['womens-bags', 'prada-women-bag', 'women-handbag-black', 'white-faux-leather-backpack'],
+  tote: ['womens-bags', 'women-handbag-black', 'prada-women-bag'],
+  handbag: ['womens-bags', 'prada-women-bag', 'women-handbag-black'],
+  backpack: ['womens-bags', 'white-faux-leather-backpack', 'women-handbag-black'],
+  luxe: ['womens-bags', 'prada-women-bag', 'women-handbag-black'],
+  lx: ['womens-bags', 'prada-women-bag', 'women-handbag-black', 'white-faux-leather-backpack'],
+  sneaker: ['mens-shoes', 'nike-air-jordan-1-red-and-black', 'puma-future-rider-trainers', 'sports-sneakers-off-white-red'],
+  sneakers: ['mens-shoes', 'nike-air-jordan-1-red-and-black', 'puma-future-rider-trainers', 'sports-sneakers-off-white-red'],
+  shoe: ['mens-shoes', 'puma-future-rider-trainers', 'nike-air-jordan-1-red-and-black'],
+  sh: ['mens-shoes', 'nike-air-jordan-1-red-and-black', 'puma-future-rider-trainers', 'sports-sneakers-off-white-red'],
+  loafer: ['mens-shoes', 'puma-future-rider-trainers', 'nike-air-jordan-1-red-and-black'],
+  runner: ['mens-shoes', 'sports-sneakers-off-white-red', 'nike-air-jordan-1-red-and-black'],
+  shades: ['sunglasses', 'classic-sun-glasses', 'black-sun-glasses', 'green-and-black-glasses'],
+  laptop: ['laptops', 'apple-macbook-pro-14-inch-space-grey', 'asus-zenbook-pro-dual-screen-laptop', 'lenovo-yoga-920'],
+  earbuds: ['mobile-accessories', 'apple-airpods', 'apple-airpods-max-silver'],
+  headphones: ['mobile-accessories', 'apple-airpods-max-silver', 'apple-airpods'],
+  tz: ['mobile-accessories', 'apple-airpods', 'apple-airpods-max-silver', 'amazon-echo-plus'],
+  palette: ['beauty', 'eyeshadow-palette-with-mirror', 'powder-canister'],
+  cushion: ['home-decoration', 'table-lamp', 'plant-pot', 'house-showpiece-plant'],
+  dress: ['womens-dresses', 'corset-leather-with-skirt', 'corset-with-black-skirt', 'dress-pea'],
+  bella: ['womens-dresses', 'dress-pea', 'corset-with-black-skirt'],
+  bm: ['womens-dresses', 'corset-leather-with-skirt', 'dress-pea', 'corset-with-black-skirt'],
+  jewelry: ['womens-jewellery', 'green-crystal-earring', 'green-oval-earring', 'tropical-earring'],
+  skincare: ['skin-care', 'olay-ultra-moisture-shea-butter-body-wash', 'vaseline-men-body-and-face-lotion'],
+  shirt: ['mens-shirts', 'man-plaid-shirt', 'man-short-sleeve-shirt', 'men-check-shirt'],
+  tech: ['smartphones', 'iphone-13-pro', 'iphone-x', 'oppo-a57'],
+};
+
+// Story / seller full-screen covers aren't products → LoremFlickr store scenes
+// (https://loremflickr.com/<w>/<h>/<kw>?lock=<n>). token → search; comma = multiple tags.
+const KEYWORD: Record<string, string> = {
+  stream: 'fashion,model', editorial: 'fashion',
+  mingle: 'boutique', palace: 'storefront', sanctuary: 'jewelry,store',
+  meadow: 'fashion,store', realm: 'sneaker,store', corner: 'handbag,store',
+  bazaar: 'market', dome: 'shopping,mall', trove: 'vintage,store', sphere: 'electronics,store',
+};
+// Seed prefixes/suffixes that aren't subjects (tr-watch, story-mingle, mingle-f1…).
+const SKIP = new Set(['tr', 'bs', 'flash', 'feature', 'live', 'trend', 'disc', 'na', 'brand', 'seller', 'story', 'sd', 'f']);
+
+// The subject token of a seed: 'tr-watch' → 'watch', 'mingle-f1' → 'mingle'.
+function token(seed: string) {
+  const tokens = seed.split(/[-\d]+/).filter(Boolean);
+  return tokens.reverse().find(t => !SKIP.has(t)) ?? 'product';
+}
+
+// Deterministic 1–1000 lock from the full seed → stable, distinct images.
+function lock(seed: string) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return (h % 1000) + 1;
+}
+
+export function img(seed: string, w: number, h: number) {
+  const t = token(seed);
+  const product = PRODUCT[t];
+  if (product) {
+    const [category, ...slugs] = product;
+    const slug = slugs[lock(seed) % slugs.length];
+    return `https://cdn.dummyjson.com/product-images/${category}/${slug}/thumbnail.webp`;
+  }
+  return `https://loremflickr.com/${w}/${h}/${KEYWORD[t] ?? t}?lock=${lock(seed)}`;
+}
+
+// Real brand logos via Clearbit (free, no key): https://logo.clearbit.com/<domain>.
+const BRAND_DOMAIN: Record<string, string> = {
+  Apple: 'apple.com', Nike: 'nike.com', Sony: 'sony.com', Adidas: 'adidas.com',
+  Samsung: 'samsung.com', Gucci: 'gucci.com', Dyson: 'dyson.com', Bose: 'bose.com',
+};
+function logo(name: string) {
+  return `https://logo.clearbit.com/${BRAND_DOMAIN[name] ?? `${name.toLowerCase()}.com`}`;
 }
 
 // n distinct full-screen covers (1080×1920 portrait) derived from one seed — the
@@ -251,14 +329,14 @@ export const trustedBrands = {
   title: 'Trusted Brands',
   subtitle: 'Discover 100+ top brands you can trust.',
   brands: [
-    { id: 'br1', name: 'Apple', logo: img('brand-apple', 200, 120) },
-    { id: 'br2', name: 'Nike', logo: img('brand-nike', 200, 120) },
-    { id: 'br3', name: 'Sony', logo: img('brand-sony', 200, 120) },
-    { id: 'br4', name: 'Adidas', logo: img('brand-adidas', 200, 120) },
-    { id: 'br5', name: 'Samsung', logo: img('brand-samsung', 200, 120) },
-    { id: 'br6', name: 'Gucci', logo: img('brand-gucci', 200, 120) },
-    { id: 'br7', name: 'Dyson', logo: img('brand-dyson', 200, 120) },
-    { id: 'br8', name: 'Bose', logo: img('brand-bose', 200, 120) },
+    { id: 'br1', name: 'Apple', logo: logo('Apple') },
+    { id: 'br2', name: 'Nike', logo: logo('Nike') },
+    { id: 'br3', name: 'Sony', logo: logo('Sony') },
+    { id: 'br4', name: 'Adidas', logo: logo('Adidas') },
+    { id: 'br5', name: 'Samsung', logo: logo('Samsung') },
+    { id: 'br6', name: 'Gucci', logo: logo('Gucci') },
+    { id: 'br7', name: 'Dyson', logo: logo('Dyson') },
+    { id: 'br8', name: 'Bose', logo: logo('Bose') },
   ] as Brand[],
 };
 

@@ -1,7 +1,7 @@
 import { Image, ScrollView, Text, View } from '@/components/ui';
 import { trustedBrands } from '@/features/home/data';
 
-// ponytail: Figma uses logo-only chips (no name); picsum dummy art keeps name as a11y label.
+// ponytail: Figma uses logo-only chips (no name); Clearbit logos keep name as a11y label.
 export function TrustedBrands() {
   return (
     <View className="w-full gap-6 bg-white py-8">

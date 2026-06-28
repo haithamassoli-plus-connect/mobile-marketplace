@@ -15,7 +15,6 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -332,7 +331,7 @@ function useStoryCube({
         });
       }
       else {
-        x.value = withSpring(0, { damping: 18 });
+        x.value = withTiming(0, { duration: 220, easing: Easing.out(Easing.cubic) });
       }
     })
     .onFinalize(() => {
@@ -366,8 +365,8 @@ function useSwipeToClose(onClose: () => void) {
         });
       }
       else {
-        translateY.value = withSpring(0, { damping: 18 });
-        backdrop.value = withSpring(1);
+        translateY.value = withTiming(0, { duration: 220, easing: Easing.out(Easing.cubic) });
+        backdrop.value = withTiming(1, { duration: 220, easing: Easing.out(Easing.cubic) });
       }
     });
 
@@ -397,7 +396,9 @@ function CubeFace({
     const rotateY = interpolate(local, [-1, 0, 1], [-90, 0, 90], Extrapolation.CLAMP);
     const translateX = interpolate(local, [-1, 0, 1], [-width, 0, width], Extrapolation.CLAMP);
     const opacity = interpolate(Math.abs(local), [0, 1], [1, 0.35], Extrapolation.CLAMP);
-    return { opacity, transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
+    // Hinge on the shared seam (prev→right edge, next→left edge) so it meets the centre face.
+    const transformOrigin = position < 0 ? '100% 50%' : '0% 50%';
+    return { opacity, transformOrigin, transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
   });
   return (
     <Animated.View style={[StyleSheet.absoluteFill, style]}>
@@ -445,7 +446,11 @@ function CenterFace({
     const local = x.value / width;
     const rotateY = interpolate(local, [-1, 0, 1], [-90, 0, 90], Extrapolation.CLAMP);
     const translateX = interpolate(local, [-1, 0, 1], [-width, 0, width], Extrapolation.CLAMP);
-    return { transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
+    // Hinge on the seam edge the swipe heads toward so faces fold into a cube corner
+    // instead of pivoting about their centres (which opened a gap mid-swipe). Flips at
+    // x=0 where rotateY is 0, so the swap is invisible.
+    const transformOrigin = local < 0 ? '100% 50%' : '0% 50%';
+    return { transformOrigin, transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
   });
   return (
     <Animated.View style={[StyleSheet.absoluteFill, style]}>
