@@ -87,6 +87,10 @@ const MORPH = { duration: 350, easing: Easing.inOut(Easing.quad) } as const;
 const MINI_W = 220; // ponytail: mini pill width; eyeball-tune to Figma 361:4781.
 const LABEL_H = 12; // Figma tab label line height (iOS/Tab Bar: 10/12).
 
+// ponytail: gold scroll-top handle hidden for now — the Home tab handles
+// scroll-to-top (tap the active tab). Flip to true to bring it back.
+const SHOW_SCROLL_TOP_HANDLE = false;
+
 type Props = {
   /** Shrinks to the icon-only pill (set while scrolling down). */
   mini?: boolean;
@@ -141,7 +145,7 @@ export function BottomNav({
         className="relative w-full items-center"
         style={{ paddingBottom: insets.bottom + 8 }}
       >
-        {showScrollTop && !mini
+        {SHOW_SCROLL_TOP_HANDLE && showScrollTop && !mini
           ? <ScrollTopHandle onPress={onScrollToTop} pillWidth={winW - 32} />
           : null}
 
@@ -156,7 +160,13 @@ export function BottomNav({
               tab={tab}
               active={active === tab.key}
               p={p}
-              onPress={() => router.navigate(tab.route)}
+              onPress={() => {
+                if (active === tab.key) {
+                  onScrollToTop?.();
+                  return;
+                }
+                router.navigate(tab.route);
+              }}
             />
           ))}
         </Animated.View>
