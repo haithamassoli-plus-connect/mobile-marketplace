@@ -57,7 +57,7 @@ export function TrendingGrid() {
 
       {/* Editorial grid: tall featured card + two stacked cards */}
       <View className="h-[344px] flex-row gap-4 px-4">
-        <TrendingCard item={featured} className="h-full flex-1 px-4 py-3" />
+        <TrendingCard item={featured} className="h-full flex-1" />
 
         <View className="w-[157px] gap-2">
           {items.map(item => (
