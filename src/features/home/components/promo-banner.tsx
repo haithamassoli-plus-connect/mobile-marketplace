@@ -1,5 +1,8 @@
 import type { Product } from '../data';
 
+import { LinearGradient } from 'expo-linear-gradient';
+import { StyleSheet } from 'react-native';
+
 import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
 
 import { countdown, flashDeals, promo } from '../data';
@@ -90,7 +93,16 @@ function FlashCard({ product }: { product: Product }) {
 
 export function PromoBanner() {
   return (
-    <View className="mt-8 w-full gap-4 bg-gold-500 p-5">
+    <View className="mt-8 w-full gap-4 p-5">
+      {/* Gold gradient background — Figma 126:3779, left→right f7d466 → e5ad38 → d18c21 */}
+      <LinearGradient
+        colors={['#f7d466', '#e5ad38', '#d18c21'] as const}
+        locations={[0, 0.5, 1]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={StyleSheet.absoluteFill}
+      />
+
       {/* Eyebrow */}
       <Text className="text-center text-[12px]/4 font-medium tracking-[0.9px] text-[#1a1a2e]">
         {promo.eyebrow}
