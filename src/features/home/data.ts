@@ -66,18 +66,19 @@ export const wishlist: WishlistItem[] = [
 ];
 
 /* --------------------------------- Stories --------------------------------- */
-export type Story = { id: string; label: string; image: string; live?: boolean };
+export type StoryTag = 'live' | 'new' | 'hot';
+export type Story = { id: string; label: string; image: string; tag?: StoryTag; viewed?: boolean };
 export const stories: Story[] = [
-  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), live: true },
-  { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200) },
-  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200) },
+  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live' },
+  { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200), tag: 'new' },
+  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200), tag: 'hot' },
   { id: 'st4', label: 'MerchantMeadow', image: img('story-meadow', 200, 200) },
   { id: 'st5', label: 'RetailRealm', image: img('story-realm', 200, 200) },
   { id: 'st6', label: 'CommerceCorner', image: img('story-corner', 200, 200) },
   { id: 'st7', label: 'BazaarBuddy', image: img('story-bazaar', 200, 200) },
-  { id: 'st8', label: 'DealDome', image: img('story-dome', 200, 200) },
-  { id: 'st9', label: 'TradeTrove', image: img('story-trove', 200, 200) },
-  { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200) },
+  { id: 'st8', label: 'DealDome', image: img('story-dome', 200, 200), viewed: true },
+  { id: 'st9', label: 'TradeTrove', image: img('story-trove', 200, 200), viewed: true },
+  { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200), viewed: true },
 ];
 
 /* ---------------------------- Featured hero rail --------------------------- */
