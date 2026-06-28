@@ -172,6 +172,8 @@ function DiscoveryRail() {
 }
 
 function RecentSearches() {
+  const [showAll, setShowAll] = useState(false);
+  const shown = showAll ? recentSearches : recentSearches.slice(0, 4);
   return (
     <>
       <View className="flex-row items-center justify-between px-4 pt-6">
@@ -181,7 +183,7 @@ function RecentSearches() {
         </Pressable>
       </View>
       <View className="flex-row flex-wrap gap-2 px-4 pt-3">
-        {recentSearches.map(term => (
+        {shown.map(term => (
           <View
             key={term}
             className="flex-row items-center gap-[7px] rounded-full border border-neutral-200 bg-neutral-100 py-2 pr-[11px] pl-3"
@@ -192,6 +194,20 @@ function RecentSearches() {
           </View>
         ))}
       </View>
+      {recentSearches.length > 4
+        ? (
+            <Pressable
+              onPress={() => setShowAll(v => !v)}
+              hitSlop={8}
+              className="flex-row items-center gap-1 self-start px-4 pt-3 active:opacity-60"
+            >
+              <Text variant="footnote" emphasized className="text-primary-700">
+                {showAll ? 'Show less' : `Show all (${recentSearches.length})`}
+              </Text>
+              <Icon name={showAll ? 'chevron-up' : 'chevron-down'} size={16} color="#92741a" />
+            </Pressable>
+          )
+        : null}
     </>
   );
 }
