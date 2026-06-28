@@ -1,6 +1,7 @@
+import type { StoryTag } from '@/features/home/data';
 import { router } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
-import { stories, type StoryTag } from '@/features/home/data';
+import { stories } from '@/features/home/data';
 
 // Badge tones per the Figma design: LIVE=red, NEW=dark, HOT=gold.
 const badge: Record<StoryTag, { label: string; bg: string; text: string; dot?: boolean }> = {
@@ -22,7 +23,7 @@ export function StoriesRow() {
         return (
           <Pressable
             key={story.id}
-            onPress={() => router.push('/live2')}
+            onPress={() => router.push({ pathname: '/story', params: { id: story.id } })}
             className="w-20 items-center gap-1.5"
           >
             <View className="size-[76px] items-center justify-center">

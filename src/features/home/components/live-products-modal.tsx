@@ -17,7 +17,13 @@ import { Icon } from './icon';
 // Same shell as WishlistModal — shared backdrop + drag handle. Cards are static.
 const INK = '#181d27'; // neutral-900
 
-export function LiveProductsModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
+export function LiveProductsModal({
+  ref,
+  onDismiss,
+}: {
+  ref?: React.Ref<BottomSheetModal>;
+  onDismiss?: () => void;
+}) {
   const insets = useSafeAreaInsets();
   const modal = useModal();
   React.useImperativeHandle(ref, () => modal.ref.current as BottomSheetModal);
@@ -26,6 +32,7 @@ export function LiveProductsModal({ ref }: { ref?: React.Ref<BottomSheetModal> }
     <Sheet
       ref={modal.ref}
       snapPoints={['75%']}
+      onDismiss={onDismiss}
       backdropComponent={renderBackdrop}
       handleComponent={Handle}
       backgroundStyle={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}

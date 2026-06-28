@@ -8,6 +8,12 @@ function img(seed: string, w: number, h: number) {
   return `https://picsum.photos/seed/${seed}/${w}/${h}`;
 }
 
+// n distinct full-screen covers (1080×1920 portrait) derived from one seed — the
+// per-store frames shown in the story viewer. ponytail: derived inline, no backend.
+function frames(seed: string, n: number) {
+  return Array.from({ length: n }, (_, i) => img(`${seed}-f${i + 1}`, 1080, 1920));
+}
+
 export type Product = {
   id: string;
   title: string;
@@ -67,18 +73,25 @@ export const wishlist: WishlistItem[] = [
 
 /* --------------------------------- Stories --------------------------------- */
 export type StoryTag = 'live' | 'new' | 'hot';
-export type Story = { id: string; label: string; image: string; tag?: StoryTag; viewed?: boolean };
+export type Story = {
+  id: string;
+  label: string;
+  image: string; // 200px avatar — used by StoriesRow (unchanged)
+  tag?: StoryTag;
+  viewed?: boolean;
+  frames: string[]; // 3–5 full-screen covers for the viewer (one segment each)
+};
 export const stories: Story[] = [
-  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live' },
-  { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200), tag: 'new' },
-  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200), tag: 'hot' },
-  { id: 'st4', label: 'MerchantMeadow', image: img('story-meadow', 200, 200) },
-  { id: 'st5', label: 'RetailRealm', image: img('story-realm', 200, 200) },
-  { id: 'st6', label: 'CommerceCorner', image: img('story-corner', 200, 200) },
-  { id: 'st7', label: 'BazaarBuddy', image: img('story-bazaar', 200, 200) },
-  { id: 'st8', label: 'DealDome', image: img('story-dome', 200, 200), viewed: true },
-  { id: 'st9', label: 'TradeTrove', image: img('story-trove', 200, 200), viewed: true },
-  { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200), viewed: true },
+  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live', frames: frames('mingle', 4) },
+  { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200), tag: 'new', frames: frames('palace', 3) },
+  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200), tag: 'hot', frames: frames('sanctuary', 5) },
+  { id: 'st4', label: 'MerchantMeadow', image: img('story-meadow', 200, 200), frames: frames('meadow', 3) },
+  { id: 'st5', label: 'RetailRealm', image: img('story-realm', 200, 200), frames: frames('realm', 4) },
+  { id: 'st6', label: 'CommerceCorner', image: img('story-corner', 200, 200), frames: frames('corner', 3) },
+  { id: 'st7', label: 'BazaarBuddy', image: img('story-bazaar', 200, 200), frames: frames('bazaar', 5) },
+  { id: 'st8', label: 'DealDome', image: img('story-dome', 200, 200), viewed: true, frames: frames('dome', 3) },
+  { id: 'st9', label: 'TradeTrove', image: img('story-trove', 200, 200), viewed: true, frames: frames('trove', 4) },
+  { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200), viewed: true, frames: frames('sphere', 3) },
 ];
 
 /* ---------------------------- Featured hero rail --------------------------- */
