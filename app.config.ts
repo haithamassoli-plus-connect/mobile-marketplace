@@ -37,7 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: Env.EXPO_PUBLIC_VERSION.toString(),
   orientation: 'portrait',
   icon: './assets/icon.png',
-  userInterfaceStyle: 'automatic',
+  userInterfaceStyle: 'light',
   updates: {
     fallbackToCacheTimeout: 0,
     url: 'https://u.expo.dev/16fa87e2-b408-4086-b569-ff8164f154e6',

@@ -25,13 +25,11 @@ export function useSelectedTheme() {
     [_setTheme],
   );
 
-  const selectedTheme = (theme ?? 'system') as ColorSchemeType;
+  const selectedTheme = (theme ?? 'light') as ColorSchemeType;
   return { selectedTheme, setSelectedTheme } as const;
 }
 // to be used in the root file to load the selected theme from MMKV
 export function loadSelectedTheme() {
   const theme = storage.getString(SELECTED_THEME);
-  if (theme !== undefined) {
-    Uniwind.setTheme(theme as ColorSchemeType);
-  }
+  Uniwind.setTheme((theme ?? 'light') as ColorSchemeType);
 }
