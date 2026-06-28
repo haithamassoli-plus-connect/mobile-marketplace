@@ -152,15 +152,16 @@ export const trending: { featured: TrendingItem; items: TrendingItem[] } = {
 /* -------------------------------- Live video ------------------------------- */
 export const live = {
   badge: 'LIVE',
-  title: 'Summer Style Edit — shop the looks',
-  host: 'Bella Moda',
-  viewers: '2.4K watching',
+  count: '23.6K', // shown in the top badge: "LIVE · 23.6K"
+  host: 'Urban Sole',
   image: img('live-stream', 760, 1100),
+  // Featured-products sheet (Figma 170:4036) — price/badge populate the cards.
   products: [
-    { id: 'lp1', title: 'Linen Shirt', image: img('live-shirt', 200, 200), price: 59 },
-    { id: 'lp2', title: 'Straw Hat', image: img('live-hat', 200, 200), price: 39 },
-    { id: 'lp3', title: 'Canvas Tote', image: img('live-tote', 200, 200), price: 49 },
-  ],
+    { id: 'lp1', title: 'Linen Shirt', image: img('live-shirt', 360, 360), price: 59, oldPrice: 89, badge: '-33%' },
+    { id: 'lp2', title: 'Straw Hat', image: img('live-hat', 360, 360), price: 39, oldPrice: 59, badge: '-34%' },
+    { id: 'lp3', title: 'Canvas Tote', image: img('live-tote', 360, 360), price: 49, oldPrice: 79, badge: '-38%' },
+    { id: 'lp4', title: 'Suede Loafers', image: img('live-loafer', 360, 360), price: 119, oldPrice: 199, badge: '-40%' },
+  ] as Product[],
 };
 
 /* ----------------------- Promo banner (flash deals) ------------------------ */
