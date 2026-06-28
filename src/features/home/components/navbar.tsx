@@ -2,6 +2,7 @@ import type { RefObject } from 'react';
 import type { View as RNView } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
+import { router } from 'expo-router';
 import { Pressable } from 'react-native';
 import Animated, {
   Easing,
@@ -121,8 +122,13 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
           </View>
         </View>
 
-        {/* Row 2: search bar */}
-        <View className="mt-4 h-[44px] flex-row items-center gap-2.5 rounded-lg border border-neutral-200 bg-neutral-100 py-1.5 pr-2 pl-4">
+        {/* Row 2: search bar — taps through to the full search screen */}
+        <Pressable
+          onPress={() => router.push('/search')}
+          accessibilityRole="search"
+          accessibilityLabel={nav.searchPlaceholder}
+          className="mt-4 h-[44px] flex-row items-center gap-2.5 rounded-lg border border-neutral-200 bg-neutral-100 py-1.5 pr-2 pl-4 active:opacity-80"
+        >
           <Icon name="search" size={18} color={ICON_GRAY} />
           <Text
             numberOfLines={1}
@@ -135,7 +141,7 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
             <Icon name="mic" size={20} color={ICON_GRAY} />
             <Icon name="camera" size={20} color={ICON_GRAY} />
           </View>
-        </View>
+        </Pressable>
       </View>
 
       <LocaleModal ref={locale.ref} />
