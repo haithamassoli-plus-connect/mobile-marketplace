@@ -542,8 +542,71 @@ function TopBar({
         </View>
         <RoundButton size={32} icon="x" label="Close story" onPress={onClose} />
       </View>
+
+      <StoryLabels store={store} />
     </View>
   );
+}
+
+// Tag labels under the header (Figma 515:1572 + Live/New variants):
+// hot → gold HOT + red discount + "Ends in MM:SS" countdown; live → red LIVE + "Nk watching";
+// new → gold NEW. Non-interactive so taps fall through to the prev/next zones.
+function StoryLabels({ store }: { store: Story }) {
+  const { tag, discount, watching, endsInSec } = store;
+  if (!tag)
+    return null;
+  return (
+    <View pointerEvents="none" className="mt-3 flex-row items-center justify-between">
+      <View className="flex-row items-center gap-2">
+        {tag === 'hot' && (
+          <>
+            <Badge className="bg-primary-500" textClassName="text-neutral-900">HOT</Badge>
+            {!!discount && <Badge className="bg-error-500">{discount}</Badge>}
+          </>
+        )}
+        {tag === 'new' && <Badge className="bg-primary-500" textClassName="text-neutral-900">NEW</Badge>}
+        {tag === 'live' && (
+          <View className="flex-row items-center gap-1 rounded-full bg-error-500 py-[5px] pr-2.5 pl-2">
+            <View className="size-1.5 rounded-full bg-white" />
+            <Text variant="caption-2" emphasized className="tracking-[0.66px] text-white">LIVE</Text>
+          </View>
+        )}
+      </View>
+
+      {tag === 'hot' && endsInSec != null && <Countdown seconds={endsInSec} />}
+      {tag === 'live' && !!watching && <GlassPill>{`${watching} watching`}</GlassPill>}
+    </View>
+  );
+}
+
+function Badge({ className, textClassName = 'text-white', children }: { className: string; textClassName?: string; children: string }) {
+  return (
+    <View className={`rounded-full px-2.5 py-[5px] ${className}`}>
+      <Text variant="caption-2" emphasized className={`tracking-[0.66px] ${textClassName}`}>{children}</Text>
+    </View>
+  );
+}
+
+// Glass pill for the hot countdown and live watcher count (Figma "Urgency").
+function GlassPill({ children }: { children: React.ReactNode }) {
+  return (
+    <View className="rounded-full border border-white/20 bg-black/40 px-2.5 py-[5px]">
+      <Text variant="caption-2" emphasized className="tracking-[0.22px] text-white">{children}</Text>
+    </View>
+  );
+}
+
+// 1s countdown → "Ends in MM:SS". Isolated leaf so only this pill re-renders each tick.
+// ponytail: naive setInterval, drifts a few ms/min — fine for a display timer.
+function Countdown({ seconds }: { seconds: number }) {
+  const [left, setLeft] = React.useState(seconds);
+  React.useEffect(() => {
+    const id = setInterval(() => setLeft(s => (s > 0 ? s - 1 : 0)), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const mm = String(Math.floor(left / 60)).padStart(2, '0');
+  const ss = String(left % 60).padStart(2, '0');
+  return <GlassPill>{`Ends in ${mm}:${ss}`}</GlassPill>;
 }
 
 function BottomBar({

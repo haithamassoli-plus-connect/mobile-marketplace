@@ -1,7 +1,7 @@
 import type { ViewProps } from 'react-native';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-import { Stack, ThemeProvider } from 'expo-router';
+import { Stack, ThemeProvider, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
@@ -34,6 +34,9 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  const segments = useSegments();
+  console.log('[screen]', segments.join('/'));
+
   const hasHiddenSplash = React.useRef(false);
 
   const onLayoutRootView = React.useCallback(() => {

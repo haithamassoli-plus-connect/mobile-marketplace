@@ -78,13 +78,16 @@ export type Story = {
   label: string;
   image: string; // 200px avatar — used by StoriesRow (unchanged)
   tag?: StoryTag;
+  discount?: string; // hot: red discount pill, e.g. '-40%'
+  endsInSec?: number; // hot: countdown shown as "Ends in MM:SS"
+  watching?: string; // live: e.g. '1.2k' → "1.2k watching"
   viewed?: boolean;
   frames: string[]; // 3–5 full-screen covers for the viewer (one segment each)
 };
 export const stories: Story[] = [
-  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live', frames: frames('mingle', 4) },
+  { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live', watching: '1.2k', frames: frames('mingle', 4) },
   { id: 'st2', label: 'PurchasePalace', image: img('story-palace', 200, 200), tag: 'new', frames: frames('palace', 3) },
-  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200), tag: 'hot', frames: frames('sanctuary', 5) },
+  { id: 'st3', label: 'SalesSanctuary', image: img('story-sanctuary', 200, 200), tag: 'hot', discount: '-40%', endsInSec: 134, frames: frames('sanctuary', 5) },
   { id: 'st4', label: 'MerchantMeadow', image: img('story-meadow', 200, 200), frames: frames('meadow', 3) },
   { id: 'st5', label: 'RetailRealm', image: img('story-realm', 200, 200), frames: frames('realm', 4) },
   { id: 'st6', label: 'CommerceCorner', image: img('story-corner', 200, 200), frames: frames('corner', 3) },
