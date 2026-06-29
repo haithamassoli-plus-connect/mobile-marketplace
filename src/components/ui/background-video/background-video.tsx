@@ -9,25 +9,34 @@ const StyledVideoView = withUniwind(VideoView);
 
 export type BackgroundVideoProps = {
   source: VideoSource;
+  /** Controlled mute. Defaults to true so autoplay is always allowed. */
+  muted?: boolean;
   className?: string;
   style?: StyleProp<ViewStyle>;
 };
 
 /**
- * Muted, looping, autoplaying cover video that fills its parent. Decorative:
- * no native controls and ignores touches. Render a poster (e.g. an <Image />)
- * as a sibling behind it to avoid a black flash while the stream buffers.
+ * Looping, autoplaying cover video that fills its parent (muted by default;
+ * control with `muted`). Decorative: no native controls and ignores touches.
+ * Render a poster (e.g. an <Image />) as a sibling behind it to avoid a black
+ * flash while the stream buffers.
  */
 export function BackgroundVideo({
   source,
+  muted = true,
   className,
   style,
 }: BackgroundVideoProps) {
   const player = useVideoPlayer(source, (p) => {
     p.loop = true;
-    p.muted = true;
+    p.muted = muted;
     p.play();
   });
+
+  // Sync later toggles — the setup callback only runs once, on player creation.
+  React.useEffect(() => {
+    player.muted = muted;
+  }, [player, muted]);
 
   return (
     <StyledVideoView

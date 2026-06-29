@@ -20,6 +20,7 @@ const comments = [
 export function LiveVideo() {
   const productsRef = React.useRef<BottomSheetModal>(null);
   const storesRef = React.useRef<BottomSheetModal>(null);
+  const [muted, setMuted] = React.useState(true);
 
   const share = () =>
     Share.share({
@@ -43,7 +44,7 @@ export function LiveVideo() {
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
-        <BackgroundVideo source={live.video} />
+        <BackgroundVideo source={live.video} muted={muted} />
         {/* Legibility gradients — Figma 166:4193 (top scrim, black 0.5→0) +
             166:4194 (bottom scrim, 0→black 0.82). Default direction is top→bottom. */}
         <LinearGradient
@@ -75,9 +76,14 @@ export function LiveVideo() {
           </View>
         </View>
 
-        {/* Top-right: mute */}
-        <Pressable className="absolute top-[18px] right-4 size-9 items-center justify-center rounded-full bg-black/50">
-          <Icon name="volume-x" size={18} color="#ffffff" />
+        {/* Top-right: mute toggle */}
+        <Pressable
+          onPress={() => setMuted((m) => !m)}
+          accessibilityRole="button"
+          accessibilityLabel={muted ? 'Unmute video' : 'Mute video'}
+          className="absolute top-[18px] right-4 size-9 items-center justify-center rounded-full bg-black/50"
+        >
+          <Icon name={muted ? 'volume-x' : 'volume-2'} size={18} color="#ffffff" />
         </Pressable>
 
         {/* Right action sidebar */}
