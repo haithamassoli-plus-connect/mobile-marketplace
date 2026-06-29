@@ -1,6 +1,7 @@
+import type { View as RNView } from 'react-native';
 import type { SellerProfile } from '../data';
 import type { IconName } from '@/features/home/components/icon';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Image, ImageViewer, Modal, Pressable, ScrollView, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
@@ -12,13 +13,23 @@ const SELLER_SNAP = [370]; // ponytail: fixed sheet height — content is compac
 // Main product image + floating pills + page dots + thumbnail strip. The active
 // index is owned here and shared between the dots and the thumbnails — tapping a
 // thumbnail swaps the main image. No swipe pager (spec drives it from thumbnails).
-export function Gallery({ images, seller }: { images: string[]; seller: SellerProfile }) {
+function GalleryImpl({
+  images,
+  seller,
+  mainImageRef,
+  onActiveChange,
+}: {
+  images: string[];
+  seller: SellerProfile;
+  mainImageRef?: React.Ref<RNView>;
+  onActiveChange?: (src: string) => void;
+}) {
   const [active, setActive] = useState(0);
   const [viewerOpen, setViewerOpen] = useState(false);
   const sellerModal = useModal();
   return (
     <View>
-      <View className="relative h-[400px] bg-neutral-100">
+      <View ref={mainImageRef} className="relative h-[400px] bg-neutral-100">
         <Pressable
           onPress={() => setViewerOpen(true)}
           accessibilityRole="imagebutton"
@@ -64,7 +75,10 @@ export function Gallery({ images, seller }: { images: string[]; seller: SellerPr
           <Pressable
             // eslint-disable-next-line react/no-array-index-key -- static positional gallery; the key is the active index
             key={i}
-            onPress={() => setActive(i)}
+            onPress={() => {
+              setActive(i);
+              onActiveChange?.(images[i]);
+            }}
             className={`h-16 w-14 overflow-hidden rounded-[10px] bg-neutral-100 ${
               i === active ? 'border-2 border-gold-500' : 'border border-neutral-200'
             }`}
@@ -88,6 +102,8 @@ export function Gallery({ images, seller }: { images: string[]; seller: SellerPr
     </View>
   );
 }
+
+export const Gallery = memo(GalleryImpl);
 
 // ponytail: decorative — '360 View' has no handler; only 'Zoom' gets an onPress.
 function GalleryPill({ icon, label, className, onPress }: { icon: IconName; label: string; className: string; onPress?: () => void }) {

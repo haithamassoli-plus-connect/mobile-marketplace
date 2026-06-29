@@ -1,5 +1,6 @@
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useIsFocused } from 'expo-router';
 import * as React from 'react';
 import { Share, StyleSheet } from 'react-native';
 
@@ -21,6 +22,7 @@ export function LiveVideo() {
   const productsRef = React.useRef<BottomSheetModal>(null);
   const storesRef = React.useRef<BottomSheetModal>(null);
   const [muted, setMuted] = React.useState(true);
+  const isFocused = useIsFocused(); // pause playback when navigated away
 
   const share = () =>
     Share.share({
@@ -43,7 +45,7 @@ export function LiveVideo() {
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
-        <BackgroundVideo source={live.video} muted={muted} />
+        <BackgroundVideo source={live.video} muted={muted} paused={!isFocused} />
         {/* Legibility scrims — Figma 166:4193 (top, black 0.5→0) + 166:4194 (bottom, 0→0.82) */}
         <LinearGradient
           pointerEvents="none"

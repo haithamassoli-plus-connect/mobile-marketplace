@@ -11,6 +11,8 @@ export type BackgroundVideoProps = {
   source: VideoSource;
   /** Controlled mute. Defaults to true so autoplay is always allowed. */
   muted?: boolean;
+  /** Controlled pause — set true to stop playback (e.g. when the screen blurs). */
+  paused?: boolean;
   className?: string;
   style?: StyleProp<ViewStyle>;
 };
@@ -24,6 +26,7 @@ export type BackgroundVideoProps = {
 export function BackgroundVideo({
   source,
   muted = true,
+  paused = false,
   className,
   style,
 }: BackgroundVideoProps) {
@@ -34,12 +37,20 @@ export function BackgroundVideo({
   });
 
   // Sync later toggles — the setup callback only runs once, on player creation.
+  // Pausing when blurred stops audio + frame decoding so it can't bleed into
+  // other screens or burn CPU/battery off-screen.
   React.useEffect(() => {
-    // expo-video's player is an external mutable native object; setting `.muted`
-    // is its documented API, which React Compiler's immutability check can't model.
-    // eslint-disable-next-line react-hooks/immutability, react-compiler/react-compiler
+    // expo-video's player is an external mutable native object; `.muted` and
+    // play()/pause() are its documented API, which React Compiler's immutability
+    // check can't model.
+    /* eslint-disable react-hooks/immutability, react-compiler/react-compiler */
     player.muted = muted;
-  }, [player, muted]);
+    if (paused)
+      player.pause();
+    else
+      player.play();
+    /* eslint-enable react-hooks/immutability, react-compiler/react-compiler */
+  }, [player, muted, paused]);
 
   return (
     <StyledVideoView
