@@ -27,6 +27,7 @@ const appIconBadgeConfig: AppIconBadgeConfig = {
   ],
 };
 
+// eslint-disable-next-line max-lines-per-function
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: Env.EXPO_PUBLIC_NAME,
@@ -152,6 +153,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     '@react-native-vector-icons/feather',
     '@react-native-vector-icons/ionicons',
     '@react-native-vector-icons/material-design-icons',
+    [
+      'expo-video',
+      {
+        supportsBackgroundPlayback: true,
+        supportsPictureInPicture: true,
+      },
+    ],
   ],
   extra: {
     eas: {

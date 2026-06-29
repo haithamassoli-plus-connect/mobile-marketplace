@@ -70,6 +70,7 @@
     "expo-status-bar": "~56.0.4",
     "expo-system-ui": "~56.0.5",
     "expo-updates": "~56.0.19",
+    "expo-video": "~56.1.4",
     "i18next": "^25.8.0",
     "lodash.memoize": "^4.1.2",
     "moti": "^0.30.0",
