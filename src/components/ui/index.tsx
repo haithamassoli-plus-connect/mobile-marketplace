@@ -3,6 +3,7 @@ export * from './background-video';
 export * from './button';
 export * from './checkbox';
 export { default as colors } from './colors';
+export * from './dropdown';
 export * from './focus-aware-status-bar';
 export * from './image';
 export * from './image-viewer';

@@ -168,3 +168,75 @@ export const coupons: Coupon[] = [
   { id: 'c4', percent: 25, caption: 'Weekend only', code: 'WEEKEND25', variant: 'red' },
   { id: 'c5', percent: 30, caption: 'App exclusive', code: 'APP30', variant: 'dark' },
 ];
+
+export type SizeSystem = { label: string; sizes: string[] };
+
+export type SizeGuide = {
+  columns: string[];
+  systems: SizeSystem[];
+  rows: number[][]; // measurements in CM, aligned by index to each system’s sizes
+  howToMeasure: string[];
+  fitNote?: string;
+};
+
+export const sizeGuides: Record<string, SizeGuide> = {
+  hoodie: {
+    columns: ['Chest', 'Length', 'Sleeve'],
+    systems: [
+      { label: 'International (XS–XXL)', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+      { label: 'US (0–20)', sizes: ['0', '4', '8', '12', '16', '20'] },
+      { label: 'EU (40–50)', sizes: ['40', '42', '44', '46', '48', '50'] },
+    ],
+    rows: [[106, 66, 58], [110, 68, 59], [114, 70, 60], [118, 72, 61], [122, 74, 62], [126, 76, 63]],
+    howToMeasure: [
+      'Chest — measure around the fullest part, under the arms.',
+      'Length — from the highest shoulder point down to the hem.',
+      'Sleeve — from the shoulder seam to the cuff.',
+    ],
+    fitNote: 'This style runs oversized — size down for a regular fit.',
+  },
+  tshirt: {
+    columns: ['Chest', 'Length', 'Sleeve'],
+    systems: [
+      { label: 'International (XS–XXL)', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+      { label: 'US (0–20)', sizes: ['0', '4', '8', '12', '16', '20'] },
+    ],
+    rows: [[92, 66, 20], [96, 68, 21], [100, 70, 22], [104, 72, 23], [108, 74, 24], [112, 76, 25]],
+    howToMeasure: [
+      'Chest — measure around the fullest part, under the arms.',
+      'Length — from the highest shoulder point down to the hem.',
+      'Sleeve — from the shoulder seam to the sleeve hem.',
+    ],
+    fitNote: 'Regular fit — true to size.',
+  },
+  jeans: {
+    columns: ['Waist', 'Hip', 'Inseam'],
+    systems: [
+      { label: 'International (XS–XXL)', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+      { label: 'Waist (in)', sizes: ['28', '30', '32', '34', '36', '38'] },
+      { label: 'EU (36–46)', sizes: ['36', '38', '40', '42', '44', '46'] },
+    ],
+    rows: [[71, 91, 78], [76, 96, 79], [81, 101, 80], [86, 106, 81], [91, 111, 82], [96, 116, 82]],
+    howToMeasure: [
+      'Waist — measure around your natural waistline.',
+      'Hip — measure around the fullest part of your hips.',
+      'Inseam — from the crotch seam down to the hem.',
+    ],
+    fitNote: 'Slim fit — size up if you prefer a relaxed leg.',
+  },
+  dress: {
+    columns: ['Bust', 'Waist', 'Length'],
+    systems: [
+      { label: 'International (XS–XXL)', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+      { label: 'US (0–20)', sizes: ['0', '4', '8', '12', '16', '20'] },
+      { label: 'UK (4–24)', sizes: ['4', '8', '12', '16', '20', '24'] },
+    ],
+    rows: [[82, 64, 88], [86, 68, 90], [90, 72, 92], [94, 76, 94], [98, 80, 96], [102, 84, 98]],
+    howToMeasure: [
+      'Bust — measure around the fullest part of your bust.',
+      'Waist — measure around your natural waistline.',
+      'Length — from the shoulder seam down to the hem.',
+    ],
+    fitNote: 'Designed for a regular fit — fully lined.',
+  },
+};

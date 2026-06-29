@@ -1,8 +1,11 @@
-import type { ProductColor, ProductDetail } from '../data';
+import type { ProductColor, ProductDetail, SizeGuide } from '../data';
 import { useState } from 'react';
 
-import { Button, Text, View } from '@/components/ui';
+import { Button, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
+
+import { sizeGuides } from '../data';
+import { SizeGuideSheet } from './size-guide-sheet';
 
 const INK_900 = '#181d27';
 
@@ -21,7 +24,7 @@ export function PurchasePanel({ product }: { product: ProductDetail }) {
       />
       <View className="h-px bg-neutral-200" />
       <ColorBlock colors={product.colors} />
-      <SizeBlock sizes={product.sizes} />
+      <SizeBlock sizes={product.sizes} productTitle={product.title} sizeGuide={sizeGuides.hoodie} />
       <Stepper />
     </View>
   );
@@ -63,8 +66,9 @@ function ColorBlock({ colors }: { colors: ProductColor[] }) {
   );
 }
 
-function SizeBlock({ sizes }: { sizes: string[] }) {
+function SizeBlock({ sizes, productTitle, sizeGuide }: { sizes: string[]; productTitle: string; sizeGuide: SizeGuide }) {
   const [selected, setSelected] = useState('M');
+  const sizeModal = useModal();
   return (
     <View className="gap-2.5">
       <View className="flex-row items-center justify-between">
@@ -72,7 +76,7 @@ function SizeBlock({ sizes }: { sizes: string[] }) {
           <Text variant="caption-2" emphasized className="text-neutral-500">SIZE</Text>
           <Text variant="footnote" emphasized className="text-neutral-800">{selected}</Text>
         </View>
-        <Button variant="ghost" hitSlop={8} className="my-0 h-auto p-0">
+        <Button variant="ghost" onPress={() => sizeModal.present()} hitSlop={8} className="my-0 h-auto p-0">
           <Text variant="footnote" emphasized className="text-gold-700">Size Guide</Text>
         </Button>
       </View>
@@ -82,7 +86,7 @@ function SizeBlock({ sizes }: { sizes: string[] }) {
             key={size}
             variant="ghost"
             onPress={() => setSelected(size)}
-            className={`my-0 px-0 h-10 flex-1 items-center justify-center rounded-[10px] ${
+            className={`my-0 h-10 flex-1 items-center justify-center rounded-[10px] px-0 ${
               size === selected ? 'bg-gold-500' : 'border border-neutral-200 bg-white'
             }`}
           >
@@ -92,6 +96,7 @@ function SizeBlock({ sizes }: { sizes: string[] }) {
           </Button>
         ))}
       </View>
+      <SizeGuideSheet ref={sizeModal.ref} title={productTitle} guide={sizeGuide} />
     </View>
   );
 }
@@ -100,13 +105,13 @@ function Stepper() {
   const [qty, setQty] = useState(1);
   return (
     <View className="flex-row items-center self-start rounded-full border border-neutral-200">
-      <Button variant="ghost" onPress={() => setQty(value => Math.max(1, value - 1))} hitSlop={4} className="my-0 px-0 rounded-none h-11 w-[42px] items-center justify-center">
+      <Button variant="ghost" onPress={() => setQty(value => Math.max(1, value - 1))} hitSlop={4} className="my-0 h-11 w-[42px] items-center justify-center rounded-none px-0">
         <Icon name="minus" size={18} color={INK_900} />
       </Button>
       <View className="h-11 w-[34px] items-center justify-center">
         <Text variant="subheadline" emphasized className="text-neutral-900">{qty}</Text>
       </View>
-      <Button variant="ghost" onPress={() => setQty(value => value + 1)} hitSlop={4} className="my-0 px-0 rounded-none h-11 w-[42px] items-center justify-center">
+      <Button variant="ghost" onPress={() => setQty(value => value + 1)} hitSlop={4} className="my-0 h-11 w-[42px] items-center justify-center rounded-none px-0">
         <Icon name="plus" size={18} color={INK_900} />
       </Button>
     </View>
