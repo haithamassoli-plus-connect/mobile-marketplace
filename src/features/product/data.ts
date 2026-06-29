@@ -83,6 +83,32 @@ export const product: ProductDetail = {
   sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
 };
 
+export type SellerStat = { value: string; label: string };
+
+export type SellerProfile = {
+  name: string;
+  avatar: string;
+  verified: boolean;
+  topRated: boolean;
+  rating: number;
+  ratingCount: string;
+  stats: SellerStat[];
+};
+
+export const sellerProfile: SellerProfile = {
+  name: product.seller,
+  avatar: product.sellerAvatar,
+  verified: true,
+  topRated: true,
+  rating: 4.8,
+  ratingCount: '12,560',
+  stats: [
+    { value: '90', label: 'Sales' },
+    { value: '1.2M', label: 'Followers' },
+    { value: '2Y+', label: 'On GoldenTik' },
+  ],
+};
+
 export const ratingHistogram: RatingBar[] = [
   { stars: 5, percent: 78 },
   { stars: 4, percent: 14 },

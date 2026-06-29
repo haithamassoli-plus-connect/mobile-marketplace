@@ -1,25 +1,32 @@
+import type { SellerProfile } from '../data';
 import type { IconName } from '@/features/home/components/icon';
 import { useState } from 'react';
 
-import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Image, Modal, Pressable, ScrollView, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
+import { SellerSheet } from './seller-sheet';
 
 const INK_800 = '#252b37'; // neutral-800
+const SELLER_SNAP = [370]; // ponytail: fixed sheet height — content is compact and static.
 
 // Main product image + floating pills + page dots + thumbnail strip. The active
 // index is owned here and shared between the dots and the thumbnails — tapping a
 // thumbnail swaps the main image. No swipe pager (spec drives it from thumbnails).
-export function Gallery({ images, seller, sellerAvatar }: { images: string[]; seller: string; sellerAvatar: string }) {
+export function Gallery({ images, seller }: { images: string[]; seller: SellerProfile }) {
   const [active, setActive] = useState(0);
   const [wished, setWished] = useState(false);
+  const sellerModal = useModal();
   return (
     <View>
       <View className="relative h-[400px] bg-neutral-100">
         <Image source={images[active]} contentFit="contain" className="size-full" transition={150} />
-        {/* ponytail: decorative — opens the seller profile once routing exists. */}
-        <Pressable className="absolute top-3 left-3 flex-row items-center gap-2 rounded-full bg-white py-1 pr-2.5 pl-1.5 shadow-sm">
-          <Image source={sellerAvatar} contentFit="cover" className="size-6 rounded-full" />
-          <Text variant="footnote" emphasized className="text-neutral-900">{seller}</Text>
+        {/* ponytail: opens the seller sheet. */}
+        <Pressable
+          onPress={() => sellerModal.present()}
+          className="absolute top-3 left-3 flex-row items-center gap-2 rounded-full bg-white py-1 pr-2.5 pl-1.5 shadow-sm"
+        >
+          <Image source={seller.avatar} contentFit="cover" className="size-6 rounded-full" />
+          <Text variant="footnote" emphasized className="text-neutral-900">{seller.name}</Text>
           <Icon name="badge-check" size={14} color="#2e90fa" />
           <Icon name="chevron-right" size={14} color="#717680" />
         </Pressable>
@@ -68,6 +75,10 @@ export function Gallery({ images, seller, sellerAvatar }: { images: string[]; se
           </Pressable>
         ))}
       </ScrollView>
+
+      <Modal ref={sellerModal.ref} snapPoints={SELLER_SNAP}>
+        <SellerSheet seller={seller} />
+      </Modal>
     </View>
   );
 }

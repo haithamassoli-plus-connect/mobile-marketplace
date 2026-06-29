@@ -12,7 +12,7 @@ import { PurchaseBar } from './components/purchase-bar';
 import { PurchasePanel } from './components/purchase-panel';
 import { Related } from './components/related';
 import { Reviews } from './components/reviews';
-import { accordions, coupons, product, ratingHistogram, relatedProducts, reviews } from './data';
+import { accordions, coupons, product, ratingHistogram, relatedProducts, reviews, sellerProfile } from './data';
 
 const INK_900 = '#181d27'; // neutral-900
 const NEUTRAL_700 = '#414651';
@@ -33,7 +33,7 @@ export function ProductScreen({ id }: { id: string }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >
-        <Gallery images={product.gallery} seller={product.seller} sellerAvatar={product.sellerAvatar} />
+        <Gallery images={product.gallery} seller={sellerProfile} />
         <View className="h-px bg-neutral-200" />
         <PurchasePanel product={product} />
         <Coupon coupons={coupons} />
