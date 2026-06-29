@@ -2,7 +2,7 @@ import type { SellerProfile } from '../data';
 import type { IconName } from '@/features/home/components/icon';
 import { useState } from 'react';
 
-import { Image, Modal, Pressable, ScrollView, Text, useModal, View } from '@/components/ui';
+import { Image, ImageViewer, Modal, Pressable, ScrollView, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { SellerSheet } from './seller-sheet';
 
@@ -14,12 +14,19 @@ const SELLER_SNAP = [370]; // ponytail: fixed sheet height — content is compac
 // thumbnail swaps the main image. No swipe pager (spec drives it from thumbnails).
 export function Gallery({ images, seller }: { images: string[]; seller: SellerProfile }) {
   const [active, setActive] = useState(0);
-  const [wished, setWished] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false);
   const sellerModal = useModal();
   return (
     <View>
       <View className="relative h-[400px] bg-neutral-100">
-        <Image source={images[active]} contentFit="contain" className="size-full" transition={150} />
+        <Pressable
+          onPress={() => setViewerOpen(true)}
+          accessibilityRole="imagebutton"
+          accessibilityLabel="View image fullscreen"
+          className="size-full"
+        >
+          <Image source={images[active]} contentFit="contain" className="size-full" transition={150} />
+        </Pressable>
         {/* ponytail: opens the seller sheet. */}
         <Pressable
           onPress={() => sellerModal.present()}
@@ -30,17 +37,8 @@ export function Gallery({ images, seller }: { images: string[]; seller: SellerPr
           <Icon name="badge-check" size={14} color="#2e90fa" />
           <Icon name="chevron-right" size={14} color="#717680" />
         </Pressable>
-        {/* ponytail: local wishlist toggle — no store yet. */}
-        <Pressable
-          onPress={() => setWished(v => !v)}
-          accessibilityRole="button"
-          accessibilityLabel={wished ? 'Remove from wishlist' : 'Add to wishlist'}
-          className="absolute top-3 right-3 size-9 items-center justify-center rounded-full bg-white shadow-sm"
-        >
-          <Icon name="heart" size={20} color={wished ? '#dbb42c' : '#181d27'} />
-        </Pressable>
         <GalleryPill icon="rotate-3d" label="360 View" className="left-3" />
-        <GalleryPill icon="maximize" label="Zoom" className="right-3" />
+        <GalleryPill icon="maximize" label="Zoom" className="right-3" onPress={() => setViewerOpen(true)} />
         <View className="absolute inset-x-0 bottom-3 flex-row items-center justify-center gap-1.5">
           {images.map((_, i) => (
             <View
@@ -79,14 +77,23 @@ export function Gallery({ images, seller }: { images: string[]; seller: SellerPr
       <Modal ref={sellerModal.ref} snapPoints={SELLER_SNAP}>
         <SellerSheet seller={seller} />
       </Modal>
+
+      <ImageViewer
+        visible={viewerOpen}
+        images={images}
+        initialIndex={active}
+        onClose={() => setViewerOpen(false)}
+        onIndexChange={setActive}
+      />
     </View>
   );
 }
 
-// ponytail: decorative — 360 View / Zoom have no handler yet.
-function GalleryPill({ icon, label, className }: { icon: IconName; label: string; className: string }) {
+// ponytail: decorative — '360 View' has no handler; only 'Zoom' gets an onPress.
+function GalleryPill({ icon, label, className, onPress }: { icon: IconName; label: string; className: string; onPress?: () => void }) {
   return (
     <Pressable
+      onPress={onPress}
       className={`absolute bottom-3 flex-row items-center gap-1.5 rounded-full bg-white py-1.5 pr-3 pl-2.5 shadow-sm ${className}`}
     >
       <Icon name={icon} size={14} color={INK_800} />
