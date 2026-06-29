@@ -42,7 +42,8 @@ export function LiveVideo() {
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
-        <BackgroundVideo source={live.video} muted={muted} paused={!isFocused} />
+        {/* ponytail: zoom past the clip's baked-in 2.35:1 letterbox bars (58px/480). Re-tune scale if live.video changes. */}
+        <BackgroundVideo source={live.video} muted={muted} paused={!isFocused} style={{ transform: [{ scale: 1.33 }] }} />
         <LinearGradient
           pointerEvents="none"
           colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'] as const}
