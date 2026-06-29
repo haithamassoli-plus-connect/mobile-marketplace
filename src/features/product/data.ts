@@ -141,3 +141,13 @@ export const accordions: Accordion[] = [
     body: 'Machine wash cold with like colours, tumble dry low, and skip ironing the print. Backed by a 30-day fit guarantee with free returns if the cosiness is not instant.',
   },
 ];
+
+export type Coupon = { id: string; percent: number; caption: string; code: string; variant: 'gold' | 'green' | 'blue' | 'red' | 'dark' };
+
+export const coupons: Coupon[] = [
+  { id: 'c1', percent: 10, caption: 'Valid on first order', code: 'WELCOME10', variant: 'gold' },
+  { id: 'c2', percent: 15, caption: 'Orders over JOD 50', code: 'SAVE15', variant: 'green' },
+  { id: 'c3', percent: 20, caption: 'On selected items', code: 'DEAL20', variant: 'blue' },
+  { id: 'c4', percent: 25, caption: 'Weekend only', code: 'WEEKEND25', variant: 'red' },
+  { id: 'c5', percent: 30, caption: 'App exclusive', code: 'APP30', variant: 'dark' },
+];

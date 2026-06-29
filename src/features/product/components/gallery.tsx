@@ -9,12 +9,29 @@ const INK_800 = '#252b37'; // neutral-800
 // Main product image + floating pills + page dots + thumbnail strip. The active
 // index is owned here and shared between the dots and the thumbnails — tapping a
 // thumbnail swaps the main image. No swipe pager (spec drives it from thumbnails).
-export function Gallery({ images }: { images: string[] }) {
+export function Gallery({ images, seller, sellerAvatar }: { images: string[]; seller: string; sellerAvatar: string }) {
   const [active, setActive] = useState(0);
+  const [wished, setWished] = useState(false);
   return (
     <View>
       <View className="relative h-[400px] bg-neutral-100">
         <Image source={images[active]} contentFit="contain" className="size-full" transition={150} />
+        {/* ponytail: decorative — opens the seller profile once routing exists. */}
+        <Pressable className="absolute top-3 left-3 flex-row items-center gap-2 rounded-full bg-white py-1 pr-2.5 pl-1.5 shadow-sm">
+          <Image source={sellerAvatar} contentFit="cover" className="size-6 rounded-full" />
+          <Text variant="footnote" emphasized className="text-neutral-900">{seller}</Text>
+          <Icon name="badge-check" size={14} color="#2e90fa" />
+          <Icon name="chevron-right" size={14} color="#717680" />
+        </Pressable>
+        {/* ponytail: local wishlist toggle — no store yet. */}
+        <Pressable
+          onPress={() => setWished(v => !v)}
+          accessibilityRole="button"
+          accessibilityLabel={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+          className="absolute top-3 right-3 size-9 items-center justify-center rounded-full bg-white shadow-sm"
+        >
+          <Icon name="heart" size={20} color={wished ? '#dbb42c' : '#181d27'} />
+        </Pressable>
         <GalleryPill icon="rotate-3d" label="360 View" className="left-3" />
         <GalleryPill icon="maximize" label="Zoom" className="right-3" />
         <View className="absolute inset-x-0 bottom-3 flex-row items-center justify-center gap-1.5">

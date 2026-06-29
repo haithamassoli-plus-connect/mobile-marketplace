@@ -12,7 +12,7 @@ import { PurchaseBar } from './components/purchase-bar';
 import { PurchasePanel } from './components/purchase-panel';
 import { Related } from './components/related';
 import { Reviews } from './components/reviews';
-import { accordions, product, ratingHistogram, relatedProducts, reviews } from './data';
+import { accordions, coupons, product, ratingHistogram, relatedProducts, reviews } from './data';
 
 const INK_900 = '#181d27'; // neutral-900
 const NEUTRAL_700 = '#414651';
@@ -33,19 +33,19 @@ export function ProductScreen({ id }: { id: string }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >
-        <Gallery images={product.gallery} />
+        <Gallery images={product.gallery} seller={product.seller} sellerAvatar={product.sellerAvatar} />
         <View className="h-px bg-neutral-200" />
         <PurchasePanel product={product} />
+        <Coupon coupons={coupons} />
         <Reviews
           summary={{ rating: product.rating, reviewCount: product.reviewCount, bars: ratingHistogram }}
           reviews={reviews}
         />
-        <Coupon />
+        <ServicesStrip />
         <ProductTabs tabs={accordions} />
         <Related items={relatedProducts} />
-        <ServicesStrip />
       </ScrollView>
-      <PurchaseBar price={product.price} currency={product.currency} insetBottom={insets.bottom} />
+      <PurchaseBar insetBottom={insets.bottom} />
     </View>
   );
 }

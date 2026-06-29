@@ -35,6 +35,9 @@ export function BackgroundVideo({
 
   // Sync later toggles — the setup callback only runs once, on player creation.
   React.useEffect(() => {
+    // expo-video's player is an external mutable native object; setting `.muted`
+    // is its documented API, which React Compiler's immutability check can't model.
+    // eslint-disable-next-line react-hooks/immutability, react-compiler/react-compiler
     player.muted = muted;
   }, [player, muted]);
 

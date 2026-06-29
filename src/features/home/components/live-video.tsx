@@ -34,8 +34,7 @@ export function LiveVideo() {
   ];
 
   return (
-    // ponytail: px-4 wrapper keeps the card centered; w-full makes width explicit so
-    // the aspect ratio drives only height. rounded-3xl == Figma radius/24.
+    // ponytail: px-4 centers the card; w-full + aspect-ratio drive height. rounded-3xl = Figma /24.
     <View className="mt-8 px-4">
       <View className="relative aspect-361/722 w-full overflow-hidden rounded-3xl">
         {/* Live stream — dummy video over the poster (poster shows while it buffers) */}
@@ -45,8 +44,7 @@ export function LiveVideo() {
           className="absolute inset-0 size-full"
         />
         <BackgroundVideo source={live.video} muted={muted} />
-        {/* Legibility gradients — Figma 166:4193 (top scrim, black 0.5→0) +
-            166:4194 (bottom scrim, 0→black 0.82). Default direction is top→bottom. */}
+        {/* Legibility scrims — Figma 166:4193 (top, black 0.5→0) + 166:4194 (bottom, 0→0.82) */}
         <LinearGradient
           pointerEvents="none"
           colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'] as const}
@@ -78,7 +76,7 @@ export function LiveVideo() {
 
         {/* Top-right: mute toggle */}
         <Pressable
-          onPress={() => setMuted((m) => !m)}
+          onPress={() => setMuted(m => !m)}
           accessibilityRole="button"
           accessibilityLabel={muted ? 'Unmute video' : 'Mute video'}
           className="absolute top-[18px] right-4 size-9 items-center justify-center rounded-full bg-black/50"
