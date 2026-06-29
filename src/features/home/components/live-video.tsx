@@ -4,13 +4,12 @@ import { useIsFocused } from 'expo-router';
 import * as React from 'react';
 import { Share, StyleSheet } from 'react-native';
 
-import { BackgroundVideo, Image, Pressable, Text, View } from '@/components/ui';
+import { BackgroundVideo, Button, Image, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { live } from '@/features/home/data';
 import { LiveProductsModal } from './live-products-modal';
 import { LiveStoresModal } from './live-stores-modal';
 
-// ponytail: dummy live-stream comments — the data module has no comments field.
 const comments = [
   { id: 'c1', user: 'Sneha', text: 'Love this bag!', starred: true, opacity: 'opacity-60' },
   { id: 'c2', user: 'Ankit', text: 'Is it available in black?', opacity: 'opacity-80' },
@@ -22,7 +21,7 @@ export function LiveVideo() {
   const productsRef = React.useRef<BottomSheetModal>(null);
   const storesRef = React.useRef<BottomSheetModal>(null);
   const [muted, setMuted] = React.useState(true);
-  const isFocused = useIsFocused(); // pause playback when navigated away
+  const isFocused = useIsFocused();
 
   const share = () =>
     Share.share({
@@ -36,17 +35,14 @@ export function LiveVideo() {
   ];
 
   return (
-    // ponytail: px-4 centers the card; w-full + aspect-ratio drive height. rounded-3xl = Figma /24.
     <View className="mt-8 px-4">
       <View className="relative aspect-361/722 w-full overflow-hidden rounded-3xl">
-        {/* Live stream — dummy video over the poster (poster shows while it buffers) */}
         <Image
           source={live.image}
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
         <BackgroundVideo source={live.video} muted={muted} paused={!isFocused} />
-        {/* Legibility scrims — Figma 166:4193 (top, black 0.5→0) + 166:4194 (bottom, 0→0.82) */}
         <LinearGradient
           pointerEvents="none"
           colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'] as const}
@@ -58,7 +54,6 @@ export function LiveVideo() {
           style={styles.bottomScrim}
         />
 
-        {/* Top-left: LIVE badge + host */}
         <View className="absolute top-4 left-4 gap-2">
           <View className="flex-row items-center gap-1.5 self-start rounded-lg bg-error-500 py-[5px] pr-2.5 pl-2">
             <View className="size-[7px] rounded-full bg-white" />
@@ -76,29 +71,27 @@ export function LiveVideo() {
           </View>
         </View>
 
-        {/* Top-right: mute toggle */}
-        <Pressable
+        <Button
+          variant="ghost"
           onPress={() => setMuted(m => !m)}
           accessibilityRole="button"
           accessibilityLabel={muted ? 'Unmute video' : 'Mute video'}
-          className="absolute top-[18px] right-4 size-9 items-center justify-center rounded-full bg-black/50"
+          className="my-0 h-auto px-0 absolute top-[18px] right-4 size-9 items-center justify-center rounded-full bg-black/50"
         >
           <Icon name={muted ? 'volume-x' : 'volume-2'} size={18} color="#ffffff" />
-        </Pressable>
+        </Button>
 
-        {/* Right action sidebar */}
         <View className="absolute right-4 bottom-[86px] items-center gap-[18px]">
           {actions.map(a => (
-            <Pressable key={a.id} onPress={a.onPress} className="items-center gap-1.5">
+            <Button key={a.id} variant="ghost" onPress={a.onPress} className="my-0 h-auto flex-col px-0 items-center gap-1.5">
               <View className="size-12 items-center justify-center rounded-full bg-black/50">
                 <Icon name={a.icon} size={22} color="#ffffff" />
               </View>
               <Text variant="caption-2" emphasized className="text-white/95">{a.label}</Text>
-            </Pressable>
+            </Button>
           ))}
         </View>
 
-        {/* Live comments */}
         <View className="absolute bottom-[78px] left-4 gap-1.5">
           {comments.map(c => (
             <View
@@ -112,14 +105,13 @@ export function LiveVideo() {
           ))}
         </View>
 
-        {/* Comment input */}
         <View className="absolute inset-x-4 bottom-4 flex-row items-center gap-2.5">
           <View className="flex-1 rounded-full border border-white/25 bg-white/15 px-4 py-3">
             <Text variant="footnote" className="text-white/80">Say something…</Text>
           </View>
-          <Pressable className="size-[46px] items-center justify-center rounded-full bg-gold-500">
+          <Button variant="ghost" className="my-0 h-auto px-0 size-[46px] items-center justify-center rounded-full bg-gold-500">
             <Icon name="send" size={20} color="#0a0d12" />
-          </Pressable>
+          </Button>
         </View>
       </View>
 

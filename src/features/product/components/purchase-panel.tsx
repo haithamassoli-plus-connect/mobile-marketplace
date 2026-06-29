@@ -1,13 +1,11 @@
 import type { ProductColor, ProductDetail } from '../data';
 import { useState } from 'react';
 
-import { Pressable, Text, View } from '@/components/ui';
+import { Button, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 
-const INK_900 = '#181d27'; // neutral-900
+const INK_900 = '#181d27';
 
-// B4 — title, price, and the colour + size selectors plus a quantity stepper. The
-// colour index, size, and quantity live in their own blocks (nothing above needs them).
 export function PurchasePanel({ product }: { product: ProductDetail }) {
   return (
     <View className="gap-[14px] p-4">
@@ -51,14 +49,14 @@ function ColorBlock({ colors }: { colors: ProductColor[] }) {
       </View>
       <View className="flex-row gap-3">
         {colors.map((color, i) => (
-          <Pressable
+          <Button
             key={color.hex}
+            variant="ghost"
             onPress={() => setIndex(i)}
-            className={`rounded-full p-0.5 ${i === index ? 'border-2 border-gold-500' : 'border-2 border-transparent'}`}
+            className={`my-0 h-auto rounded-full p-0.5 ${i === index ? 'border-2 border-gold-500' : 'border-2 border-transparent'}`}
           >
-            {/* ponytail: raw hex — fabric colours have no token. */}
             <View className="size-[38px] rounded-full" style={{ backgroundColor: color.hex }} />
-          </Pressable>
+          </Button>
         ))}
       </View>
     </View>
@@ -74,24 +72,24 @@ function SizeBlock({ sizes }: { sizes: string[] }) {
           <Text variant="caption-2" emphasized className="text-neutral-500">SIZE</Text>
           <Text variant="footnote" emphasized className="text-neutral-800">{selected}</Text>
         </View>
-        {/* ponytail: decorative — Size Guide sheet not built. */}
-        <Pressable hitSlop={8}>
+        <Button variant="ghost" hitSlop={8} className="my-0 h-auto p-0">
           <Text variant="footnote" emphasized className="text-gold-700">Size Guide</Text>
-        </Pressable>
+        </Button>
       </View>
       <View className="flex-row gap-2">
         {sizes.map(size => (
-          <Pressable
+          <Button
             key={size}
+            variant="ghost"
             onPress={() => setSelected(size)}
-            className={`h-10 flex-1 items-center justify-center rounded-[10px] ${
+            className={`my-0 px-0 h-10 flex-1 items-center justify-center rounded-[10px] ${
               size === selected ? 'bg-gold-500' : 'border border-neutral-200 bg-white'
             }`}
           >
             <Text variant="footnote" emphasized className={size === selected ? 'text-neutral-1000' : 'text-neutral-700'}>
               {size}
             </Text>
-          </Pressable>
+          </Button>
         ))}
       </View>
     </View>
@@ -102,15 +100,15 @@ function Stepper() {
   const [qty, setQty] = useState(1);
   return (
     <View className="flex-row items-center self-start rounded-full border border-neutral-200">
-      <Pressable onPress={() => setQty(value => Math.max(1, value - 1))} hitSlop={4} className="h-11 w-[42px] items-center justify-center">
+      <Button variant="ghost" onPress={() => setQty(value => Math.max(1, value - 1))} hitSlop={4} className="my-0 px-0 rounded-none h-11 w-[42px] items-center justify-center">
         <Icon name="minus" size={18} color={INK_900} />
-      </Pressable>
+      </Button>
       <View className="h-11 w-[34px] items-center justify-center">
         <Text variant="subheadline" emphasized className="text-neutral-900">{qty}</Text>
       </View>
-      <Pressable onPress={() => setQty(value => value + 1)} hitSlop={4} className="h-11 w-[42px] items-center justify-center">
+      <Button variant="ghost" onPress={() => setQty(value => value + 1)} hitSlop={4} className="my-0 px-0 rounded-none h-11 w-[42px] items-center justify-center">
         <Icon name="plus" size={18} color={INK_900} />
-      </Pressable>
+      </Button>
     </View>
   );
 }

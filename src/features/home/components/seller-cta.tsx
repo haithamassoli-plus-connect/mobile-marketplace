@@ -6,7 +6,6 @@ export function SellerCta() {
   return (
     <View className="mx-4 mt-8">
       <View className="overflow-hidden rounded-2xl bg-secondary-950 px-6 py-7">
-        {/* faint gold radial glow accent */}
         <View className="absolute -top-12 -right-12 size-44 rounded-full bg-gold-500/15" />
 
         <Text variant="caption-1" emphasized className="text-gold-500">

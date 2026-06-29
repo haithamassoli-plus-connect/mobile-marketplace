@@ -3,15 +3,11 @@ import type { Product } from '../data';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet } from 'react-native';
 
-import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 
 import { countdown, flashDeals, promo } from '../data';
 import { Icon } from './icon';
 import { IconButton } from './primitives';
-
-// Full-bleed gold promo block: eyebrow, glass countdown timer, a flash-deals rail
-// of rich cards, a headline + dark CTA, and a dismiss link.
-// ponytail: static countdown values — wire to a real timer when needed.
 
 const TIMER_CELLS = [
   { value: countdown.days, label: 'DAYS' },
@@ -23,7 +19,6 @@ const TIMER_CELLS = [
 function TimerCell({ value, label }: { value: string; label: string }) {
   return (
     <View className="flex-1 items-center justify-center gap-0.5">
-      {/* ponytail: 26px bold isn't a text variant — inline the Figma cell size. */}
       <Text className="text-[26px] leading-[31px] font-bold text-[#111827]">{value}</Text>
       <Text className="text-[9px] leading-[11px] font-medium tracking-[0.7px] text-[#4a5463]">
         {label}
@@ -36,8 +31,6 @@ function TimerColon() {
   return <Text className="text-[22px] leading-[28px] font-bold text-[#111827]/45">:</Text>;
 }
 
-// ponytail: stock/flash-timer copy is decorative and not in the data module —
-// kept static to stay faithful to the Figma flash card.
 function FlashCard({ product }: { product: Product }) {
   return (
     <View className="w-[290px] overflow-hidden rounded-2xl bg-white shadow-lg">
@@ -94,7 +87,6 @@ function FlashCard({ product }: { product: Product }) {
 export function PromoBanner() {
   return (
     <View className="mt-8 w-full gap-4 p-5">
-      {/* Gold gradient background — Figma 126:3779, left→right f7d466 → e5ad38 → d18c21 */}
       <LinearGradient
         colors={['#f7d466', '#e5ad38', '#d18c21'] as const}
         locations={[0, 0.5, 1]}
@@ -103,12 +95,10 @@ export function PromoBanner() {
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Eyebrow */}
       <Text className="text-center text-[12px]/4 font-medium tracking-[0.9px] text-[#1a1a2e]">
         {promo.eyebrow}
       </Text>
 
-      {/* Glass countdown timer */}
       <View className="flex-row items-center justify-center gap-1 rounded-2xl border border-white/65 bg-white/30 px-2 pt-3.5 pb-3 shadow-lg">
         {TIMER_CELLS.map((cell, index) => (
           <View key={cell.label} className="flex-1 flex-row items-center justify-center">
@@ -118,7 +108,6 @@ export function PromoBanner() {
         ))}
       </View>
 
-      {/* Flash deal cards */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -129,18 +118,15 @@ export function PromoBanner() {
         ))}
       </ScrollView>
 
-      {/* Headline */}
       <Text variant="title-2" emphasized className="text-center text-[#111827]">
         {promo.headline}
       </Text>
 
-      {/* CTA */}
-      <Pressable className="flex-row items-center justify-center gap-2 rounded-xl bg-[#1a1a2e] px-5 py-3.5 shadow-md">
+      <Button variant="ghost" className="my-0 h-auto flex-row items-center justify-center gap-2 rounded-xl bg-[#1a1a2e] px-5 py-3.5 shadow-md">
         <Text variant="headline" className="text-white">{promo.cta}</Text>
         <Icon name="arrow-right" size={18} color="#ffffff" />
-      </Pressable>
+      </Button>
 
-      {/* Dismiss */}
       <Text variant="footnote" className="text-center text-[#1a1a2e]/70">
         {promo.dismiss}
       </Text>

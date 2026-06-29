@@ -5,17 +5,14 @@ import {
   BottomSheetModal as Sheet,
 } from '@gorhom/bottom-sheet';
 import * as React from 'react';
-import { Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Text, useModal, View } from '@/components/ui';
+import { Button, Image, Text, useModal, View } from '@/components/ui';
 import { renderBackdrop } from '@/components/ui/modal';
 import { sellers } from '@/features/home/data';
 import { Icon } from './icon';
 
-// Other-live-stores sheet (Figma 172:4036). Reuses the verified-sellers data —
-// first product image is the stream thumbnail, review count stands in for viewers.
-const INK = '#0a0909'; // secondary-950 — dark text on the gold button
+const INK = '#0a0909';
 
 export function LiveStoresModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
   const insets = useSafeAreaInsets();
@@ -30,7 +27,6 @@ export function LiveStoresModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) 
       handleComponent={Handle}
       backgroundStyle={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}
     >
-      {/* Header */}
       <View className="gap-0.5 px-5 pb-3.5">
         <Text variant="headline" emphasized className="text-neutral-900">Live right now</Text>
         <Text variant="footnote" className="text-neutral-500">
@@ -77,14 +73,15 @@ function Card({ seller }: { seller: Seller }) {
         <Text variant="caption-1" className="text-neutral-500" numberOfLines={1}>
           {seller.category}
         </Text>
-        <Pressable
+        <Button
+          variant="ghost"
           accessibilityRole="button"
           accessibilityLabel={`watch ${seller.name} live`}
-          className="mt-2 h-9 flex-row items-center justify-center gap-1.5 rounded-xl bg-primary-500 active:opacity-90"
+          className="my-0 px-0 mt-2 h-9 flex-row items-center justify-center gap-1.5 rounded-xl bg-primary-500 active:opacity-90"
         >
           <Icon name="play" size={14} color={INK} />
           <Text variant="caption-1" emphasized className="text-secondary-950">Watch</Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );

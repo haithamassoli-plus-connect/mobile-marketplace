@@ -1,17 +1,16 @@
 import type { RatingBar, Review } from '../data';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Button, Image, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { Stars } from './stars';
 
-const GOLD = '#dbb42c'; // gold-500
+const GOLD = '#dbb42c';
 const SUCCESS_700 = '#027a48';
 const NEUTRAL_500 = '#717680';
 const NEUTRAL_600 = '#535862';
 
 type Summary = { rating: number; reviewCount: number; bars: RatingBar[] };
 
-// B5 — header, score + histogram summary, then the review cards.
 export function Reviews({ summary, reviews }: { summary: Summary; reviews: Review[] }) {
   return (
     <View className="gap-4 px-4 pt-[18px] pb-2">
@@ -31,11 +30,10 @@ function ReviewsHeader({ reviewCount }: { reviewCount: number }) {
         <Text variant="title-3" emphasized className="text-neutral-900">Customer Reviews</Text>
         <Text variant="footnote" className="text-neutral-500">{`(${reviewCount})`}</Text>
       </View>
-      {/* ponytail: decorative — View All list not built. */}
-      <Pressable className="flex-row items-center gap-1 rounded-full border border-neutral-300 py-2 pr-2.5 pl-3">
+      <Button variant="ghost" className="my-0 h-auto flex-row items-center gap-1 rounded-full border border-neutral-300 py-2 pr-2.5 pl-3">
         <Text variant="footnote" emphasized className="text-neutral-700">View All</Text>
         <Icon name="chevron-right" size={14} color={NEUTRAL_500} />
-      </Pressable>
+      </Button>
     </View>
   );
 }
@@ -101,11 +99,10 @@ function ReviewCard({ review }: { review: Review }) {
             </View>
           )
         : null}
-      {/* ponytail: decorative — "Helpful" vote not wired. */}
-      <Pressable className="flex-row items-center gap-1.5 self-start rounded-full border border-neutral-300 py-2 pr-3.5 pl-3">
+      <Button variant="ghost" className="my-0 h-auto flex-row items-center gap-1.5 self-start rounded-full border border-neutral-300 py-2 pr-3.5 pl-3">
         <Icon name="thumbs-up" size={15} color={NEUTRAL_600} />
         <Text variant="footnote" emphasized className="text-neutral-600">{`Helpful (${review.helpful})`}</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 }

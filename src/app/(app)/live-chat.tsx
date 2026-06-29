@@ -3,22 +3,18 @@ import * as React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   TextInput,
 } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { wishlist } from '@/features/home/data';
 
-// Live Chat — Conversation (Figma 445:1502). Reached from the Support sheet's
-// "Live Chat" card. Conversation is seeded per the design; the composer appends
-// real user bubbles. ponytail: no backend — agent replies aren't simulated.
-type Msg =
-  | { id: string; from: 'agent' | 'user'; text: string }
-  | { id: string; from: 'agent'; order: true };
+type Msg
+  = | { id: string; from: 'agent' | 'user'; text: string }
+    | { id: string; from: 'agent'; order: true };
 
 const SEED: Msg[] = [
   { id: 'm1', from: 'agent', text: 'Hi there! Thanks for reaching out to Golden Place. How can I help you today?' },
@@ -37,7 +33,8 @@ export default function LiveChatScreen() {
 
   const send = () => {
     const text = draft.trim();
-    if (!text) return;
+    if (!text)
+      return;
     setMessages(prev => [...prev, { id: `u${prev.length}`, from: 'user', text }]);
     setDraft('');
     requestAnimationFrame(() => scrollRef.current?.scrollToEnd({ animated: true }));
@@ -46,21 +43,21 @@ export default function LiveChatScreen() {
   return (
     <View className="flex-1 bg-neutral-50">
       <SystemBars style="dark" />
-      {/* Header */}
       <View
         style={{ paddingTop: insets.top }}
         className="bg-white shadow-sm"
       >
         <View className="h-14 flex-row items-center gap-2.5 px-2.5">
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={() => router.back()}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="back"
-            className="size-9 items-center justify-center rounded-2xl active:opacity-70"
+            className="my-0 h-auto px-0 size-9 items-center justify-center rounded-2xl active:opacity-70"
           >
             <Icon name="chevron-left" size={24} color="#181d27" />
-          </Pressable>
+          </Button>
 
           <View className="size-10">
             <View className="size-10 items-center justify-center rounded-full bg-success-400">
@@ -77,14 +74,15 @@ export default function LiveChatScreen() {
             </View>
           </View>
 
-          <Pressable
+          <Button
+            variant="ghost"
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="call agent"
-            className="size-10 items-center justify-center rounded-full bg-neutral-50 active:opacity-70"
+            className="my-0 h-auto px-0 size-10 items-center justify-center rounded-full bg-neutral-50 active:opacity-70"
           >
             <Icon name="phone" size={20} color="#181d27" />
-          </Pressable>
+          </Button>
         </View>
       </View>
 
@@ -110,7 +108,6 @@ export default function LiveChatScreen() {
             />
           ))}
 
-          {/* Typing */}
           <View className="flex-row items-end gap-2">
             <Avatar />
             <View className="flex-row gap-1 rounded-[18px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-3">
@@ -121,18 +118,18 @@ export default function LiveChatScreen() {
           </View>
         </ScrollView>
 
-        {/* Composer */}
         <View
           style={{ paddingBottom: insets.bottom + 8 }}
           className="flex-row items-center gap-2.5 border-t border-neutral-200 bg-white px-3.5 pt-3"
         >
-          <Pressable
+          <Button
+            variant="ghost"
             accessibilityRole="button"
             accessibilityLabel="add attachment"
-            className="size-[38px] items-center justify-center rounded-full bg-neutral-100 active:opacity-70"
+            className="my-0 h-auto px-0 size-[38px] items-center justify-center rounded-full bg-neutral-100 active:opacity-70"
           >
             <Icon name="plus" size={22} color="#717680" />
-          </Pressable>
+          </Button>
 
           <TextInput
             value={draft}
@@ -144,14 +141,15 @@ export default function LiveChatScreen() {
             className="flex-1 rounded-[21px] bg-neutral-100 px-4 py-2.5 text-[15px] text-neutral-900"
           />
 
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={send}
             accessibilityRole="button"
             accessibilityLabel="send message"
-            className="size-[38px] items-center justify-center rounded-full bg-primary-500 active:opacity-80"
+            className="my-0 h-auto px-0 size-[38px] items-center justify-center rounded-full bg-primary-500 active:opacity-80"
           >
             <Icon name="send" size={18} color="#0a0d12" />
-          </Pressable>
+          </Button>
         </View>
       </KeyboardAvoidingView>
     </View>
@@ -194,11 +192,13 @@ function Bubble({ msg, avatar }: { msg: Msg; avatar: boolean }) {
   return (
     <View className="flex-row items-end gap-2">
       {avatar ? <Avatar /> : <View className="w-7" />}
-      {'order' in msg ? <OrderCard /> : (
-        <View className="max-w-[260px] rounded-[18px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-2.5">
-          <Text variant="subheadline" className="text-neutral-800">{msg.text}</Text>
-        </View>
-      )}
+      {'order' in msg
+        ? <OrderCard />
+        : (
+            <View className="max-w-[260px] rounded-[18px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-2.5">
+              <Text variant="subheadline" className="text-neutral-800">{msg.text}</Text>
+            </View>
+          )}
     </View>
   );
 }

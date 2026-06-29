@@ -3,14 +3,9 @@ import type { Product } from '../data';
 import type { IconName } from './icon';
 
 import { router } from 'expo-router';
-import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from './icon';
 
-// Shared building blocks reused across home sections.
-// ponytail: plain props, no theming layer — gold/ink come straight from tokens.
-
-/* -------------------------------- IconButton ------------------------------- */
-// White circular action (e.g. wishlist heart) with a soft Figma "Buttons Shadow".
 export function IconButton({
   name,
   size = 18,
@@ -23,15 +18,15 @@ export function IconButton({
   className?: string;
 }) {
   return (
-    <Pressable
-      className={`size-[34px] items-center justify-center rounded-full shadow-sm ${className}`}
+    <Button
+      variant="ghost"
+      className={`my-0 size-[34px] items-center justify-center rounded-full px-0 shadow-sm ${className}`}
     >
       <Icon name={name} size={size} color={color} />
-    </Pressable>
+    </Button>
   );
 }
 
-/* ----------------------------------- Chip ---------------------------------- */
 export function Chip({ label, active = false }: { label: string; active?: boolean }) {
   return (
     <View
@@ -50,7 +45,6 @@ export function Chip({ label, active = false }: { label: string; active?: boolea
   );
 }
 
-/* --------------------------------- Rating ---------------------------------- */
 export function Rating({ value }: { value: number }) {
   return (
     <View className="flex-row items-center gap-1">
@@ -62,9 +56,6 @@ export function Rating({ value }: { value: number }) {
   );
 }
 
-/* ------------------------------ SectionHeader ------------------------------ */
-// Leading gold icon + title (Title 3 Emphasized), white-bordered "Shop Now"
-// pill on the right, and a muted subheadline subtitle below.
 export function SectionHeader({
   title,
   subtitle,
@@ -87,10 +78,13 @@ export function SectionHeader({
         </View>
         {actionLabel
           ? (
-              <Pressable className="flex-row items-center gap-1.5 rounded-xl border border-neutral-300 bg-white py-[11px] pr-[18px] pl-5">
+              <Button
+                variant="ghost"
+                className="my-0 h-auto flex-row items-center justify-start gap-1.5 rounded-xl border border-neutral-300 bg-white py-[11px] pr-[18px] pl-5"
+              >
                 <Text variant="footnote" emphasized className="text-ink-900">{actionLabel}</Text>
                 <Icon name="arrow-right" size={14} color="#020617" />
-              </Pressable>
+              </Button>
             )
           : null}
       </View>
@@ -99,8 +93,6 @@ export function SectionHeader({
   );
 }
 
-/* ---------------------------------- Badge ---------------------------------- */
-// ponytail: #1a1a2e is the exact Figma badge navy — no token matches it.
 export function ProductBadge({
   label,
   tone = 'dark',
@@ -117,13 +109,12 @@ export function ProductBadge({
   );
 }
 
-/* ------------------------------- ProductCard ------------------------------- */
-// Fills its parent width. Wrap in a fixed-width View (rails) or flex-1 (grids).
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={() => router.push({ pathname: '/product', params: { id: product.id } })}
-      className="w-full gap-2.5 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-2 pt-2 pb-3 shadow-md"
+      className="my-0 h-auto w-full flex-col items-stretch justify-start gap-2.5 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-2 pt-2 pb-3 shadow-md"
     >
       <View className="relative h-[149px] overflow-hidden rounded-xl">
         <Image source={product.image} className="size-full" contentFit="cover" />
@@ -160,15 +151,13 @@ export function ProductCard({ product }: { product: Product }) {
         </View>
       </View>
 
-      <Pressable className="h-[42px] items-center justify-center rounded-xl bg-gold-500">
+      <Button variant="ghost" className="my-0 h-[42px] items-center justify-center rounded-xl bg-gold-500 px-0">
         <Text variant="footnote" emphasized className="text-ink-950">Add to cart</Text>
-      </Pressable>
-    </Pressable>
+      </Button>
+    </Button>
   );
 }
 
-/* ------------------------------- ProductRail ------------------------------- */
-// Section header + horizontal scroll of ProductCards. Used by Best Seller & Top Rated.
 export function ProductRail({
   title,
   subtitle,
@@ -200,8 +189,6 @@ export function ProductRail({
   );
 }
 
-/* -------------------------------- Section ---------------------------------- */
-// Lightweight vertical-rhythm wrapper so sections space consistently.
 export function Section({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <View className={`mt-8 ${className}`}>{children}</View>;
 }

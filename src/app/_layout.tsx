@@ -13,7 +13,6 @@ import { hydrateAuth } from '@/features/auth';
 
 import { APIProvider } from '@/lib/api';
 import { loadSelectedTheme } from '@/lib/hooks';
-// Import  global CSS file
 import '../global.css';
 
 export { ErrorBoundary } from 'expo-router';
@@ -25,9 +24,7 @@ export const unstable_settings = {
 
 hydrateAuth();
 loadSelectedTheme();
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-// Set the animation options. This is optional.
 SplashScreen.setOptions({
   duration: 500,
   fade: true,

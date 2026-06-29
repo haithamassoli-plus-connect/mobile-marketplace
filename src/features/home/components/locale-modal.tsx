@@ -5,19 +5,14 @@ import {
   BottomSheetModal as Sheet,
 } from '@gorhom/bottom-sheet';
 import * as React from 'react';
-import { Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Text, useModal, View } from '@/components/ui';
+import { Button, Text, useModal, View } from '@/components/ui';
 import { renderBackdrop } from '@/components/ui/modal';
 import { Icon } from './icon';
 
-// Region & Language sheet (Figma 157:3891 Language / 156:3891 Currency). Same
-// shell as Support/Wishlist; two segmented tabs share one searchable list.
-// ponytail: selection is local state — call i18n changeLanguage (src/lib/i18n)
-// and a currency store here once those ship.
-const GOLD = '#b8941f'; // primary check + active chip text
-const MUTED = '#717680'; // neutral-500
+const GOLD = '#b8941f';
+const MUTED = '#717680';
 
 type Item = { code: string; chip: string; title: string; sub: string; rtl?: boolean };
 type Tab = 'currency' | 'language';
@@ -89,23 +84,22 @@ export function LocaleModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
         contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
         <View className="flex-row items-center justify-between px-5 pb-3.5">
           <Text variant="title-3" emphasized className="text-neutral-900">
             Region & Language
           </Text>
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={modal.dismiss}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="close region and language"
-            className="size-[30px] items-center justify-center rounded-[15px] bg-neutral-100"
+            className="my-0 h-auto px-0 size-[30px] items-center justify-center rounded-[15px] bg-neutral-100"
           >
             <Icon name="x" size={14} color={MUTED} />
-          </Pressable>
+          </Button>
         </View>
 
-        {/* Segmented tabs */}
         <View className="px-5">
           <View className="flex-row gap-1 rounded-xl bg-neutral-100 p-1">
             <Segment label="Currency" active={tab === 'currency'} onPress={() => switchTab('currency')} />
@@ -113,7 +107,6 @@ export function LocaleModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
           </View>
         </View>
 
-        {/* Search */}
         <View className="mt-3 px-5">
           <View className="h-11 flex-row items-center gap-2.5 rounded-xl border border-neutral-200 bg-neutral-100 pr-2 pl-4">
             <Icon name="search" size={18} color={MUTED} />
@@ -129,12 +122,10 @@ export function LocaleModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
           </View>
         </View>
 
-        {/* Subtitle */}
         <Text variant="footnote" className="px-5 pt-3.5 pb-1.5 text-neutral-500">
           {subtitle}
         </Text>
 
-        {/* List */}
         <View className="px-5">
           {items.map((item, i) => (
             <Row
@@ -161,11 +152,12 @@ function Handle() {
 
 function Segment({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onPress}
       accessibilityRole="tab"
       accessibilityState={{ selected: active }}
-      className={`flex-1 items-center justify-center rounded-[9px] py-2 ${active ? 'bg-white' : ''}`}
+      className={`my-0 h-auto px-0 flex-1 items-center justify-center rounded-[9px] py-2 ${active ? 'bg-white' : ''}`}
       style={
         active
           ? {
@@ -185,7 +177,7 @@ function Segment({ label, active, onPress }: { label: string; active: boolean; o
       >
         {label}
       </Text>
-    </Pressable>
+    </Button>
   );
 }
 
@@ -201,12 +193,13 @@ function Row({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ selected }}
       accessibilityLabel={`${item.title}, ${item.sub}`}
-      className="active:opacity-70"
+      className="my-0 h-auto px-0 flex-col items-stretch active:opacity-70"
     >
       <View className="flex-row items-center gap-3.5 py-3">
         <View
@@ -240,6 +233,6 @@ function Row({
       </View>
 
       {divider && <View className="ml-[52px] h-px bg-neutral-200" />}
-    </Pressable>
+    </Button>
   );
 }

@@ -2,10 +2,10 @@ import type { Coupon as CouponType } from '../data';
 import { useState } from 'react';
 import { TextInput } from 'react-native';
 
-import { Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 
-const CHECK = '#12b76a'; // success-500
+const CHECK = '#12b76a';
 
 type CardClasses = {
   card: string;
@@ -17,7 +17,6 @@ type CardClasses = {
   code: string;
 };
 
-// ponytail: variant→class map, cards differ only by colour.
 const VARIANTS: Record<CouponType['variant'], CardClasses> = {
   gold: {
     card: 'bg-gold-50 border border-dashed border-gold-300',
@@ -66,8 +65,6 @@ const VARIANTS: Record<CouponType['variant'], CardClasses> = {
   },
 };
 
-// B6 — "Coupons for you": a code field plus a horizontal rail of promo cards.
-// Tapping a card fills the field and flips the button to "Applied" (local only).
 export function Coupon({ coupons }: { coupons: CouponType[] }) {
   const [code, setCode] = useState('');
   const [applied, setApplied] = useState(false);
@@ -75,10 +72,9 @@ export function Coupon({ coupons }: { coupons: CouponType[] }) {
     <View className="gap-3 pt-3.5 pb-4">
       <View className="flex-row items-center justify-between px-4">
         <Text variant="headline" emphasized className="text-neutral-900">Coupons for you</Text>
-        {/* ponytail: decorative — full coupon list not built. */}
-        <Pressable>
+        <Button variant="ghost" className="my-0 h-auto p-0">
           <Text variant="caption-1" className="font-medium text-neutral-500">View all</Text>
-        </Pressable>
+        </Button>
       </View>
 
       <View className="flex-row items-center gap-2.5 px-4">
@@ -96,15 +92,15 @@ export function Coupon({ coupons }: { coupons: CouponType[] }) {
           />
           {applied ? <Icon name="check" size={16} color={CHECK} /> : null}
         </View>
-        {/* ponytail: toggles applied only — no validation/redemption yet. */}
-        <Pressable
+        <Button
+          variant="ghost"
           onPress={() => setApplied(code.length > 0)}
-          className={`h-[46px] items-center justify-center rounded-[10px] px-[22px] ${applied ? 'bg-success-500' : 'bg-gold-500'}`}
+          className={`my-0 h-[46px] items-center justify-center rounded-[10px] px-[22px] ${applied ? 'bg-success-500' : 'bg-gold-500'}`}
         >
           <Text variant="subheadline" emphasized className={applied ? 'text-white' : 'text-neutral-900'}>
             {applied ? 'Applied' : 'Apply'}
           </Text>
-        </Pressable>
+        </Button>
       </View>
 
       <ScrollView
@@ -130,9 +126,10 @@ export function Coupon({ coupons }: { coupons: CouponType[] }) {
 function CouponCard({ coupon, onApply }: { coupon: CouponType; onApply: () => void }) {
   const v = VARIANTS[coupon.variant];
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onApply}
-      className={`relative h-[116px] w-[244px] flex-row items-center gap-3 overflow-hidden rounded-[14px] py-4 pr-3.5 pl-4 ${v.card}`}
+      className={`relative my-0 h-[116px] w-[244px] flex-row items-center justify-start gap-3 overflow-hidden rounded-[14px] py-4 pr-3.5 pl-4 ${v.card}`}
     >
       {coupon.variant === 'blue'
         ? (
@@ -162,6 +159,6 @@ function CouponCard({ coupon, onApply }: { coupon: CouponType; onApply: () => vo
           <Text className={`text-[12px] font-bold tracking-[0.3px] ${v.code}`}>{coupon.code}</Text>
         </View>
       </View>
-    </Pressable>
+    </Button>
   );
 }

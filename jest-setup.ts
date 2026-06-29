@@ -18,7 +18,10 @@ jest.mock('react-native-reanimated', () => {
       ScrollView: View,
       createAnimatedComponent: (component: any) => component,
     },
-    useSharedValue: jest.fn(() => ({ value: 0 })),
+    useSharedValue: jest.fn((initial = 0) => {
+      const sv = { value: initial, get: () => sv.value, set: (v: any) => sv.value = v };
+      return sv;
+    }),
     useAnimatedStyle: jest.fn(fn => fn()),
     withTiming: jest.fn(value => value),
     withSpring: jest.fn(value => value),
@@ -51,6 +54,15 @@ jest.mock('react-native-reanimated', () => {
     Keyframe: jest.fn(),
   };
 });
+
+// Mock expo-haptics
+jest.mock('expo-haptics', () => ({
+  impactAsync: jest.fn(() => Promise.resolve()),
+  notificationAsync: jest.fn(() => Promise.resolve()),
+  selectionAsync: jest.fn(() => Promise.resolve()),
+  ImpactFeedbackStyle: { Light: 'light', Medium: 'medium', Heavy: 'heavy', Soft: 'soft', Rigid: 'rigid' },
+  NotificationFeedbackType: { Success: 'success', Warning: 'warning', Error: 'error' },
+}));
 
 // Mock expo-localization
 jest.mock('expo-localization', () => ({

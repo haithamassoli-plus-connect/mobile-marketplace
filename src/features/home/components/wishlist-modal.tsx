@@ -5,22 +5,17 @@ import {
   BottomSheetModal as Sheet,
 } from '@gorhom/bottom-sheet';
 import * as React from 'react';
-import { Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Text, useModal, View } from '@/components/ui';
+import { Button, Image, Text, useModal, View } from '@/components/ui';
 import { renderBackdrop } from '@/components/ui/modal';
 import { wishlist } from '@/features/home/data';
 import { Icon } from './icon';
 
-// Wishlist sheet (Figma 457:1516). Same shell as SupportModal — shared backdrop,
-// content-sized, drag handle + close. Hearts remove locally so the count and
-// "Add all" total stay in sync.
-// ponytail: local state only — swap for a wishlist store/mutation when one exists.
-const HEART = '#ef4444'; // error-500 — saved heart
-const MUTED = '#717680'; // neutral-500
-const INK = '#181d27'; // neutral-900
-const SUCCESS = '#027a48'; // success-700
+const HEART = '#ef4444';
+const MUTED = '#717680';
+const INK = '#181d27';
+const SUCCESS = '#027a48';
 
 export function WishlistModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
   const insets = useSafeAreaInsets();
@@ -43,7 +38,6 @@ export function WishlistModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
         style={{ paddingBottom: insets.bottom + 20 }}
         className="gap-4 px-5 pt-1.5"
       >
-        {/* Header */}
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center gap-3">
             <View
@@ -71,18 +65,18 @@ export function WishlistModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
               </Text>
             </View>
           </View>
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={modal.dismiss}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="close wishlist"
-            className="size-8 items-center justify-center rounded-2xl bg-neutral-100"
+            className="my-0 size-8 items-center justify-center rounded-2xl bg-neutral-100 px-0"
           >
             <Icon name="x" size={16} color={MUTED} />
-          </Pressable>
+          </Button>
         </View>
 
-        {/* Items */}
         {items.length === 0
           ? (
               <View className="items-center gap-2 py-10">
@@ -100,7 +94,6 @@ export function WishlistModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
               </View>
             )}
 
-        {/* Footer */}
         {items.length > 0 && (
           <View className="gap-3 pt-1">
             <View className="h-px w-full bg-neutral-200" />
@@ -110,17 +103,18 @@ export function WishlistModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
             >
               Saved items aren’t reserved — add to cart to lock today’s price.
             </Text>
-            <Pressable
+            <Button
+              variant="ghost"
               accessibilityRole="button"
               accessibilityLabel={`add all to cart, ${total} dollars`}
-              className="h-12 flex-row items-center justify-center gap-2 rounded-xl bg-primary-500 active:opacity-90"
+              className="my-0 h-12 flex-row items-center justify-center gap-2 rounded-xl bg-primary-500 px-0 active:opacity-90"
             >
               <Icon name="shopping-cart" size={18} color="#0a0909" />
               <Text variant="subheadline" emphasized className="text-secondary-950">
                 Add all to cart · $
                 {total}
               </Text>
-            </Pressable>
+            </Button>
           </View>
         )}
       </BottomSheetView>
@@ -154,21 +148,22 @@ function Row({ item, onRemove }: { item: WishlistItem; onRemove: () => void }) {
           >
             {item.title}
           </Text>
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={onRemove}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel={`remove ${item.title} from wishlist`}
+            className="my-0 h-auto p-0"
           >
             <Icon name="heart" size={20} color={HEART} />
-          </Pressable>
+          </Button>
         </View>
 
         <Text variant="caption-1" className="text-neutral-500">
           {item.category}
         </Text>
 
-        {/* Price row */}
         <View className="flex-row items-center gap-[7px]">
           <Text variant="callout" emphasized className="text-primary-500">
             $
@@ -209,18 +204,18 @@ function Row({ item, onRemove }: { item: WishlistItem; onRemove: () => void }) {
           )}
         </View>
 
-        {/* Cart row */}
         <View className="mt-0.5 flex-row items-center gap-2.5">
-          <Pressable
+          <Button
+            variant="ghost"
             accessibilityRole="button"
             accessibilityLabel={`add ${item.title} to cart`}
-            className="flex-row items-center gap-2 rounded-[10px] border border-neutral-300 bg-white px-[18px] py-[11px] active:opacity-80"
+            className="my-0 h-auto flex-row items-center gap-2 rounded-[10px] border border-neutral-300 bg-white px-[18px] py-[11px] active:opacity-80"
           >
             <Icon name="shopping-cart" size={17} color={INK} />
             <Text variant="subheadline" emphasized className="text-neutral-900">
               Add to cart
             </Text>
-          </Pressable>
+          </Button>
           {!!item.meta && (
             <Text
               variant="caption-2"

@@ -12,10 +12,7 @@ import { Image } from '@/components/ui';
 
 type Rect = { x: number; y: number; width: number; height: number };
 
-// Presentational overlay: renders a shrinking copy of the gallery image flying
-// along an arc from `start` to `end`. Mounted only while a flight is in progress;
-// owns no cart/label state — it just reports `onLand` when the timing finishes.
-const TARGET_W = 26; // cart icon footprint we shrink down to
+const TARGET_W = 26;
 
 export function FlyToCart({
   source,
@@ -30,8 +27,6 @@ export function FlyToCart({
 }) {
   const progress = useSharedValue(0);
 
-  // Mutate .value in the effect (memory rule): never inside useCallback/useMemo.
-  // `onLand` is stable (useCallback in the parent) so this runs once, on mount.
   useEffect(() => {
     progress.set(
       withTiming(1, { duration: 600, easing: Easing.inOut(Easing.cubic) }, (fin) => {
@@ -46,7 +41,7 @@ export function FlyToCart({
     const dx = end.x - (start.x + start.width / 2);
     const dy = end.y - (start.y + start.height / 2);
     const tx = p * dx;
-    const ty = p * dy - 80 * Math.sin(p * Math.PI); // slight upward arc
+    const ty = p * dy - 80 * Math.sin(p * Math.PI);
     const scale = interpolate(p, [0, 1], [1, TARGET_W / start.width]);
     const opacity = interpolate(p, [0, 0.65, 1], [1, 1, 0]);
     return { transform: [{ translateX: tx }, { translateY: ty }, { scale }], opacity };

@@ -17,39 +17,23 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 
-// ponytail: Dimensions.get('window') once at module scope — the viewer is fullscreen and
-// short-lived; a rotation re-seed isn't worth a useWindowDimensions subscription.
 const { width: W, height: H } = Dimensions.get('window');
 const MAX_SCALE = 4;
 const DOUBLE_TAP_SCALE = 2.5;
 const DISMISS_DISTANCE = H * 0.2;
 const DISMISS_VELOCITY = 800;
 
-// React 19: no forwardRef, no ref prop. Controlled component. Product-agnostic (string URIs only).
 export type ImageViewerProps = {
-  /** Image URIs to page through. */
   images: string[];
-  /** Controlled visibility (standard Modal pattern; NOT a behavior-variant boolean). */
   visible: boolean;
-  /** Page shown when the viewer opens. Default 0. */
   initialIndex?: number;
-  /** Called when the user closes via the X button or swipe-to-dismiss. */
   onClose: () => void;
-  /**
-   * Optional: fires after a pager snap settles with the new page index.
-   * Lets a consumer (e.g. Gallery) keep its own dots/thumbnails in sync.
-   */
   onIndexChange?: (index: number) => void;
 };
 
-// ponytail: NO compound sub-components — a fullscreen lightbox is one atomic gesture surface.
-// Splitting it into <Viewer.Backdrop>/<Viewer.Pager>/<Viewer.CloseButton> would push the shared
-// gesture SharedValues through context for zero consumer benefit. Flat controlled API wins here.
-// (Internal helpers below — the hook + leaf components — exist only to satisfy max-lines-per-function;
-// they are not part of the public surface.)
 export function ImageViewer({
   images,
   visible,
@@ -59,7 +43,7 @@ export function ImageViewer({
 }: ImageViewerProps): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const reduce = useReducedMotion();
-  const v = useViewer({ images, initialIndex, reduce, onClose, onIndexChange });
+  const v = useViewer({ images, initialIndex, reduce, onClose, onIndexChange, visible });
 
   return (
     <Modal
@@ -69,11 +53,8 @@ export function ImageViewer({
       animationType="fade"
       onRequestClose={onClose}
     >
-      {/* REQUIRED own root: the GestureHandlerRootView in _layout.tsx doesn't cover the Modal's
-          separate native hierarchy, so without this gestures silently no-op. */}
       <GestureHandlerRootView style={styles.flex}>
         <StatusBar style="light" />
-        {/* accessibilityViewIsModal traps the screen reader so it can't wander behind the scrim. */}
         <Animated.View
           accessibilityViewIsModal
           pointerEvents="none"
@@ -90,38 +71,43 @@ export function ImageViewer({
         />
 
         {v.chrome && (
-          <ViewerChrome
-            active={v.active}
-            total={images.length}
-            insetTop={insets.top}
-            onClose={onClose}
-            onPrev={() => v.goTo(v.active - 1)}
-            onNext={() => v.goTo(v.active + 1)}
-          />
+          <>
+            <ViewerChrome
+              active={v.active}
+              total={images.length}
+              insetTop={insets.top}
+              onClose={onClose}
+              onPrev={() => v.goTo(v.active - 1)}
+              onNext={() => v.goTo(v.active + 1)}
+            />
+            <ViewerFilmstrip
+              images={images}
+              active={v.active}
+              insetBottom={insets.bottom}
+              onSelect={v.goTo}
+            />
+          </>
         )}
       </GestureHandlerRootView>
     </Modal>
   );
 }
 
-// All gesture state + the composed gesture graph + animated styles. Lives in a hook so the
-// public component stays small; semantically still "inside the component". Every SharedValue
-// mutation below is in a gesture worklet, a useDerivedValue, or a plain JS function dispatched
-// via scheduleOnRN — never in useEffect/useCallback/useMemo (immutability lint).
 function useViewer({
   images,
   initialIndex,
   reduce,
   onClose,
   onIndexChange,
+  visible,
 }: {
   images: string[];
   initialIndex: number;
   reduce: boolean;
   onClose: () => void;
   onIndexChange?: (index: number) => void;
+  visible: boolean;
 }) {
-  // React state (NOT SharedValues): drives which page receives the zoom transform + the dots/announce.
   const [active, setActive] = React.useState(initialIndex);
   const [chrome, setChrome] = React.useState(true);
 
@@ -131,17 +117,15 @@ function useViewer({
   const ty = useSharedValue(0);
   const sTx = useSharedValue(0);
   const sTy = useSharedValue(0);
-  // ponytail: pager offset is seeded AT CONSTRUCTION from initialIndex — no useEffect re-seed. If a
-  // consumer needs a different start between opens, key <ImageViewer> on initialIndex to remount.
   const pagerX = useSharedValue(initialIndex * W);
   const dragY = useSharedValue(0);
-  const mode = useSharedValue(0); // per-pan axis lock: 0 undecided / 1 paging / 2 dismiss
+  const mode = useSharedValue(0);
+
+  // The viewer stays mounted, so re-sync to the tapped image each time it opens.
+  useReopenReset(visible, initialIndex, { setActive, setChrome, scale, savedScale, tx, ty, dragY, pagerX });
 
   const backdropOpacity = useDerivedValue(() => 1 - clamp(Math.abs(dragY.get()) / H, 0, 1) * 0.85);
 
-  // ponytail: pan bounds use the scaled VIEWPORT box (W,H), not the true letterboxed displayed-image
-  // rect (we lack intrinsic image dimensions). At high zoom this allows a small over-pan into the
-  // letterbox margin — acceptable for a product gallery.
   const maxX = () => {
     'worklet';
     return Math.max(0, (W * scale.get() - W) / 2);
@@ -155,10 +139,7 @@ function useViewer({
     return withTiming(value, { duration: reduce ? 0 : 220 });
   };
 
-  // JS-thread callbacks (plain functions; invoked via scheduleOnRN from worklets — a SharedValue
-  // .set() from here is legal, it's not inside useEffect/useCallback/useMemo).
   function commitPage(page: number) {
-    // ponytail: zoom reset lives here (one place), not in a useEffect watching active.
     scale.set(1);
     savedScale.set(1);
     tx.set(0);
@@ -174,8 +155,6 @@ function useViewer({
   function toggleChrome() {
     setChrome(c => !c);
   }
-  // Accessible alternative to the swipe pager (chevron buttons). Plain JS function: pagerX.set here
-  // is the same legal site as commitPage's resets.
   function goTo(page: number) {
     if (page < 0 || page >= images.length)
       return;
@@ -183,9 +162,6 @@ function useViewer({
     commitPage(page);
   }
 
-  // Gestures: built inline each render (NOT useMemo — React Compiler memoizes; a manual memo closing
-  // over SharedValues would trip the immutability lint). Extracted to a plain function only to keep
-  // each function under max-lines-per-function; it owns no hooks.
   const gesture = composeGesture({
     scale,
     savedScale,
@@ -218,6 +194,39 @@ function useViewer({
   return { active, chrome, goTo, gesture, rowStyle, imgStyle, bgStyle };
 }
 
+// Reset the pager to `index` on the visible false->true edge. Kept out of
+// useViewer so it stays under the line cap; setters pass through `v` so they
+// read as a reset, not stray render-time state writes.
+function useReopenReset(
+  visible: boolean,
+  index: number,
+  v: {
+    setActive: (i: number) => void;
+    setChrome: (c: boolean) => void;
+    scale: SharedValue<number>;
+    savedScale: SharedValue<number>;
+    tx: SharedValue<number>;
+    ty: SharedValue<number>;
+    dragY: SharedValue<number>;
+    pagerX: SharedValue<number>;
+  },
+) {
+  const wasVisibleRef = React.useRef(false);
+  React.useEffect(() => {
+    if (visible && !wasVisibleRef.current) {
+      v.setActive(index);
+      v.setChrome(true);
+      v.scale.set(1);
+      v.savedScale.set(1);
+      v.tx.set(0);
+      v.ty.set(0);
+      v.dragY.set(0);
+      v.pagerX.set(index * W);
+    }
+    wasVisibleRef.current = visible;
+  }, [visible, index, v]);
+}
+
 type GestureCtx = {
   scale: SharedValue<number>;
   savedScale: SharedValue<number>;
@@ -239,8 +248,6 @@ type GestureCtx = {
   toggleChrome: () => void;
 };
 
-// Composes pinch (zoom) + pan (zoomed-pan / paging / swipe-to-dismiss via a per-pan axis lock) +
-// double-tap (anchored zoom toward the tap) + single-tap (toggle chrome). Pure function, no hooks.
 function composeGesture(c: GestureCtx): ComposedGesture {
   const { scale, savedScale, tx, ty, sTx, sTy, pagerX, dragY, mode, maxX, maxY, t } = c;
 
@@ -301,7 +308,6 @@ function composeGesture(c: GestureCtx): ComposedGesture {
       }
     });
 
-  // Anchors zoom toward the tap point so it doesn't jump to center.
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
     .maxDuration(250)
@@ -329,9 +335,6 @@ function composeGesture(c: GestureCtx): ComposedGesture {
   return Gesture.Race(Gesture.Simultaneous(pinch, pan), Gesture.Exclusive(doubleTap, singleTap));
 }
 
-// Reanimated translateX row (NOT ScrollView/FlashList — a native scroll recognizer would fight the
-// Pinch/Pan composition). ponytail: render ALL pages; product galleries have a handful of images and
-// expo-image handles decode/cache. Only the active page gets imgStyle so zoom never leaks to neighbors.
 function ViewerPager({
   images,
   active,
@@ -372,8 +375,6 @@ function ViewerPager({
   );
 }
 
-// Close button + index counter + (when >1 image) prev/next chevrons. Toggled by the single-tap.
-// Close is a real focusable button, never gesture-only.
 function ViewerChrome({
   active,
   total,
@@ -437,6 +438,51 @@ function ViewerChrome({
         </>
       )}
     </>
+  );
+}
+
+// ponytail: no auto-scroll-to-active — 5-6 thumbs fit on screen; add scrollTo when galleries grow.
+function ViewerFilmstrip({
+  images,
+  active,
+  insetBottom,
+  onSelect,
+}: {
+  images: string[];
+  active: number;
+  insetBottom: number;
+  onSelect: (index: number) => void;
+}) {
+  if (images.length < 2)
+    return null;
+  return (
+    <View
+      pointerEvents="box-none"
+      style={{ bottom: insetBottom + 12 }}
+      className="absolute inset-x-0"
+    >
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 16, gap: 8, flexGrow: 1, justifyContent: 'center' }}
+      >
+        {images.map((uri, i) => (
+          <Pressable
+            key={uri}
+            onPress={() => onSelect(i)}
+            accessibilityRole="button"
+            accessibilityLabel={`View image ${i + 1} of ${images.length}`}
+            className={
+              i === active
+                ? 'size-12 overflow-hidden rounded-lg border-2 border-gold-500'
+                : 'size-12 overflow-hidden rounded-lg border border-white/40'
+            }
+          >
+            <Image source={uri} contentFit="cover" className="size-full" />
+          </Pressable>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 

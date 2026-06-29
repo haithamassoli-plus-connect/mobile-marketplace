@@ -3,16 +3,13 @@ import type { SellerProfile } from '../data';
 import type { IconName } from '@/features/home/components/icon';
 import { memo, useState } from 'react';
 
-import { Image, ImageViewer, Modal, Pressable, ScrollView, Text, useModal, View } from '@/components/ui';
+import { Button, Image, ImageViewer, Modal, ScrollView, Text, useModal, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { SellerSheet } from './seller-sheet';
 
-const INK_800 = '#252b37'; // neutral-800
-const SELLER_SNAP = [370]; // ponytail: fixed sheet height — content is compact and static.
+const INK_800 = '#252b37';
+const SELLER_SNAP = [370];
 
-// Main product image + floating pills + page dots + thumbnail strip. The active
-// index is owned here and shared between the dots and the thumbnails — tapping a
-// thumbnail swaps the main image. No swipe pager (spec drives it from thumbnails).
 function GalleryImpl({
   images,
   seller,
@@ -30,24 +27,25 @@ function GalleryImpl({
   return (
     <View>
       <View ref={mainImageRef} className="relative h-[400px] bg-neutral-100">
-        <Pressable
+        <Button
+          variant="ghost"
           onPress={() => setViewerOpen(true)}
           accessibilityRole="imagebutton"
           accessibilityLabel="View image fullscreen"
-          className="size-full"
+          className="my-0 size-full rounded-none px-0"
         >
           <Image source={images[active]} contentFit="contain" className="size-full" transition={150} />
-        </Pressable>
-        {/* ponytail: opens the seller sheet. */}
-        <Pressable
+        </Button>
+        <Button
+          variant="ghost"
           onPress={() => sellerModal.present()}
-          className="absolute top-3 left-3 flex-row items-center gap-2 rounded-full bg-white py-1 pr-2.5 pl-1.5 shadow-sm"
+          className="absolute top-3 left-3 my-0 h-auto flex-row items-center justify-start gap-2 rounded-full bg-white py-1 pr-2.5 pl-1.5 shadow-sm"
         >
           <Image source={seller.avatar} contentFit="cover" className="size-6 rounded-full" />
           <Text variant="footnote" emphasized className="text-neutral-900">{seller.name}</Text>
           <Icon name="badge-check" size={14} color="#2e90fa" />
           <Icon name="chevron-right" size={14} color="#717680" />
-        </Pressable>
+        </Button>
         <GalleryPill icon="rotate-3d" label="360 View" className="left-3" />
         <GalleryPill icon="maximize" label="Zoom" className="right-3" onPress={() => setViewerOpen(true)} />
         <View className="absolute inset-x-0 bottom-3 flex-row items-center justify-center gap-1.5">
@@ -72,19 +70,20 @@ function GalleryImpl({
         className="pt-3 pb-1"
       >
         {images.map((src, i) => (
-          <Pressable
+          <Button
+            variant="ghost"
             // eslint-disable-next-line react/no-array-index-key -- static positional gallery; the key is the active index
             key={i}
             onPress={() => {
               setActive(i);
               onActiveChange?.(images[i]);
             }}
-            className={`h-16 w-14 overflow-hidden rounded-[10px] bg-neutral-100 ${
+            className={`my-0 h-16 w-14 overflow-hidden rounded-[10px] bg-neutral-100 px-0 ${
               i === active ? 'border-2 border-gold-500' : 'border border-neutral-200'
             }`}
           >
             <Image source={src} contentFit="cover" className="size-full" />
-          </Pressable>
+          </Button>
         ))}
       </ScrollView>
 
@@ -105,15 +104,15 @@ function GalleryImpl({
 
 export const Gallery = memo(GalleryImpl);
 
-// ponytail: decorative — '360 View' has no handler; only 'Zoom' gets an onPress.
 function GalleryPill({ icon, label, className, onPress }: { icon: IconName; label: string; className: string; onPress?: () => void }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onPress}
-      className={`absolute bottom-3 flex-row items-center gap-1.5 rounded-full bg-white py-1.5 pr-3 pl-2.5 shadow-sm ${className}`}
+      className={`absolute bottom-3 my-0 h-auto flex-row items-center justify-start gap-1.5 rounded-full bg-white py-1.5 pr-3 pl-2.5 shadow-sm ${className}`}
     >
       <Icon name={icon} size={14} color={INK_800} />
       <Text variant="footnote" emphasized className="text-neutral-800">{label}</Text>
-    </Pressable>
+    </Button>
   );
 }

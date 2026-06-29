@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { Coupon } from './components/coupon';
 import { FlyToCart } from './components/fly-to-cart';
@@ -18,17 +18,13 @@ import { Related } from './components/related';
 import { Reviews } from './components/reviews';
 import { accordions, coupons, product, ratingHistogram, relatedProducts, reviews, sellerProfile } from './data';
 
-const INK_900 = '#181d27'; // neutral-900
+const INK_900 = '#181d27';
 const NEUTRAL_700 = '#414651';
 const START_CART_COUNT = 3;
 
 type Rect = { x: number; y: number; width: number; height: number };
 type FlyState = { source: string; start: Rect; end: { x: number; y: number } };
 
-// PDP route screen. Sticky AppBar + sticky PurchaseBar live outside the ScrollView
-// (siblings in a flex column), so the bars never overlap the content.
-// ponytail: `id` keys the route but data is a single static product for now; it is
-// surfaced as a testID until a React Query lookup is wired.
 export function ProductScreen({ id }: { id: string }) {
   const insets = useSafeAreaInsets();
   const [cartCount, setCartCount] = useState(START_CART_COUNT);
@@ -37,25 +33,15 @@ export function ProductScreen({ id }: { id: string }) {
   const activeImageRef = useRef(product.gallery[0]);
   const cartRef = useRef<RNView>(null);
   const galleryRef = useRef<RNView>(null);
-  // Derive the button morph from the cart, not a parallel flag.
   const added = cartCount > START_CART_COUNT;
 
-  // The active gallery image is only read when a flight launches, so keep it in a
-  // ref — mirroring it as state would re-render the whole screen on every thumbnail tap.
   const onActiveImageChange = useCallback((src: string) => {
     activeImageRef.current = src;
   }, []);
 
-  // Tap logic lives in the event handler (not an effect): measure both rects, then
-  // mount the flying copy. Both measureInWindow values map directly onto the
-  // absolute inset-0 overlay because the root View fills the window from (0,0).
   const onAddToCart = () => {
-    // Block re-entry once added, and while a flight is already in the air —
-    // `added` only flips ~600ms later on landing, so guard on flyState too.
     if (added || flyState !== null)
       return;
-    // Rest params keep each measureInWindow callback at one parameter (the API
-    // hands back x, y, width, height positionally).
     galleryRef.current?.measureInWindow((...g: number[]) =>
       cartRef.current?.measureInWindow((...c: number[]) =>
         setFlyState({
@@ -65,8 +51,6 @@ export function ProductScreen({ id }: { id: string }) {
         }),
       ),
     );
-    // ponytail: if the gallery is scrolled off-screen the fly just starts from its
-    // measured (possibly negative) y — acceptable.
   };
 
   const onLand = useCallback(() => {
@@ -110,7 +94,7 @@ function AppBar({
 }: {
   insetTop: number;
   cartCount: number;
-  cartRef: React.Ref<RNView>;
+  cartRef: React.RefObject<RNView | null>;
   bumpKey: number;
 }) {
   const scale = useSharedValue(1);
@@ -122,28 +106,28 @@ function AppBar({
   const bumpStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.get() }] }));
   return (
     <View className="flex-row items-center bg-white p-2" style={{ paddingTop: insetTop + 8 }}>
-      <Pressable
+      <Button
+        variant="ghost"
         onPress={() => router.back()}
         hitSlop={8}
         accessibilityRole="button"
         accessibilityLabel="Go back"
-        className="size-10 items-center justify-center active:opacity-60"
+        className="my-0 size-10 items-center justify-center px-0 active:opacity-60"
       >
         <Icon name="arrow-left" size={24} color={INK_900} />
-      </Pressable>
+      </Button>
       <View className="flex-1" />
-      {/* ponytail: decorative — share/cart have no handlers yet. */}
-      <Pressable hitSlop={8} className="size-10 items-center justify-center active:opacity-60">
+      <Button variant="ghost" hitSlop={8} className="my-0 size-10 items-center justify-center px-0 active:opacity-60">
         <Icon name="share" size={22} color={INK_900} />
-      </Pressable>
-      <Pressable ref={cartRef} hitSlop={8} className="size-10 items-center justify-center active:opacity-60">
+      </Button>
+      <Button ref={cartRef} variant="ghost" hitSlop={8} className="my-0 size-10 items-center justify-center px-0 active:opacity-60">
         <Animated.View style={bumpStyle} className="size-full items-center justify-center">
           <Icon name="shopping-cart" size={22} color={INK_900} />
           <View className="absolute top-1.5 right-1.5 size-4 items-center justify-center rounded-full bg-error-500">
             <Text variant="caption-2" emphasized className="text-white">{cartCount}</Text>
           </View>
         </Animated.View>
-      </Pressable>
+      </Button>
     </View>
   );
 }

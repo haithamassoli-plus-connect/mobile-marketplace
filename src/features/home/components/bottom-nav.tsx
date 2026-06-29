@@ -18,11 +18,8 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Button, Image, Text, View } from '@/components/ui';
 
-// ponytail: floating tab bar (Figma 98:4507 default / 361:4781 mini). Routes via
-// expo-router — the active tab is derived from the current path. Filled icon =
-// active, outline = inactive (the SVGs already carry the right colors, no tinting).
 type Tab = {
   key: string;
   label: string;
@@ -70,8 +67,6 @@ const TABS: Tab[] = [
   },
 ];
 
-// Dominant layer of the Figma pill's two-part shadow (RN has one native layer):
-// 0px 10px 28px rgba(15,23,41,0.14). The lighter 0,2,6 @0.07 layer is dropped.
 const PILL_SHADOW = {
   shadowColor: '#0f1729',
   shadowOpacity: 0.14,
@@ -80,24 +75,16 @@ const PILL_SHADOW = {
   elevation: 12,
 } as const;
 
-// Default ⇄ mini morph driven by one shared value, so the whole pill moves on a
-// single 350ms ease-in-out timeline. No LinearTransition snapshot + a stable tree
-// (labels stay mounted, just collapsed) means no ghosting/afterimage.
 const MORPH = { duration: 350, easing: Easing.inOut(Easing.quad) } as const;
-const MINI_W = 220; // ponytail: mini pill width; eyeball-tune to Figma 361:4781.
-const LABEL_H = 12; // Figma tab label line height (iOS/Tab Bar: 10/12).
+const MINI_W = 220;
+const LABEL_H = 12;
 
-// ponytail: gold scroll-top handle hidden for now — the Home tab handles
-// scroll-to-top (tap the active tab). Flip to true to bring it back.
 const SHOW_SCROLL_TOP_HANDLE = false;
 
 type Props = {
-  /** Shrinks to the icon-only pill (set while scrolling down). */
   mini?: boolean;
-  /** Show the scroll-to-top handle (only honored in the default, non-mini state). */
   showScrollTop?: boolean;
   onScrollToTop?: () => void;
-  /** BlurTargetView ref Android samples for the backdrop blur (omit → no Android blur). */
   blurTarget?: RefObject<RNView | null>;
 };
 
@@ -112,17 +99,15 @@ export function BottomNav({
   const { width: winW } = useWindowDimensions();
   const active = TABS.find(tab => tab.route === pathname)?.key ?? 'home';
 
-  // 0 = expanded, 1 = mini. Seeded to the current state so the first paint isn't
-  // animated; every later toggle eases over MORPH (same curve both directions).
   const p = useSharedValue(mini ? 1 : 0);
   useEffect(() => {
     p.value = withTiming(mini ? 1 : 0, MORPH);
   }, [mini, p]);
 
   const containerStyle = useAnimatedStyle(() => ({
-    width: interpolate(p.value, [0, 1], [winW - 38, MINI_W]), // mx-4 → compact
-    paddingHorizontal: interpolate(p.value, [0, 1], [16, 14]), // px-4 → px-3.5
-    paddingVertical: interpolate(p.value, [0, 1], [10, 8]), // py-2.5 → py-2
+    width: interpolate(p.value, [0, 1], [winW - 38, MINI_W]),
+    paddingHorizontal: interpolate(p.value, [0, 1], [16, 14]),
+    paddingVertical: interpolate(p.value, [0, 1], [10, 8]),
     borderRadius: interpolate(p.value, [0, 1], [28, 22]),
   }), [winW]);
 
@@ -131,8 +116,6 @@ export function BottomNav({
       pointerEvents="box-none"
       className="absolute inset-x-0 bottom-0 items-center"
     >
-      {/* Progressive backdrop blur behind the pill (Figma "Background blur bottom nav").
-          Shrinks with the pill (same `p` timeline). */}
       <ProgressiveBlur
         p={p}
         blurTarget={blurTarget}
@@ -149,7 +132,6 @@ export function BottomNav({
           ? <ScrollTopHandle onPress={onScrollToTop} pillWidth={winW - 32} />
           : null}
 
-        {/* Pill — morphs between default and mini off the shared `p` value. */}
         <Animated.View
           style={[PILL_SHADOW, containerStyle, { alignSelf: 'center' }]}
           className="flex-row items-center border border-neutral-200 bg-white"
@@ -175,19 +157,9 @@ export function BottomNav({
   );
 }
 
-// Figma "Background blur bottom nav": blur ramps 0 → ~45px, top → bottom. expo-blur
-// has no gradient, so approximate it by stacking equal light bands each pinned to the
-// bottom with a higher top edge — overlap count grows downward, giving a near-linear
-// ramp (iOS compounds stacked blurs; Android approximates).
-// ponytail: 6 fixed bands; bump BANDS or switch to MaskedView + gradient if it bands.
-// On Android each band is a dimezisBlurViewSdk31Plus pass (cheap RenderNode on 12+,
-// no-op below) — if 8 stacked passes jank while scrolling, drop BLUR_BANDS for Android.
 const BLUR_BANDS = 8;
-const BLUR_INTENSITY = 13; // per band; ≈×6 at the very bottom
+const BLUR_INTENSITY = 13;
 
-// Band tops are percentages so they scale when the container height animates between
-// the expanded and mini heights (driven by `p`). ponytail: height shrinks the blur
-// area; per-band intensity is left constant (animating it needs AnimatedBlurView).
 function ProgressiveBlur({
   p,
   blurTarget,
@@ -201,7 +173,6 @@ function ProgressiveBlur({
 }) {
   const heightStyle = useAnimatedStyle(() => ({
     height: interpolate(p.value, [0, 1], [expandedHeight, miniHeight]),
-    // Fade the blur out as the pill goes mini — no backdrop in small mode.
     opacity: interpolate(p.value, [0, 1], [1, 0]),
   }));
   return (
@@ -244,8 +215,6 @@ function TabButton({
     const size = interpolate(p.value, [0, 1], [24, 20]);
     return { width: size, height: size };
   });
-  // Collapse the label (height + its 4px gap) and fade it out in lockstep with the
-  // pill so the row height follows intrinsically — no popping, no afterimage.
   const labelStyle = useAnimatedStyle(() => ({
     opacity: interpolate(p.value, [0, 1], [1, 0]),
     height: interpolate(p.value, [0, 1], [LABEL_H, 0]),
@@ -253,11 +222,12 @@ function TabButton({
   }));
 
   return (
-    <Pressable
+    <Button
+      variant="ghost"
+      className="my-0 h-auto flex-col px-0 flex-1 items-center"
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected: active }}
-      className="flex-1 items-center"
     >
       <Animated.View className="relative" style={iconStyle}>
         <Image
@@ -272,9 +242,6 @@ function TabButton({
           : null}
       </Animated.View>
       <Animated.View style={[labelStyle, { overflow: 'hidden' }]}>
-        {/* ponytail: Figma tab label is 10/12 (smaller than caption-2 11/13), so
-            size + leading are set explicitly. Active = SemiBold neutral-900,
-            inactive = Medium neutral-500. */}
         <Text
           numberOfLines={1}
           className={`text-[10px] leading-[12px] ${
@@ -286,17 +253,12 @@ function TabButton({
           {tab.label}
         </Text>
       </Animated.View>
-    </Pressable>
+    </Button>
   );
 }
 
-const GOLD = '#dbb42c'; // primary-500
+const GOLD = '#dbb42c';
 
-// Scroll-to-top handle (Figma 233:5078): a gold rounded card with a gentle center
-// hump + white chevron, sitting BEHIND the pill so only the top band and hump peek
-// above. Drawn as one SVG path so the hump blends seamlessly into the card; the
-// chevron is a second path inside the same viewBox so it tracks the hump at any
-// scale. ViewBox units mirror the Figma pixel grid.
 const GOLD_VB_W = 396;
 const GOLD_VB_H = 81;
 const GOLD_PATH
@@ -319,20 +281,11 @@ function ScrollTopHandle({
   onPress?: () => void;
   pillWidth: number;
 }) {
-  // Gold is inset ~6% from the pill so the pill's white corners sit proud of it.
   const w = pillWidth * 0.936;
   const h = (w * GOLD_VB_H) / GOLD_VB_W;
-  // Lift so the shoulder (vb y16) clears the pill top by the rise (vb 14); the rest
-  // tucks behind the pill. top = -(16+14)/vbW · w collapses the viewBox math.
   const top = -(w * 30) / GOLD_VB_W;
 
   return (
-    // Enter: ZoomIn on the MORPH curve — the handle grows out of the pill, in
-    // lockstep with the nav expanding mini→full.
-    // Exit: NOT ZoomOut. An unmounting view is frozen by Reanimated at its old
-    // position while the nav shrinks (its top drops ~25px), so a scale-to-center
-    // would leave the handle floating above the now-smaller nav. FadeOutDown slides
-    // down 25px (≈ that exact drop) + fades, so it tucks away with the shrink.
     <Animated.View
       entering={ZoomIn.duration(MORPH.duration).easing(MORPH.easing)}
       exiting={FadeOutDown.duration(200)}
@@ -340,7 +293,9 @@ function ScrollTopHandle({
       className="absolute inset-x-0 items-center"
       style={{ top }}
     >
-      <Pressable
+      <Button
+        variant="ghost"
+        className="my-0 h-auto p-0"
         onPress={onPress}
         hitSlop={16}
         accessibilityRole="button"
@@ -362,7 +317,7 @@ function ScrollTopHandle({
             fill="none"
           />
         </Svg>
-      </Pressable>
+      </Button>
     </Animated.View>
   );
 }

@@ -5,17 +5,14 @@ import {
   BottomSheetModal as Sheet,
 } from '@gorhom/bottom-sheet';
 import * as React from 'react';
-import { Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Text, useModal, View } from '@/components/ui';
+import { Button, Image, Text, useModal, View } from '@/components/ui';
 import { renderBackdrop } from '@/components/ui/modal';
 import { live } from '@/features/home/data';
 import { Icon } from './icon';
 
-// Featured-products sheet for the live stream (Figma 170:4036).
-// Same shell as WishlistModal — shared backdrop + drag handle. Cards are static.
-const INK = '#181d27'; // neutral-900
+const INK = '#181d27';
 
 export function LiveProductsModal({
   ref,
@@ -37,7 +34,6 @@ export function LiveProductsModal({
       handleComponent={Handle}
       backgroundStyle={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}
     >
-      {/* Header */}
       <View className="flex-row items-center gap-2 px-5 pb-3.5">
         <View className="flex-row items-center gap-1 rounded-full bg-error-500 py-[3px] pr-2 pl-[7px]">
           <View className="size-1.5 rounded-full bg-white" />
@@ -79,11 +75,12 @@ function Card({ product }: { product: Product }) {
             <Text variant="caption-2" emphasized className="text-white">{product.badge}</Text>
           </View>
         )}
-        <Pressable
+        <Button
+          variant="ghost"
           accessibilityRole="button"
           accessibilityLabel={`save ${product.title}`}
           hitSlop={6}
-          className="absolute top-2 right-2 size-[34px] items-center justify-center rounded-full bg-white"
+          className="my-0 px-0 absolute top-2 right-2 size-[34px] items-center justify-center rounded-full bg-white"
           style={{
             shadowColor: '#000',
             shadowOpacity: 0.1,
@@ -93,7 +90,7 @@ function Card({ product }: { product: Product }) {
           }}
         >
           <Icon name="heart" size={18} color={INK} />
-        </Pressable>
+        </Button>
       </View>
 
       <View className="gap-1">
@@ -108,13 +105,14 @@ function Card({ product }: { product: Product }) {
         </View>
       </View>
 
-      <Pressable
+      <Button
+        variant="ghost"
         accessibilityRole="button"
         accessibilityLabel={`add ${product.title} to cart`}
-        className="h-[42px] items-center justify-center rounded-xl bg-primary-500 active:opacity-90"
+        className="my-0 px-0 h-[42px] items-center justify-center rounded-xl bg-primary-500 active:opacity-90"
       >
         <Text variant="footnote" emphasized className="text-secondary-950">Add to cart</Text>
-      </Pressable>
+      </Button>
     </View>
   );
 }

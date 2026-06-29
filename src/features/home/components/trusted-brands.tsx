@@ -1,7 +1,6 @@
 import { Image, ScrollView, Text, View } from '@/components/ui';
 import { trustedBrands } from '@/features/home/data';
 
-// ponytail: Figma uses logo-only chips (no name); Clearbit logos keep name as a11y label.
 export function TrustedBrands() {
   return (
     <View className="w-full gap-6 bg-white py-8">
@@ -38,7 +37,6 @@ export function TrustedBrands() {
   );
 }
 
-// Figma chip shadow: 0px 6px 14px rgba(51,51,89,0.18).
 const chipShadow = {
   shadowColor: '#333359',
   shadowOpacity: 0.18,

@@ -8,7 +8,6 @@ export const queryClient = new QueryClient();
 export function APIProvider({ children }: { children: React.ReactNode }) {
   useReactQueryDevTools(queryClient);
   return (
-    // Provide the client to your App
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }

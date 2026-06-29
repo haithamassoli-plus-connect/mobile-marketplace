@@ -3,24 +3,19 @@ import * as React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   TextInput,
 } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { wishlist } from '@/features/home/data';
 
-// GoldenBot — AI Conversation (Figma 448:1502). Reached from the Support sheet's
-// "Ask the AI" card. Conversation is seeded per the design; the composer and the
-// quick-reply chips append real user bubbles. ponytail: no backend — bot replies
-// aren't generated.
-type Msg =
-  | { id: string; from: 'bot' | 'user'; text: string }
-  | { id: string; from: 'bot'; chips: string[] }
-  | { id: string; from: 'bot'; product: true };
+type Msg
+  = | { id: string; from: 'bot' | 'user'; text: string }
+    | { id: string; from: 'bot'; chips: string[] }
+    | { id: string; from: 'bot'; product: true };
 
 const SEED: Msg[] = [
   { id: 'm1', from: 'bot', text: 'Hi! I’m GoldenBot, your shopping assistant. I can help with products, orders, returns and more — what would you like to do?' },
@@ -39,7 +34,8 @@ export default function AiChatScreen() {
 
   const append = (text: string) => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed)
+      return;
     setMessages(prev => [...prev, { id: `u${prev.length}`, from: 'user', text: trimmed }]);
     requestAnimationFrame(() => scrollRef.current?.scrollToEnd({ animated: true }));
   };
@@ -52,18 +48,18 @@ export default function AiChatScreen() {
   return (
     <View className="flex-1 bg-neutral-50">
       <SystemBars style="dark" />
-      {/* Header */}
       <View style={{ paddingTop: insets.top }} className="bg-white shadow-sm">
         <View className="h-14 flex-row items-center gap-2.5 px-2.5">
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={() => router.back()}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="back"
-            className="size-9 items-center justify-center rounded-2xl active:opacity-70"
+            className="my-0 px-0 size-9 items-center justify-center rounded-2xl active:opacity-70"
           >
             <Icon name="chevron-left" size={24} color="#181d27" />
-          </Pressable>
+          </Button>
 
           <View className="size-10">
             <View className="size-10 items-center justify-center rounded-full bg-primary-500">
@@ -104,7 +100,6 @@ export default function AiChatScreen() {
             <Bubble key={m.id} msg={m} onChip={append} />
           ))}
 
-          {/* Typing */}
           <View className="flex-row items-end gap-2">
             <Avatar />
             <View className="flex-row gap-1 rounded-[16px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-3">
@@ -115,18 +110,18 @@ export default function AiChatScreen() {
           </View>
         </ScrollView>
 
-        {/* Composer */}
         <View
           style={{ paddingBottom: insets.bottom + 8 }}
           className="flex-row items-center gap-2.5 border-t border-neutral-200 bg-white px-3.5 pt-3"
         >
-          <Pressable
+          <Button
+            variant="ghost"
             accessibilityRole="button"
             accessibilityLabel="add attachment"
-            className="size-[38px] items-center justify-center rounded-full bg-neutral-100 active:opacity-70"
+            className="my-0 px-0 size-[38px] items-center justify-center rounded-full bg-neutral-100 active:opacity-70"
           >
             <Icon name="plus" size={22} color="#717680" />
-          </Pressable>
+          </Button>
 
           <TextInput
             value={draft}
@@ -138,14 +133,15 @@ export default function AiChatScreen() {
             className="flex-1 rounded-[21px] bg-neutral-100 px-4 py-2.5 text-[15px] text-neutral-900"
           />
 
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={send}
             accessibilityRole="button"
             accessibilityLabel="send message"
-            className="size-[38px] items-center justify-center rounded-full bg-primary-500 active:opacity-80"
+            className="my-0 px-0 size-[38px] items-center justify-center rounded-full bg-primary-500 active:opacity-80"
           >
             <Icon name="send" size={18} color="#0a0d12" />
-          </Pressable>
+          </Button>
         </View>
       </KeyboardAvoidingView>
     </View>
@@ -181,14 +177,15 @@ function Bubble({ msg, onChip }: { msg: Msg; onChip: (text: string) => void }) {
     return (
       <View className="flex-row flex-wrap gap-2 pl-9">
         {msg.chips.map((label, i) => (
-          <Pressable
+          <Button
             key={label}
+            variant="ghost"
             onPress={() => onChip(label)}
             accessibilityRole="button"
-            className={`rounded-full border-[1.2px] px-3.5 py-2 active:opacity-70 ${i === msg.chips.length - 1 ? 'border-primary-200 bg-primary-50' : 'border-primary-300 bg-white'}`}
+            className={`my-0 h-auto rounded-full border-[1.2px] px-3.5 py-2 active:opacity-70 ${i === msg.chips.length - 1 ? 'border-primary-200 bg-primary-50' : 'border-primary-300 bg-white'}`}
           >
             <Text variant="subheadline" emphasized className="text-primary-800">{label}</Text>
-          </Pressable>
+          </Button>
         ))}
       </View>
     );
@@ -197,17 +194,19 @@ function Bubble({ msg, onChip }: { msg: Msg; onChip: (text: string) => void }) {
   return (
     <View className="flex-row items-end gap-2">
       <Avatar />
-      {'product' in msg ? <ProductCard /> : (
-        <View className="max-w-[240px] rounded-[16px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-2.5">
-          <Text variant="subheadline" className="text-neutral-800">{msg.text}</Text>
-        </View>
-      )}
+      {'product' in msg
+        ? <ProductCard />
+        : (
+            <View className="max-w-[240px] rounded-[16px] rounded-bl-[4px] border border-neutral-200 bg-white px-3.5 py-2.5">
+              <Text variant="subheadline" className="text-neutral-800">{msg.text}</Text>
+            </View>
+          )}
     </View>
   );
 }
 
 function ProductCard() {
-  const p = wishlist[1]; // Aviator Shades
+  const p = wishlist[1];
   return (
     <View
       className="w-[214px] overflow-hidden rounded-[16px] rounded-bl-[4px] border border-neutral-200 bg-white"
@@ -223,7 +222,10 @@ function ProductCard() {
       <View className="gap-2 px-3 pb-3 pt-[11px]">
         <Text variant="subheadline" emphasized className="text-neutral-900">{p.title}</Text>
         <View className="flex-row items-center gap-2">
-          <Text variant="callout" emphasized className="text-primary-700">${p.price}</Text>
+          <Text variant="callout" emphasized className="text-primary-700">
+            $
+            {p.price}
+          </Text>
           <Text variant="caption-1" className="text-neutral-500">★ 4.8</Text>
           <View className="flex-1" />
           <View className="flex-row items-center gap-1">
@@ -231,13 +233,14 @@ function ProductCard() {
             <Text variant="caption-2" emphasized className="text-success-700">In stock</Text>
           </View>
         </View>
-        <Pressable
+        <Button
+          variant="ghost"
           onPress={() => router.back()}
           accessibilityRole="button"
-          className="items-center rounded-xl bg-primary-500 py-2.5 active:opacity-80"
+          className="my-0 h-auto px-0 items-center rounded-xl bg-primary-500 py-2.5 active:opacity-80"
         >
           <Text variant="subheadline" emphasized className="text-neutral-950">View product</Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );

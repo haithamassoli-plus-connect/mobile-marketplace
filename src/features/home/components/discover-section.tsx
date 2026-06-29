@@ -1,19 +1,15 @@
 import { useState } from 'react';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Button, Image, Text, View } from '@/components/ui';
 
 import { discover } from '../data';
 import { Icon } from './icon';
 import { Chip, ProductCard } from './primitives';
 
-// Discover section — gold eyebrow + title, then a segmented tab bar that swaps
-// between "For you" (Top Pick + recommended grid) and "New arrivals"
-// (Just Dropped hero + fresh-this-week grid). Tabs are interactive.
 export function DiscoverSection() {
   const [tab, setTab] = useState(0);
   return (
     <View className="mt-8 gap-6 bg-neutral-50 px-4">
-      {/* Header + tabs */}
       <View className="gap-4">
         <View className="gap-1.5">
           <Text variant="caption-1" emphasized className="text-gold-600">
@@ -27,13 +23,13 @@ export function DiscoverSection() {
           </Text>
         </View>
 
-        {/* Tab bar — segmented control, tap to switch */}
         <View className="flex-row gap-1 rounded-full bg-neutral-100 p-1">
           {discover.tabs.map((t, i) => (
-            <Pressable
+            <Button
+              variant="ghost"
               key={t}
               onPress={() => setTab(i)}
-              className={`flex-1 items-center rounded-full py-2 ${
+              className={`my-0 h-auto px-0 flex-1 items-center rounded-full py-2 ${
                 tab === i ? 'bg-white shadow-sm' : ''
               }`}
             >
@@ -44,7 +40,7 @@ export function DiscoverSection() {
               >
                 {t}
               </Text>
-            </Pressable>
+            </Button>
           ))}
         </View>
       </View>
@@ -54,12 +50,10 @@ export function DiscoverSection() {
   );
 }
 
-// "For you" — horizontal Top Pick card, interest chips, 2-column recommended grid.
 function ForYou() {
   const { featured } = discover;
   return (
     <View className="gap-3">
-      {/* Top Pick — horizontal card */}
       <View className="flex-row items-center gap-3.5 rounded-2xl border border-neutral-200 bg-white p-3">
         <View className="relative h-[126px] w-[116px] overflow-hidden rounded-xl">
           <Image source={featured.image} className="size-full" contentFit="cover" />
@@ -77,20 +71,21 @@ function ForYou() {
             <Text variant="callout" emphasized className="text-gold-500">{`$ ${featured.price}`}</Text>
             <Text variant="footnote" className="text-neutral-600">{`★ ${featured.rating}`}</Text>
           </View>
-          <Pressable className="self-start rounded-[10px] bg-gold-500 px-[18px] py-[9px]">
+          <Button
+            variant="ghost"
+            className="my-0 h-auto self-start rounded-[10px] bg-gold-500 px-[18px] py-[9px]"
+          >
             <Text variant="footnote" emphasized className="text-ink-900">View item</Text>
-          </Pressable>
+          </Button>
         </View>
       </View>
 
-      {/* Recommended for you */}
       <View className="gap-3">
         <View className="flex-row items-center justify-between">
           <Text variant="subheadline" emphasized className="text-ink-900">Recommended for you</Text>
           <Text variant="footnote" className="text-gold-600">See all</Text>
         </View>
 
-        {/* Interest chips — first active */}
         <View className="flex-row flex-wrap gap-2">
           {discover.categories.map((c, i) => (
             <Chip key={c} label={c} active={i === 0} />
@@ -103,12 +98,10 @@ function ForYou() {
   );
 }
 
-// "New arrivals" — Just Dropped hero, then a fresh-this-week grid.
 function NewArrivals() {
   const { hero, items } = discover.newArrivals;
   return (
     <View className="gap-[18px]">
-      {/* Just Dropped hero */}
       <View className="h-[260px] overflow-hidden rounded-2xl bg-neutral-100">
         <Image source={hero.image} className="size-full" contentFit="cover" />
         <View className="absolute top-3 left-3 rounded-full bg-gold-500 px-2.5 py-[5px]">
@@ -120,7 +113,6 @@ function NewArrivals() {
         </View>
       </View>
 
-      {/* Fresh this week */}
       <View className="gap-[18px]">
         <View className="flex-row items-center justify-between">
           <Text variant="subheadline" emphasized className="text-ink-900">Fresh this week</Text>
@@ -132,7 +124,6 @@ function NewArrivals() {
   );
 }
 
-// 2-column product grid — justify-between keeps two cards per row.
 function Grid({ items }: { items: typeof discover.recommended }) {
   return (
     <View className="flex-row flex-wrap justify-between gap-y-[15px]">

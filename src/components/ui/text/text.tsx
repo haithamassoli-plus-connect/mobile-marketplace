@@ -8,8 +8,6 @@ import { tv } from 'tailwind-variants';
 import { translate } from '@/lib/i18n';
 import { FONT_CLASS } from '../font';
 
-// iOS HIG type scale (Noto Sans) — size/line-height baked in per variant.
-// `emphasized` bumps each style to its Figma "Emphasized" weight.
 const text = tv({
   base: `${FONT_CLASS} text-black dark:text-white`,
   variants: {
@@ -39,7 +37,6 @@ const text = tv({
     { variant: 'footnote', emphasized: true, class: 'font-semibold' },
     { variant: 'caption-1', emphasized: true, class: 'font-medium' },
     { variant: 'caption-2', emphasized: true, class: 'font-semibold' },
-    // headline is semibold-only — no emphasized pair.
   ],
   defaultVariants: { variant: 'body' },
 });

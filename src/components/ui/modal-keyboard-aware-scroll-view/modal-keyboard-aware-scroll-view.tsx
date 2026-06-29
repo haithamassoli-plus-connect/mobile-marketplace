@@ -2,21 +2,6 @@ import type { BottomSheetScrollViewMethods } from '@gorhom/bottom-sheet';
 import type { BottomSheetScrollViewProps } from '@gorhom/bottom-sheet/src/components/bottomSheetScrollable/types';
 import type { ComponentType } from 'react';
 import type { KeyboardAwareScrollViewProps } from 'react-native-keyboard-controller';
-// source https://kirillzyusko.github.io/react-native-keyboard-controller/docs/api/components/keyboard-aware-scroll-view
-/**
- * This component is used to handle the keyboard in a modal.
- * It is a wrapper around the `KeyboardAwareScrollView` component from `react-native-keyboard-controller`.
- * It is used to handle the keyboard in a modal.
- * example usage:
-      export function Example() {
-        return (
-          <Modal>
-            <BottomSheetKeyboardAwareScrollView>
-            </BottomSheetKeyboardAwareScrollView>
-          </Modal>
-        );
-        }
- */
 import {
 
   createBottomSheetScrollableComponent,

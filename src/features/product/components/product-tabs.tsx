@@ -1,13 +1,11 @@
 import type { Accordion } from '../data';
 import { useState } from 'react';
 
-import { Pressable, Text, View } from '@/components/ui';
+import { Button, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 
 const NEUTRAL_500 = '#717680';
 
-// B7 — single-open accordion. `openId` is derived state owned here; the first tab
-// starts open per the design.
 export function ProductTabs({ tabs }: { tabs: Accordion[] }) {
   const [openId, setOpenId] = useState<string | null>(tabs[0]?.id ?? null);
   return (
@@ -27,15 +25,16 @@ export function ProductTabs({ tabs }: { tabs: Accordion[] }) {
 function AccordionItem({ tab, open, onToggle }: { tab: Accordion; open: boolean; onToggle: () => void }) {
   return (
     <View className="overflow-hidden rounded-xl border border-neutral-200">
-      <Pressable
+      <Button
+        variant="ghost"
         onPress={onToggle}
-        className="flex-row items-center justify-between bg-neutral-50 px-[14px] py-[13px]"
+        className="my-0 h-auto rounded-none flex-row items-center justify-between bg-neutral-50 px-[14px] py-[13px]"
       >
         <Text variant="headline" className="text-neutral-900">{tab.title}</Text>
         <View style={{ transform: [{ rotate: open ? '180deg' : '0deg' }] }}>
           <Icon name="chevron-down" size={20} color={NEUTRAL_500} />
         </View>
-      </Pressable>
+      </Button>
       {open
         ? (
             <View className="px-[14px] py-3">

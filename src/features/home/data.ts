@@ -1,15 +1,5 @@
-// Static dummy data for the marketplace home screen.
-// Images via LoremFlickr — real keyword-matched photos, free, no API key:
-//   https://loremflickr.com/<w>/<h>/<keyword>?lock=<n>
-// Each seed encodes its subject; we map it to a search keyword and hash it to a
-// stable `lock` so every item keeps the same photo across reloads.
-// ponytail: hardcoded content — replace with React Query hooks when a backend exists.
-
 import type { IconName } from './components/icon';
 
-// Real product photos from DummyJSON (free, no key) — clean white-bg shots:
-//   https://cdn.dummyjson.com/product-images/<category>/<slug>/thumbnail.webp
-// token → [category, ...slugs]; the seed hash picks a slug so product rails stay varied.
 const PRODUCT: Record<string, [string, string, ...string[]]> = {
   watch: ['mens-watches', 'longines-master-collection', 'rolex-datejust', 'rolex-cellini-moonphase', 'brown-leather-belt-watch'],
   smart: ['mens-watches', 'rolex-cellini-date-black-dial', 'rolex-datejust'],
@@ -42,24 +32,27 @@ const PRODUCT: Record<string, [string, string, ...string[]]> = {
   tech: ['smartphones', 'iphone-13-pro', 'iphone-x', 'oppo-a57'],
 };
 
-// Story / seller full-screen covers aren't products → LoremFlickr store scenes
-// (https://loremflickr.com/<w>/<h>/<kw>?lock=<n>). token → search; comma = multiple tags.
 const KEYWORD: Record<string, string> = {
-  stream: 'fashion,model', editorial: 'fashion',
-  mingle: 'boutique', palace: 'storefront', sanctuary: 'jewelry,store',
-  meadow: 'fashion,store', realm: 'sneaker,store', corner: 'handbag,store',
-  bazaar: 'market', dome: 'shopping,mall', trove: 'vintage,store', sphere: 'electronics,store',
+  stream: 'fashion,model',
+  editorial: 'fashion',
+  mingle: 'boutique',
+  palace: 'storefront',
+  sanctuary: 'jewelry,store',
+  meadow: 'fashion,store',
+  realm: 'sneaker,store',
+  corner: 'handbag,store',
+  bazaar: 'market',
+  dome: 'shopping,mall',
+  trove: 'vintage,store',
+  sphere: 'electronics,store',
 };
-// Seed prefixes/suffixes that aren't subjects (tr-watch, story-mingle, mingle-f1…).
 const SKIP = new Set(['tr', 'bs', 'flash', 'feature', 'live', 'trend', 'disc', 'na', 'brand', 'seller', 'story', 'sd', 'f']);
 
-// The subject token of a seed: 'tr-watch' → 'watch', 'mingle-f1' → 'mingle'.
 function token(seed: string) {
   const tokens = seed.split(/[-\d]+/).filter(Boolean);
   return tokens.reverse().find(t => !SKIP.has(t)) ?? 'product';
 }
 
-// Deterministic 1–1000 lock from the full seed → stable, distinct images.
 function lock(seed: string) {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
@@ -77,17 +70,20 @@ export function img(seed: string, w: number, h: number) {
   return `https://loremflickr.com/${w}/${h}/${KEYWORD[t] ?? t}?lock=${lock(seed)}`;
 }
 
-// Real brand logos via Clearbit (free, no key): https://logo.clearbit.com/<domain>.
 const BRAND_DOMAIN: Record<string, string> = {
-  Apple: 'apple.com', Nike: 'nike.com', Sony: 'sony.com', Adidas: 'adidas.com',
-  Samsung: 'samsung.com', Gucci: 'gucci.com', Dyson: 'dyson.com', Bose: 'bose.com',
+  Apple: 'apple.com',
+  Nike: 'nike.com',
+  Sony: 'sony.com',
+  Adidas: 'adidas.com',
+  Samsung: 'samsung.com',
+  Gucci: 'gucci.com',
+  Dyson: 'dyson.com',
+  Bose: 'bose.com',
 };
 function logo(name: string) {
   return `https://logo.clearbit.com/${BRAND_DOMAIN[name] ?? `${name.toLowerCase()}.com`}`;
 }
 
-// n distinct full-screen covers (1080×1920 portrait) derived from one seed — the
-// per-store frames shown in the story viewer. ponytail: derived inline, no backend.
 function frames(seed: string, n: number) {
   return Array.from({ length: n }, (_, i) => img(`${seed}-f${i + 1}`, 1080, 1920));
 }
@@ -101,10 +97,9 @@ export type Product = {
   badge?: string;
   badgeTone?: 'dark' | 'gold';
   rating?: number;
-  timeAgo?: string; // dark "4h ago" pill on the image corner (new arrivals)
+  timeAgo?: string;
 };
 
-/* ---------------------------------- Navbar --------------------------------- */
 export const nav = {
   locale: 'En / JOD',
   wishlistCount: 2,
@@ -112,17 +107,16 @@ export const nav = {
   tagline: 'Everything you need in one place',
 };
 
-/* -------------------------------- Wishlist --------------------------------- */
 export type WishlistItem = {
   id: string;
   title: string;
   image: string;
-  category: string; // "Watches · Aurelius"
+  category: string;
   price: number;
   oldPrice?: number;
-  priceDropped?: boolean; // green "Price dropped" pill w/ trending-down icon
-  stockBadge?: { label: string; tone: 'success' | 'error' }; // "Only 3 left"
-  meta?: string; // trailing note next to the cart button, e.g. "In stock", "★ 4.8"
+  priceDropped?: boolean;
+  stockBadge?: { label: string; tone: 'success' | 'error' };
+  meta?: string;
   metaTone?: 'success' | 'muted';
 };
 export const wishlist: WishlistItem[] = [
@@ -149,18 +143,17 @@ export const wishlist: WishlistItem[] = [
   },
 ];
 
-/* --------------------------------- Stories --------------------------------- */
 export type StoryTag = 'live' | 'new' | 'hot';
 export type Story = {
   id: string;
   label: string;
-  image: string; // 200px avatar — used by StoriesRow (unchanged)
+  image: string;
   tag?: StoryTag;
-  discount?: string; // hot: red discount pill, e.g. '-40%'
-  endsInSec?: number; // hot: countdown shown as "Ends in MM:SS"
-  watching?: string; // live: e.g. '1.2k' → "1.2k watching"
+  discount?: string;
+  endsInSec?: number;
+  watching?: string;
   viewed?: boolean;
-  frames: string[]; // 3–5 full-screen covers for the viewer (one segment each)
+  frames: string[];
 };
 export const stories: Story[] = [
   { id: 'st1', label: 'MarketMingle', image: img('story-mingle', 200, 200), tag: 'live', watching: '1.2k', frames: frames('mingle', 4) },
@@ -175,7 +168,6 @@ export const stories: Story[] = [
   { id: 'st10', label: 'ShopSphere', image: img('story-sphere', 200, 200), viewed: true, frames: frames('sphere', 3) },
 ];
 
-/* ---------------------------- Featured hero rail --------------------------- */
 export type Featured = {
   id: string;
   brand: string;
@@ -223,7 +215,6 @@ export const featured: Featured[] = [
   },
 ];
 
-/* ------------------------------ Trending grid ------------------------------ */
 export type TrendingItem = {
   id: string;
   title: string;
@@ -243,15 +234,12 @@ export const trending: { featured: TrendingItem; items: TrendingItem[] } = {
   ],
 };
 
-/* -------------------------------- Live video ------------------------------- */
 export const live = {
   badge: 'LIVE',
-  count: '23.6K', // shown in the top badge: "LIVE · 23.6K"
+  count: '23.6K',
   host: 'Urban Sole',
-  image: img('live-stream', 760, 1100), // poster shown under the video while it buffers
-  // ponytail: dummy stream — W3C's public Sintel trailer; swap for a real HLS feed in prod.
+  image: img('live-stream', 760, 1100),
   video: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
-  // Featured-products sheet (Figma 170:4036) — price/badge populate the cards.
   products: [
     { id: 'lp1', title: 'Linen Shirt', image: img('live-shirt', 360, 360), price: 59, oldPrice: 89, badge: '-33%' },
     { id: 'lp2', title: 'Straw Hat', image: img('live-hat', 360, 360), price: 39, oldPrice: 59, badge: '-34%' },
@@ -260,13 +248,12 @@ export const live = {
   ] as Product[],
 };
 
-/* ----------------------- Promo banner (flash deals) ------------------------ */
 export const countdown = { days: '02', hours: '08', minutes: '45', seconds: '12' };
 export const promo = {
   eyebrow: 'HURRY — OFFER ENDS SOON',
   headline: 'Get an extra 15% off your order',
   cta: 'Claim my discount',
-  dismiss: 'No thanks, I’ll pay full price',
+  dismiss: 'No thanks, I\'ll pay full price',
 };
 export const flashDeals: Product[] = [
   { id: 'fd1', title: 'Rose Gold Minimal Watch', image: img('flash-watch', 360, 360), price: 129, oldPrice: 259, badge: '-50%', badgeTone: 'dark' },
@@ -275,7 +262,6 @@ export const flashDeals: Product[] = [
   { id: 'fd4', title: 'Smart Watch Series X', image: img('flash-smart', 360, 360), price: 179, oldPrice: 299, badge: '-40%', badgeTone: 'dark' },
 ];
 
-/* ----------------------------- Product rails ------------------------------- */
 export const bestSellers: Product[] = [
   { id: 'bs1', title: 'Aviator Watch', image: img('bs-watch', 360, 360), price: 199, oldPrice: 399, badge: '-30%', badgeTone: 'dark' },
   { id: 'bs2', title: 'Smart Fitness Band', image: img('bs-band', 360, 360), price: 89, oldPrice: 129, badge: '-30%', badgeTone: 'dark' },
@@ -291,7 +277,6 @@ export const topRated: Product[] = [
   { id: 'tr5', title: 'Minimal Backpack', image: img('tr-backpack', 360, 360), price: 139, rating: 4.9 },
 ];
 
-/* -------------------------------- Discover --------------------------------- */
 export const discover = {
   eyebrow: 'Products made for you',
   title: 'Discover',
@@ -311,7 +296,6 @@ export const discover = {
     { id: 'rc3', title: 'Cobalt Tote', image: img('tr-tote', 360, 360), price: 189 },
     { id: 'rc4', title: 'Trail Sneaker', image: img('tr-sneaker', 360, 360), price: 119 },
   ] as Product[],
-  // New arrivals tab — "Just Dropped" hero + "Fresh this week" grid (New badge + time-ago).
   newArrivals: {
     hero: { image: img('disc-runner', 720, 520), timeAgo: '2h ago' },
     items: [
@@ -325,7 +309,6 @@ export const discover = {
   },
 };
 
-/* ----------------------------- Trusted brands ------------------------------ */
 export type Brand = { id: string; name: string; logo: string };
 export const trustedBrands = {
   title: 'Trusted Brands',
@@ -342,7 +325,6 @@ export const trustedBrands = {
   ] as Brand[],
 };
 
-/* ----------------------------- Verified sellers ---------------------------- */
 export type Seller = {
   id: string;
   name: string;
@@ -377,7 +359,7 @@ export const sellers: Seller[] = [
     avatar: img('seller-bella', 120, 120),
     rating: 4.7,
     reviews: '23.1K',
-    category: 'Women’s Fashion',
+    category: 'Women\'s Fashion',
     products: ['bm1', 'bm2', 'bm3', 'bm4'].map(s => img(s, 300, 300)),
   },
   {
@@ -391,7 +373,6 @@ export const sellers: Seller[] = [
   },
 ];
 
-/* ------------------------------- Seller CTA -------------------------------- */
 export const sellerCta = {
   eyebrow: 'Golden Tik Market',
   title: 'Start selling on the marketplace',

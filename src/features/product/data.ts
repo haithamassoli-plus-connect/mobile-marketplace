@@ -1,9 +1,3 @@
-// Static demo data for the Product Detail (PDP) screen.
-// Images reuse the home image helpers (DummyJSON clean product shots / Clearbit
-// logos) so there are no expiring CDN URLs — see src/features/home/data.ts.
-// ponytail: hardcoded content — swap for a React Query hook keyed by the route
-// `id` when a backend exists; the `ProductDetail` shape stays the contract.
-
 import { img, sellers } from '@/features/home/data';
 
 export const CURRENCY = 'JOD';
@@ -52,8 +46,6 @@ export type RelatedProduct = {
 
 export type Accordion = { id: string; title: string; body: string };
 
-// 'shirt' seeds resolve to DummyJSON's clean white-bg apparel shots — the closest
-// stand-in for the hoodie, and ideal for the gallery's contentFit="contain".
 export const product: ProductDetail = {
   id: 'oversized-fleece-hoodie',
   seller: 'ShopVista',
@@ -73,7 +65,6 @@ export const product: ProductDetail = {
     img('pdp-shirt-4', 720, 720),
     img('pdp-shirt-5', 720, 720),
   ],
-  // ponytail: raw hex swatches — fabric colours have no design-system token.
   colors: [
     { name: 'Midnight Black', hex: '#181d27' },
     { name: 'Burgundy', hex: '#6b2737' },

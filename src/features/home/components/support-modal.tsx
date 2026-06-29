@@ -6,33 +6,28 @@ import {
 } from '@gorhom/bottom-sheet';
 import { router } from 'expo-router';
 import * as React from 'react';
-import { Pressable } from 'react-native';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, useModal, View } from '@/components/ui';
+import { Button, Text, useModal, View } from '@/components/ui';
 
 import { renderBackdrop } from '@/components/ui/modal';
 import { Icon } from './icon';
 
-// Help & Support sheet (Figma 416:1544). Reuses the base modal's backdrop +
-// useModal; sizes to its content so no snapPoint guessing is needed.
-// ponytail: cards just dismiss for now — wire onPress to real routes/chat when
-// those screens exist.
 type Option = {
   icon: IconName;
-  iconBg: string; // icon tile background
+  iconBg: string;
   iconColor: string;
   title: string;
   badge: { label: string; bg: string; color: string; dot?: boolean };
   body: string;
-  team?: boolean; // Live Chat only — avatar stack + reply-time footer
-  route?: Parameters<typeof router.push>[0]; // navigate on press, else just dismiss
+  team?: boolean;
+  route?: Parameters<typeof router.push>[0];
 };
 
-const SUCCESS = '#027a48'; // success-700
-const PRIMARY = '#92741a'; // primary-700
-const INFO = '#175cd3'; // information-700
-const CHEVRON = '#a4a7ae'; // neutral-400
+const SUCCESS = '#027a48';
+const PRIMARY = '#92741a';
+const INFO = '#175cd3';
+const CHEVRON = '#a4a7ae';
 
 const OPTIONS: Option[] = [
   {
@@ -86,23 +81,22 @@ export function SupportModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
         style={{ paddingBottom: insets.bottom + 30 }}
         className="gap-4 px-5 pt-2.5"
       >
-        {/* Header */}
         <View className="flex-row items-center justify-between">
           <Text variant="title-3" emphasized className="text-neutral-900">
             Help & Support
           </Text>
-          <Pressable
+          <Button
+            variant="ghost"
             onPress={modal.dismiss}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="close support"
-            className="size-8 items-center justify-center rounded-2xl bg-neutral-100"
+            className="my-0 px-0 size-8 items-center justify-center rounded-2xl bg-neutral-100"
           >
             <Icon name="x" size={16} color="#717680" />
-          </Pressable>
+          </Button>
         </View>
 
-        {/* Hero */}
         <View className="flex-row items-center gap-3.5 rounded-[22px] border border-primary-200 bg-primary-50 p-4">
           <View className="size-[84px] items-center justify-center rounded-full border border-primary-200 bg-primary-100">
             <Icon name="headphones" size={36} color="#b8941f" />
@@ -126,7 +120,6 @@ export function SupportModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
           </View>
         </View>
 
-        {/* Options */}
         <View className="gap-3">
           {OPTIONS.map(o => (
             <Card
@@ -141,7 +134,6 @@ export function SupportModal({ ref }: { ref?: React.Ref<BottomSheetModal> }) {
           ))}
         </View>
 
-        {/* Footer */}
         <View className="items-center gap-3 pt-1">
           <View className="h-px w-full bg-neutral-200" />
           <View className="flex-row items-center gap-1.5">
@@ -175,10 +167,11 @@ function Handle() {
 
 function Card({ option: o, onPress }: { option: Option; onPress: () => void }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onPress}
       accessibilityRole="button"
-      className="flex-row items-center gap-3.5 rounded-[18px] border border-neutral-200 bg-white p-3.5 active:opacity-80"
+      className="my-0 h-auto justify-start flex-row items-center gap-3.5 rounded-[18px] border border-neutral-200 bg-white p-3.5 active:opacity-80"
       style={{
         shadowColor: '#0f121a',
         shadowOpacity: 0.05,
@@ -230,6 +223,6 @@ function Card({ option: o, onPress }: { option: Option; onPress: () => void }) {
       </View>
 
       <Icon name="chevron-right" size={20} color={CHEVRON} />
-    </Pressable>
+    </Button>
   );
 }

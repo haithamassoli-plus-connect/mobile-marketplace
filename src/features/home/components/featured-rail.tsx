@@ -20,10 +20,8 @@ export function FeaturedRail() {
             contentFit="cover"
             className="absolute inset-0 size-full"
           />
-          {/* Dark scrim for legibility */}
           <View className="absolute inset-0 bg-black/35" />
 
-          {/* Top stack */}
           <View className="absolute inset-x-4 top-4 gap-1.5">
             <View className="self-start rounded-full bg-white px-1 py-0.5">
               <Text variant="caption-2" emphasized className="text-secondary-950">
@@ -47,7 +45,6 @@ export function FeaturedRail() {
             </Text>
           </View>
 
-          {/* Bottom row */}
           <View className="absolute inset-x-4 bottom-4 flex-row items-center justify-between">
             <View className="flex-row items-center gap-2 rounded-[22px] bg-white px-4 py-2 shadow-sm">
               <Text variant="footnote" emphasized className="text-success-700">

@@ -20,14 +20,12 @@ export function getQueryKey<T extends KeyParams>(key: string, params?: T) {
   return [key, ...(params ? [params] : [])];
 }
 
-// for infinite query pages  to flatList data
 export function normalizePages<T>(pages?: PaginateQuery<T>[]): T[] {
   return pages
     ? pages.reduce((prev: T[], current) => [...prev, ...current.results], [])
     : [];
 }
 
-// a function that accept a url and return params as an object
 export function getUrlParameters(
   url: string | null,
 ): { [k: string]: string } | null {

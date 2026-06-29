@@ -1,7 +1,5 @@
-// Static dummy data for the search discovery screen (Figma 610:1555).
-// ponytail: hardcoded — swap for React Query hooks when a backend exists.
-import { img as buildImg } from '@/features/home/data';
 import type { IconName } from '@/features/home/components/icon';
+import { img as buildImg } from '@/features/home/data';
 
 const img = (seed: string) => buildImg(seed, 80, 80);
 
@@ -18,7 +16,6 @@ export const categoryTabs = [
   'Gifts',
 ] as const;
 
-// Colored explore cards (3 rows × 2). Each tone keys a tailwind class set below.
 export type ExploreCard = {
   title: string;
   subtitle: string;
@@ -34,7 +31,6 @@ export const exploreCards: ExploreCard[] = [
   { title: 'New In', subtitle: 'Just landed', icon: 'sparkles', tone: 'neutral' },
 ];
 
-// tone → [card bg, card border, icon circle bg, icon color]
 export const exploreTone: Record<ExploreCard['tone'], [string, string, string, string]> = {
   error: ['bg-error-50', 'border-error-200', 'bg-error-100', '#d92d20'],
   primary: ['bg-primary-50', 'border-primary-200', 'bg-primary-100', '#b8941f'],

@@ -1,15 +1,12 @@
-import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { sellers } from '@/features/home/data';
 
-// ponytail: seller products are bare image URIs in the data module; the Figma
-// price chips are decorative, so prices are derived deterministically per cell.
 const PRICES = [99, 79, 49, 15];
 
 export function VerifiedSellers() {
   return (
     <View className="mt-8 w-full gap-4">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4">
         <View className="flex-row items-center gap-2">
           <Icon name="store" size={24} color="#DBB42C" />
@@ -22,7 +19,6 @@ export function VerifiedSellers() {
         </Text>
       </View>
 
-      {/* Cards rail */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -33,7 +29,6 @@ export function VerifiedSellers() {
             key={seller.id}
             className="w-[330px] gap-4 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-4 shadow-lg"
           >
-            {/* Shop header */}
             <View className="flex-row items-center gap-3">
               <View className="size-12 items-center justify-center overflow-hidden rounded-full border-2 border-gold-500">
                 <Image
@@ -65,14 +60,12 @@ export function VerifiedSellers() {
               <Icon name="badge-check" size={24} color="#DBB42C" />
             </View>
 
-            {/* Category badge */}
             <View className="self-start rounded-full bg-gold-500 px-2.5 py-[3px]">
               <Text variant="caption-1" emphasized className="text-ink-950">
                 {seller.category}
               </Text>
             </View>
 
-            {/* Product grid */}
             <View className="gap-2">
               {[0, 1].map(row => (
                 <View key={row} className="flex-row gap-2">
@@ -97,12 +90,14 @@ export function VerifiedSellers() {
               ))}
             </View>
 
-            {/* Visit shop button */}
-            <Pressable className="items-center justify-center rounded-[10px] border border-neutral-300 bg-white py-3">
+            <Button
+              variant="ghost"
+              className="my-0 h-auto px-0 items-center justify-center rounded-[10px] border border-neutral-300 bg-white py-3"
+            >
               <Text variant="subheadline" emphasized className="text-ink-900">
                 Visit Shop
               </Text>
-            </Pressable>
+            </Button>
           </View>
         ))}
       </ScrollView>

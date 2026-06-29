@@ -14,7 +14,6 @@ export * from './select';
 export * from './text';
 export * from './utils';
 
-// export base components from react-native
 export {
   ActivityIndicator,
   Pressable,

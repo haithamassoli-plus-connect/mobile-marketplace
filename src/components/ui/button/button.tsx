@@ -1,10 +1,16 @@
-import type { PressableProps, View } from 'react-native';
+import type { GestureResponderEvent, PressableProps, View } from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
+import * as Haptics from 'expo-haptics';
 import * as React from 'react';
 import { ActivityIndicator, Pressable, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { tv } from 'tailwind-variants';
 
 import { FONT_CLASS } from '../font';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const PRESS_SCALE = 0.96;
+const SPRING_CONFIG = { damping: 15, stiffness: 400, mass: 0.5 };
 
 const button = tv({
   slots: {
@@ -89,18 +95,45 @@ type Props = {
   loading?: boolean;
   className?: string;
   textClassName?: string;
+  /** Spring a subtle scale-down on press. */
+  animated?: boolean;
+  /** Fire haptic feedback on press-down. `true` = Light impact, or pass a specific style. */
+  haptic?: boolean | Haptics.ImpactFeedbackStyle;
 } & ButtonVariants & Omit<PressableProps, 'disabled'>;
 
-export function Button({ ref, label: text, loading = false, variant = 'default', disabled = false, size = 'default', className = '', testID, textClassName = '', ...props }: Props & { ref?: React.RefObject<View | null> }) {
+export function Button({ ref, label: text, loading = false, variant = 'default', disabled = false, size = 'default', className = '', testID, textClassName = '', animated = true, haptic = true, style, onPressIn, onPressOut, ...props }: Props & { ref?: React.RefObject<View | null> }) {
   const styles = React.useMemo(
     () => button({ variant, disabled, size }),
     [variant, disabled, size],
   );
 
+  const scale = useSharedValue(1);
+  const pressStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.get() }] }));
+
+  function handlePressIn(e: GestureResponderEvent) {
+    if (animated)
+      scale.set(withSpring(PRESS_SCALE, SPRING_CONFIG));
+    if (haptic)
+      // ponytail: swallow rejection on web/unsupported devices.
+      void Haptics.impactAsync(haptic === true ? Haptics.ImpactFeedbackStyle.Light : haptic).catch(() => {});
+    onPressIn?.(e);
+  }
+  function handlePressOut(e: GestureResponderEvent) {
+    if (animated)
+      scale.set(withSpring(1, SPRING_CONFIG));
+    onPressOut?.(e);
+  }
+
+  // ponytail: `any` dodges the AnimatedPressable|Pressable union prop-type clash; both take PressableProps.
+  const Comp: React.ComponentType<any> = animated ? AnimatedPressable : Pressable;
+
   return (
-    <Pressable
+    <Comp
       disabled={disabled || loading}
       className={styles.container({ className })}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={animated ? [pressStyle, style] : style}
       {...props}
       ref={ref}
       testID={testID}
@@ -129,6 +162,6 @@ export function Button({ ref, label: text, loading = false, variant = 'default',
                   )}
             </>
           )}
-    </Pressable>
+    </Comp>
   );
 }

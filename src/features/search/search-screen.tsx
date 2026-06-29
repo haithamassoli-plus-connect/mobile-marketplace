@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { TextInput } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
+import { Button, Image, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { Chip } from '@/features/home/components/primitives';
 
@@ -20,9 +20,6 @@ import {
 
 const ICON_GRAY = '#717680';
 
-// Full search/discovery screen (Figma 610:1555). Reached from the home navbar's
-// search bar. ponytail: discovery content is static — no query wiring yet, so
-// typing doesn't filter; the screen is the browse/discovery state only.
 export function SearchScreen() {
   const insets = useSafeAreaInsets();
 
@@ -47,20 +44,20 @@ export function SearchScreen() {
   );
 }
 
-// Back arrow + focusable search input.
 function SearchHeader({ topInset }: { topInset: number }) {
   return (
     <View className="bg-white px-4 pb-2.5" style={{ paddingTop: topInset + 8 }}>
       <View className="flex-row items-center gap-2.5">
-        <Pressable
+        <Button
+          variant="ghost"
           onPress={() => router.back()}
           accessibilityRole="button"
           accessibilityLabel="go back"
           hitSlop={8}
-          className="size-6 items-center justify-center active:opacity-60"
+          className="my-0 size-6 items-center justify-center px-0 active:opacity-60"
         >
           <Icon name="arrow-left" size={24} color="#181d27" />
-        </Pressable>
+        </Button>
 
         <View className="h-[44px] flex-1 flex-row items-center gap-2.5 rounded-xl border border-neutral-200 bg-neutral-100 py-1.5 pr-2 pl-4">
           <Icon name="search" size={18} color={ICON_GRAY} />
@@ -91,9 +88,9 @@ function CategoryTabs() {
       className="pt-3.5 pb-2.5"
     >
       {categoryTabs.map(tab => (
-        <Pressable key={tab} onPress={() => setActive(tab)}>
+        <Button key={tab} variant="ghost" className="my-0 h-auto p-0" onPress={() => setActive(tab)}>
           <Chip label={tab} active={tab === active} />
-        </Pressable>
+        </Button>
       ))}
     </ScrollView>
   );
@@ -120,7 +117,6 @@ function FeaturedBanner() {
   );
 }
 
-// Rows of two — RN has no CSS grid/calc.
 function ExploreGrid() {
   return (
     <View className="gap-3 px-4 pt-3.5">
@@ -178,9 +174,9 @@ function RecentSearches() {
     <>
       <View className="flex-row items-center justify-between px-4 pt-6">
         <Text variant="title-3" emphasized className="text-ink-900">Recent searches</Text>
-        <Pressable hitSlop={8} className="active:opacity-60">
+        <Button variant="ghost" hitSlop={8} className="my-0 h-auto px-0 active:opacity-60">
           <Text variant="footnote" className="text-neutral-500">Clear all</Text>
-        </Pressable>
+        </Button>
       </View>
       <View className="flex-row flex-wrap gap-2 px-4 pt-3">
         {shown.map(term => (
@@ -196,16 +192,17 @@ function RecentSearches() {
       </View>
       {recentSearches.length > 4
         ? (
-            <Pressable
+            <Button
+              variant="ghost"
               onPress={() => setShowAll(v => !v)}
               hitSlop={8}
-              className="flex-row items-center gap-1 self-start px-4 pt-3 active:opacity-60"
+              className="my-0 h-auto flex-row items-center gap-1 self-start px-4 pt-3 active:opacity-60"
             >
               <Text variant="footnote" emphasized className="text-primary-700">
                 {showAll ? 'Show less' : `Show all (${recentSearches.length})`}
               </Text>
               <Icon name={showAll ? 'chevron-up' : 'chevron-down'} size={16} color="#92741a" />
-            </Pressable>
+            </Button>
           )
         : null}
     </>

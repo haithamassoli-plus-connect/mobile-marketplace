@@ -19,14 +19,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Button, Image, Text, View } from '@/components/ui';
 import { stories } from '@/features/home/data';
 import { Icon } from './icon';
 import { LiveProductsModal } from './live-products-modal';
 
-const DURATION = 5000; // ms per story frame
+const DURATION = 5000;
 const WHITE = '#ffffff';
-const PERSP = 850; // cube perspective
+const PERSP = 850;
 
 export function StoryViewer({ startId }: { startId?: string }) {
   const insets = useSafeAreaInsets();
@@ -67,9 +67,6 @@ export function StoryViewer({ startId }: { startId?: string }) {
         style={[StyleSheet.absoluteFill, styles.black, swipe.backdropStyle]}
       />
 
-      {/* Keyed by storeIndex: the cube's drag value (x) is recreated fresh (=0) in the
-          SAME commit that the new store renders, so a committed swipe lands with no
-          one-frame flash of the old store (no in-worklet reset needed). */}
       <CubeStage
         key={nav.storeIndex}
         store={store}
@@ -99,9 +96,6 @@ export function StoryViewer({ startId }: { startId?: string }) {
   );
 }
 
-// One store's cube faces + the composed gesture. The parent keys this on storeIndex so
-// useStoryCube's `x` remounts to 0 atomically with the new store. The vertical
-// swipe-to-close Pan (from the parent) races the horizontal cube Pan; taps fall through.
 function CubeStage({
   store,
   prev,
@@ -176,9 +170,6 @@ function CubeStage({
   );
 }
 
-// Store + frame state machine. Guard and write read the SAME render snapshot (deps on
-// storeIndex/frameIndex) and write plain values — so a duplicated synchronous advance
-// (tap racing the timer) is idempotent: no overflow past the end, no skipped frame.
 function useStoreNav(startId: string | undefined, close: () => void) {
   const lastStore = stories.length - 1;
   const [storeIndex, setStoreIndex] = React.useState(() => {
@@ -193,7 +184,7 @@ function useStoreNav(startId: string | undefined, close: () => void) {
       setFrameIndex(frameIndex + 1);
     }
     else if (storeIndex < lastStore) {
-      setStoreIndex(storeIndex + 1); // auto-advance across stores = instant jump, no cube
+      setStoreIndex(storeIndex + 1);
       setFrameIndex(0);
     }
     else {
@@ -211,10 +202,9 @@ function useStoreNav(startId: string | undefined, close: () => void) {
     }
     else {
       setRunId(n => n + 1);
-    } // first frame of first store → restart
+    }
   }, [storeIndex, frameIndex]);
 
-  // Committed cube swipe: jump one store, reset to frame 0, restart the timer.
   const goStore = React.useCallback((dir: 1 | -1) => {
     const t = storeIndex + dir;
     if (t < 0 || t > lastStore)
@@ -227,9 +217,6 @@ function useStoreNav(startId: string | undefined, close: () => void) {
   return { storeIndex, frameIndex, runId, lastStore, goNext, goPrev, goStore };
 }
 
-// Auto-advancing progress for the active frame. progress is mutated ONLY in this effect
-// (the repo's reanimated pattern — see bottom-nav.tsx). completedKeyRef dedupes the
-// completion per (store,frame,runId) and we never re-arm a 0ms timer.
 function useStoryTimer({
   storeIndex,
   frameIndex,
@@ -266,8 +253,8 @@ function useStoryTimer({
       cancelAnimation(progress);
       return;
     }
-    const remaining = (1 - progress.value) * DURATION; // resume from where we paused
-    if (remaining < 16) { // already (essentially) done — advance, never re-arm 0ms
+    const remaining = (1 - progress.value) * DURATION;
+    if (remaining < 16) {
       complete(key);
       return;
     }
@@ -281,10 +268,6 @@ function useStoryTimer({
   return progress;
 }
 
-// Horizontal cube swipe. x is mutated ONLY inside this Pan worklet — never in an effect.
-// On commit we finish the rotation to ±width and let the parent remount this stage
-// (key=storeIndex) so a fresh x=0 lands with the new store — no flash, no worklet reset.
-// The frame timer is paused for the duration of the swipe (onStart → onFinalize).
 function useStoryCube({
   storeIndex,
   lastStore,
@@ -303,8 +286,8 @@ function useStoryCube({
   const x = useSharedValue(0);
 
   const pan = Gesture.Pan()
-    .activeOffsetX([-16, 16]) // horizontal intent
-    .failOffsetY([-14, 14]) // let swipe-to-close win on vertical drags
+    .activeOffsetX([-16, 16])
+    .failOffsetY([-14, 14])
     .onStart(() => {
       runOnJS(onPause)();
     })
@@ -312,7 +295,6 @@ function useStoryCube({
       const atStart = storeIndex === 0;
       const atEnd = storeIndex === lastStore;
       const tx = e.translationX;
-      // rubber-band at the ends (no prev before first / next after last)
       x.value = (atStart && tx > 0) || (atEnd && tx < 0) ? tx * 0.25 : tx;
     })
     .onEnd((e) => {
@@ -341,17 +323,14 @@ function useStoryCube({
   return { x, pan };
 }
 
-// Swipe-down-to-close: drag follows the finger, backdrop fades to reveal the screen
-// behind; release past the threshold slides out and calls onClose. translateY/backdrop
-// are mutated only inside the gesture worklet (never an effect) to satisfy react-hooks.
 function useSwipeToClose(onClose: () => void) {
   const { height } = useWindowDimensions();
   const translateY = useSharedValue(0);
   const backdrop = useSharedValue(1);
 
   const pan = Gesture.Pan()
-    .activeOffsetY(12) // downward drag only; taps fall through to the zones
-    .failOffsetX([-20, 20]) // a sideways drag releases this Pan to the cube
+    .activeOffsetY(12)
+    .failOffsetX([-20, 20])
     .onUpdate((e) => {
       translateY.value = Math.max(0, e.translationY);
       backdrop.value = interpolate(translateY.value, [0, height], [1, 0], Extrapolation.CLAMP);
@@ -379,7 +358,6 @@ function useSwipeToClose(onClose: () => void) {
   return { pan, contentStyle, backdropStyle };
 }
 
-// Neighbour cube face — just a cover + scrims. `local` is 0 when this face is centered.
 function CubeFace({
   x,
   width,
@@ -396,7 +374,6 @@ function CubeFace({
     const rotateY = interpolate(local, [-1, 0, 1], [-90, 0, 90], Extrapolation.CLAMP);
     const translateX = interpolate(local, [-1, 0, 1], [-width, 0, width], Extrapolation.CLAMP);
     const opacity = interpolate(Math.abs(local), [0, 1], [1, 0.35], Extrapolation.CLAMP);
-    // Hinge on the shared seam (prev→right edge, next→left edge) so it meets the centre face.
     const transformOrigin = position < 0 ? '100% 50%' : '0% 50%';
     return { opacity, transformOrigin, transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
   });
@@ -408,7 +385,6 @@ function CubeFace({
   );
 }
 
-// The active face: same cube transform (centered at rest) plus every interactive layer.
 function CenterFace({
   x,
   width,
@@ -446,9 +422,6 @@ function CenterFace({
     const local = x.value / width;
     const rotateY = interpolate(local, [-1, 0, 1], [-90, 0, 90], Extrapolation.CLAMP);
     const translateX = interpolate(local, [-1, 0, 1], [-width, 0, width], Extrapolation.CLAMP);
-    // Hinge on the seam edge the swipe heads toward so faces fold into a cube corner
-    // instead of pivoting about their centres (which opened a gap mid-swipe). Flips at
-    // x=0 where rotateY is 0, so the swap is invisible.
     const transformOrigin = local < 0 ? '100% 50%' : '0% 50%';
     return { transformOrigin, transform: [{ perspective: PERSP }, { translateX }, { rotateY: `${rotateY}deg` }] };
   });
@@ -457,16 +430,17 @@ function CenterFace({
       <Image source={source} contentFit="cover" transition={200} className="absolute inset-0 size-full" />
       <Scrims />
 
-      {/* Tap zones: left 40% = previous, right 60% = next; hold to pause */}
-      <Pressable
-        className="absolute inset-y-0 left-0 w-[40%]"
+      <Button
+        variant="ghost"
+        className="absolute inset-y-0 left-0 my-0 h-auto w-[40%] rounded-none px-0"
         onPress={onPrev}
         onLongPress={onPause}
         delayLongPress={220}
         onPressOut={onResume}
       />
-      <Pressable
-        className="absolute inset-y-0 right-0 w-[60%]"
+      <Button
+        variant="ghost"
+        className="absolute inset-y-0 right-0 my-0 h-auto w-[60%] rounded-none px-0"
         onPress={onNext}
         onLongPress={onPause}
         delayLongPress={220}
@@ -485,8 +459,6 @@ function CenterFace({
   );
 }
 
-// Top + bottom legibility gradients, per Figma 508:1547 (black 0.62→0, ~25% tall) and
-// 508:1548 (0→black 0.9, ~44% tall). `as const` satisfies LinearGradient's color tuple type.
 function Scrims() {
   return (
     <>
@@ -523,7 +495,6 @@ function TopBar({
       style={{ paddingTop: insetTop + 8 }}
       className="absolute inset-x-0 top-0 px-4"
     >
-      {/* One segment per frame of the active store (keyed by store id → remounts on jump) */}
       <View pointerEvents="none" className="h-[3px] flex-row gap-1">
         {store.frames.map((src, i) => (
           <Segment key={src} i={i} index={frameIndex} progress={progress} />
@@ -539,7 +510,6 @@ function TopBar({
             <Text variant="subheadline" emphasized className="text-white">
               {store.label}
             </Text>
-            {/* ponytail: data has no timestamp — static label to match the design. */}
             <Text variant="caption-1" className="text-white/80">
               3h
             </Text>
@@ -553,9 +523,6 @@ function TopBar({
   );
 }
 
-// Tag labels under the header (Figma 515:1572 + Live/New variants):
-// hot → gold HOT + red discount + "Ends in MM:SS" countdown; live → red LIVE + "Nk watching";
-// new → gold NEW. Non-interactive so taps fall through to the prev/next zones.
 function StoryLabels({ store }: { store: Story }) {
   const { tag, discount, watching, endsInSec } = store;
   if (!tag)
@@ -592,7 +559,6 @@ function Badge({ className, textClassName = 'text-white', children }: { classNam
   );
 }
 
-// Glass pill for the hot countdown and live watcher count (Figma "Urgency").
 function GlassPill({ children }: { children: React.ReactNode }) {
   return (
     <View className="rounded-full border border-white/20 bg-black/40 px-2.5 py-[5px]">
@@ -601,8 +567,6 @@ function GlassPill({ children }: { children: React.ReactNode }) {
   );
 }
 
-// 1s countdown → "Ends in MM:SS". Isolated leaf so only this pill re-renders each tick.
-// ponytail: naive setInterval, drifts a few ms/min — fine for a display timer.
 function Countdown({ seconds }: { seconds: number }) {
   const [left, setLeft] = React.useState(seconds);
   React.useEffect(() => {
@@ -647,16 +611,17 @@ function RoundButton({
   onPress: () => void;
 }) {
   return (
-    <Pressable
+    <Button
+      variant="ghost"
       onPress={onPress}
       hitSlop={8}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={{ width: size, height: size }}
-      className="items-center justify-center rounded-full border border-white/20 bg-black/30 active:opacity-80"
+      className="my-0 h-auto items-center justify-center rounded-full border border-white/20 bg-black/30 px-0 active:opacity-80"
     >
       <Icon name={icon} size={size <= 32 ? 18 : 22} color={WHITE} />
-    </Pressable>
+    </Button>
   );
 }
 

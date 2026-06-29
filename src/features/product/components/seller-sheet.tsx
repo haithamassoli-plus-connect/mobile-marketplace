@@ -2,18 +2,16 @@ import type { SellerProfile } from '../data';
 import { Fragment } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { Button, Image, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 
-const BLUE = '#2e90fa'; // information-500 — verified tick
-const GOLD = '#dbb42c'; // gold-500 — rating star
-const GREEN = '#027a48'; // success-700 — top-rated star
-const INK_900 = '#181d27'; // neutral-900
-const INK_800 = '#252b37'; // neutral-800
+const BLUE = '#2e90fa';
+const GOLD = '#dbb42c';
+const GREEN = '#027a48';
+const INK_900 = '#181d27';
+const INK_800 = '#252b37';
 const WHITE = '#ffffff';
 
-// Seller bottom-sheet body (Figma 679-2478). The Modal primitive renders the drag
-// handle + close button, so this is just the content. All actions are decorative.
 export function SellerSheet({ seller }: { seller: SellerProfile }) {
   const insets = useSafeAreaInsets();
   return (
@@ -42,11 +40,10 @@ export function SellerSheet({ seller }: { seller: SellerProfile }) {
             </View>
           </View>
         </View>
-        {/* ponytail: decorative — store page not built. */}
-        <Pressable className="flex-row items-center gap-0.5 rounded-full border-[1.5px] border-neutral-300 py-[9px] pr-3 pl-4">
+        <Button variant="ghost" className="my-0 h-auto flex-row items-center gap-0.5 rounded-full border-[1.5px] border-neutral-300 py-[9px] pr-3 pl-4">
           <Text variant="subheadline" emphasized className="text-neutral-900">Visit</Text>
           <Icon name="chevron-right" size={18} color={INK_900} />
-        </Pressable>
+        </Button>
       </View>
 
       <View className="flex-row items-center rounded-2xl bg-neutral-50 py-4">
@@ -62,16 +59,14 @@ export function SellerSheet({ seller }: { seller: SellerProfile }) {
       </View>
 
       <View className="flex-row items-center gap-3">
-        {/* ponytail: decorative — deal request flow not built. */}
-        <Pressable className="h-[50px] flex-1 flex-row items-center justify-center gap-2 rounded-full border-[1.5px] border-neutral-300">
+        <Button variant="ghost" className="my-0 px-0 h-[50px] flex-1 flex-row items-center justify-center gap-2 rounded-full border-[1.5px] border-neutral-300">
           <Icon name="tag" size={20} color={INK_800} />
           <Text variant="callout" emphasized className="text-neutral-800">Request Deal</Text>
-        </Pressable>
-        {/* ponytail: decorative — chat not wired. */}
-        <Pressable className="h-[50px] flex-1 flex-row items-center justify-center gap-2 rounded-full bg-gold-600">
+        </Button>
+        <Button variant="ghost" className="my-0 px-0 h-[50px] flex-1 flex-row items-center justify-center gap-2 rounded-full bg-gold-600">
           <Icon name="message-circle" size={20} color={WHITE} />
           <Text variant="callout" emphasized className="text-white">Chat with Seller</Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   );
