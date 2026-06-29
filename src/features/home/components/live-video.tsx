@@ -1,6 +1,7 @@
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
-import { Share } from 'react-native';
+import { Share, StyleSheet } from 'react-native';
 
 import { Image, Pressable, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
@@ -42,9 +43,18 @@ export function LiveVideo() {
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
-        {/* Bottom scrim for legibility */}
-        <View className="absolute inset-x-0 bottom-0 h-[330px] bg-black/30" />
-        <View className="absolute inset-x-0 bottom-0 h-40 bg-black/55" />
+        {/* Legibility gradients — Figma 166:4193 (top scrim, black 0.5→0) +
+            166:4194 (bottom scrim, 0→black 0.82). Default direction is top→bottom. */}
+        <LinearGradient
+          pointerEvents="none"
+          colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'] as const}
+          style={styles.topScrim}
+        />
+        <LinearGradient
+          pointerEvents="none"
+          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.82)'] as const}
+          style={styles.bottomScrim}
+        />
 
         {/* Top-left: LIVE badge + host */}
         <View className="absolute top-4 left-4 gap-2">
@@ -111,3 +121,8 @@ export function LiveVideo() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  topScrim: { position: 'absolute', top: 0, right: 0, left: 0, height: 170 },
+  bottomScrim: { position: 'absolute', right: 0, bottom: 0, left: 0, height: 330 },
+});
