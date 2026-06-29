@@ -248,7 +248,9 @@ export const live = {
   badge: 'LIVE',
   count: '23.6K', // shown in the top badge: "LIVE · 23.6K"
   host: 'Urban Sole',
-  image: img('live-stream', 760, 1100),
+  image: img('live-stream', 760, 1100), // poster shown under the video while it buffers
+  // ponytail: dummy stream — W3C's public Sintel trailer; swap for a real HLS feed in prod.
+  video: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
   // Featured-products sheet (Figma 170:4036) — price/badge populate the cards.
   products: [
     { id: 'lp1', title: 'Linen Shirt', image: img('live-shirt', 360, 360), price: 59, oldPrice: 89, badge: '-33%' },

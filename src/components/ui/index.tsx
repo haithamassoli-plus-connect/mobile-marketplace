@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+export * from './background-video';
 export * from './button';
 export * from './checkbox';
 export { default as colors } from './colors';

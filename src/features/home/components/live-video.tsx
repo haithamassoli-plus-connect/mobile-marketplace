@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { Share, StyleSheet } from 'react-native';
 
-import { Image, Pressable, Text, View } from '@/components/ui';
+import { BackgroundVideo, Image, Pressable, Text, View } from '@/components/ui';
 import { Icon } from '@/features/home/components/icon';
 import { live } from '@/features/home/data';
 import { LiveProductsModal } from './live-products-modal';
@@ -37,12 +37,13 @@ export function LiveVideo() {
     // the aspect ratio drives only height. rounded-3xl == Figma radius/24.
     <View className="mt-8 px-4">
       <View className="relative aspect-361/722 w-full overflow-hidden rounded-3xl">
-        {/* Live stream cover */}
+        {/* Live stream — dummy video over the poster (poster shows while it buffers) */}
         <Image
           source={live.image}
           contentFit="cover"
           className="absolute inset-0 size-full"
         />
+        <BackgroundVideo source={live.video} />
         {/* Legibility gradients — Figma 166:4193 (top scrim, black 0.5→0) +
             166:4194 (bottom scrim, 0→black 0.82). Default direction is top→bottom. */}
         <LinearGradient
