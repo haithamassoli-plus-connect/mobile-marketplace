@@ -57,6 +57,7 @@ export default function RootLayout() {
           name="story"
           options={{ headerShown: false, presentation: 'transparentModal', animation: 'fade' }}
         />
+        <Stack.Screen name="product" options={{ headerShown: false }} />
       </Stack>
     </Providers>
   );

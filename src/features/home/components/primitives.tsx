@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import type { Product } from '../data';
-
 import type { IconName } from './icon';
+
+import { router } from 'expo-router';
 import { Image, Pressable, ScrollView, Text, View } from '@/components/ui';
 import { Icon } from './icon';
 
@@ -120,7 +121,10 @@ export function ProductBadge({
 // Fills its parent width. Wrap in a fixed-width View (rails) or flex-1 (grids).
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <View className="w-full gap-2.5 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-2 pt-2 pb-3 shadow-md">
+    <Pressable
+      onPress={() => router.push({ pathname: '/product', params: { id: product.id } })}
+      className="w-full gap-2.5 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-2 pt-2 pb-3 shadow-md"
+    >
       <View className="relative h-[149px] overflow-hidden rounded-xl">
         <Image source={product.image} className="size-full" contentFit="cover" />
         {product.badge
@@ -159,7 +163,7 @@ export function ProductCard({ product }: { product: Product }) {
       <Pressable className="h-[42px] items-center justify-center rounded-xl bg-gold-500">
         <Text variant="footnote" emphasized className="text-ink-950">Add to cart</Text>
       </Pressable>
-    </View>
+    </Pressable>
   );
 }
 

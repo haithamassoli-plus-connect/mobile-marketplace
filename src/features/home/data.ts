@@ -38,7 +38,7 @@ const PRODUCT: Record<string, [string, string, ...string[]]> = {
   bm: ['womens-dresses', 'corset-leather-with-skirt', 'dress-pea', 'corset-with-black-skirt'],
   jewelry: ['womens-jewellery', 'green-crystal-earring', 'green-oval-earring', 'tropical-earring'],
   skincare: ['skin-care', 'olay-ultra-moisture-shea-butter-body-wash', 'vaseline-men-body-and-face-lotion'],
-  shirt: ['mens-shirts', 'man-plaid-shirt', 'man-short-sleeve-shirt', 'men-check-shirt'],
+  shirt: ['mens-shirts', 'man-plaid-shirt', 'man-short-sleeve-shirt', 'men-check-shirt', 'blue-&-black-check-shirt', 'gigabyte-aorus-men-tshirt'],
   tech: ['smartphones', 'iphone-13-pro', 'iphone-x', 'oppo-a57'],
 };
 
