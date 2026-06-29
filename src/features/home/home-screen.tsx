@@ -2,6 +2,7 @@ import type { View as RNView } from 'react-native';
 import { BlurTargetView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
+
 import Animated, {
   runOnJS,
   useAnimatedRef,
@@ -9,8 +10,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
-import { View } from '@/components/ui';
-
+import { FocusAwareStatusBar, View } from '@/components/ui';
 import { BottomNav } from './components/bottom-nav';
 import { DiscoverSection } from './components/discover-section';
 import { FeaturedRail } from './components/featured-rail';
@@ -88,7 +88,9 @@ export function HomeScreen() {
 
   return (
     <View className="flex-1">
+
       <StatusBar style="light" />
+      <FocusAwareStatusBar />
       <BlurTargetView ref={blurTargetRef} style={{ flex: 1 }}>
         <Animated.ScrollView
           ref={scrollRef}

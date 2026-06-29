@@ -22,7 +22,7 @@ import { nav } from '@/features/home/data';
 const HIDE = { duration: 300, easing: Easing.inOut(Easing.quad) } as const;
 const FADE = { duration: 220, easing: Easing.out(Easing.quad) } as const;
 const ICON_GRAY = '#717680';
-const INK = '#252b37';
+const WHITE = '#fff';
 
 type Props = {
   hidden: SharedValue<boolean>;
@@ -73,10 +73,10 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
               onPress={() => locale.present()}
               accessibilityRole="button"
               accessibilityLabel="region and language"
-              className="my-0 h-[34px] flex-row items-center gap-1 rounded-sm border border-neutral-200 bg-white py-2 pr-3 pl-2 shadow-sm active:opacity-80"
+              className="my-0 h-[34px] flex-row items-center gap-1 rounded-sm py-2 pr-3 pl-2"
             >
-              <Icon name="globe" size={18} color={INK} />
-              <Text variant="caption-2" emphasized className="text-ink-800">
+              <Icon name="globe" size={18} color={WHITE} />
+              <Text variant="caption-2" emphasized className="text-white">
                 {nav.locale}
               </Text>
             </Button>
@@ -86,9 +86,9 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
               onPress={() => support.present()}
               accessibilityRole="button"
               accessibilityLabel="help and support"
-              className="my-0 h-[34px] w-[33px] items-center justify-center rounded-sm bg-white px-0 shadow-sm active:opacity-80"
+              className="my-0 h-[34px] w-[33px] items-center justify-center rounded-sm px-0 active:opacity-80"
             >
-              <Icon name="headphones" size={20} color={INK} />
+              <Icon name="headphones" size={20} color={WHITE} />
             </Button>
 
             <Button
@@ -96,9 +96,9 @@ export function Navbar({ hidden, atTop, onHeight, blurTarget }: Props) {
               onPress={() => wishlist.present()}
               accessibilityRole="button"
               accessibilityLabel="wishlist"
-              className="my-0 h-[34px] w-[33px] items-center justify-center rounded-sm border border-secondary-100 bg-white px-0 shadow-sm active:opacity-80"
+              className="my-0 h-[34px] w-[33px] items-center justify-center rounded-sm px-0 active:opacity-80"
             >
-              <Icon name="heart" size={20} color={INK} />
+              <Icon name="heart" size={20} color={WHITE} />
               <View className="absolute -top-1 -right-1 size-[18px] items-center justify-center rounded-full bg-error-500">
                 <Text variant="caption-2" emphasized className="text-white">
                   {nav.wishlistCount}
